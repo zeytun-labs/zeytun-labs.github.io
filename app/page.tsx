@@ -1,10 +1,54 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
+
+import "./landing.css"
+import { Architecture } from "@/components/landing/architecture"
+import { Dns } from "@/components/landing/dns"
+import { Firewall } from "@/components/landing/firewall"
+import { Hero } from "@/components/landing/hero"
+import { Reveal } from "@/components/landing/reveal"
+import { Routing } from "@/components/landing/routing"
+import { Roadmap } from "@/components/landing/roadmap"
+import { SiteFooter } from "@/components/landing/site-footer"
+import { SiteNav } from "@/components/landing/site-nav"
+import { StatStrip } from "@/components/landing/stat-strip"
+import { Visibility } from "@/components/landing/visibility"
+import { Waitlist } from "@/components/landing/waitlist"
+
+const description =
+  "Zeytun is a desktop network manager. Watch every connection live, route traffic per process, take full control of DNS, and decide what leaves your machine."
 
 export const metadata: Metadata = {
-  title: "",
-  description: "",
+  title: "Zeytun — Desktop Network Manager",
+  description,
+  openGraph: {
+    title: "Zeytun — Desktop Network Manager",
+    description,
+    type: "website",
+  },
+}
+
+export const viewport: Viewport = {
+  colorScheme: "dark",
+  themeColor: "#070807",
 }
 
 export default function Page() {
-  return <div className="flex min-h-svh flex-col"></div>
+  return (
+    <div className="landing">
+      <SiteNav />
+      <main>
+        <Hero />
+        <StatStrip />
+        <Visibility />
+        <Routing />
+        <Dns />
+        <Firewall />
+        <Architecture />
+        <Roadmap />
+        <Waitlist />
+      </main>
+      <SiteFooter />
+      <Reveal />
+    </div>
+  )
 }
