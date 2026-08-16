@@ -1,10 +1,19 @@
+import localFont from "next/font/local"
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 
-const spaceGroteskHeading = Space_Grotesk({subsets:['latin'],variable:'--font-heading'});
+const neueKaine = localFont({
+  src: "../public/fonts/neue-kaine-variable.ttf",
+  variable: "--font-kaine",
+});
+
+const spaceGroteskHeading = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-heading'
+});
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
@@ -22,7 +31,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable, spaceGroteskHeading.variable)}
+      className={cn("antialiased font-sans", fontMono.variable, geist.variable, spaceGroteskHeading.variable, neueKaine.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>

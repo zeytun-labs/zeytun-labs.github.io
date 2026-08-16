@@ -5,20 +5,6 @@
    without fighting the shadcn theme tokens in globals.css.
    ========================================================================== */
 
-/* ============ brand display font ============ */
-/* Neue Kaine is licensed separately, so no font file ships with this repo.
-   Drop `neue-kaine.woff2` into `public/fonts/` and add the second `src` line
-   below to get the exact brand typography; until then `--display` falls back
-   to Geist and the page still renders correctly. */
-@font-face {
-  font-family: "Neue Kaine";
-  src: local("Neue Kaine");
-  /* url("/fonts/neue-kaine.woff2") format("woff2"); */
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ============ tokens ============ */
 .landing {
   --bg: #070807;
@@ -42,7 +28,7 @@
     var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --display: "Neue Kaine", var(--sans);
+  --display: var(--font-heading), var(--sans);
   --maxw: 1160px;
   --gut: 32px;
   --r-xl: 34px;
@@ -224,7 +210,7 @@ h2.h2 {
   fill: var(--lime);
 }
 .brand__word {
-  font-family: var(--display);
+  font-family: var(--font-kaine);
   font-weight: 700;
   font-size: 21px;
   letter-spacing: -0.012em;
@@ -1999,17 +1985,7 @@ section.band {
   }
 }
 
-/* --- keep rule-table headers in sync with hidden columns --- */
-@media (max-width: 900px) {
-  .rhead span:nth-child(5) {
-    display: none;
-  }
-}
-@media (max-width: 640px) {
-  .rhead span:nth-child(4) {
-    display: none;
-  }
-}
+
 
 /* --- traffic monitor ledger --- */
 .tmw {

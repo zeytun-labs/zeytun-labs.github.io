@@ -13,6 +13,7 @@ import { SiteNav } from "@/components/landing/site-nav"
 import { StatStrip } from "@/components/landing/stat-strip"
 import { Visibility } from "@/components/landing/visibility"
 import { Waitlist } from "@/components/landing/waitlist"
+import { Nav } from "@/components/landing/nav"
 
 const description =
   "Zeytun is a desktop network manager. Watch every connection live, route traffic per process, take full control of DNS, and decide what leaves your machine."
@@ -35,7 +36,7 @@ export const viewport: Viewport = {
 export default function Page() {
   return (
     <div className="landing">
-      <SiteNav />
+      <Nav />
       <main>
         <Hero />
         <StatStrip />
