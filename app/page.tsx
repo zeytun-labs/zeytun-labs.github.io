@@ -9,7 +9,6 @@ import { Reveal } from "@/components/landing/reveal"
 import { Routing } from "@/components/landing/routing"
 import { Roadmap } from "@/components/landing/roadmap"
 import { SiteFooter } from "@/components/landing/site-footer"
-import { SiteNav } from "@/components/landing/site-nav"
 import { StatStrip } from "@/components/landing/stat-strip"
 import { Visibility } from "@/components/landing/visibility"
 import { Waitlist } from "@/components/landing/waitlist"
@@ -35,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function Page() {
   return (
-    <div className="landing">
+    <div className="min-h-screen relative overflow-x-clip landing">
       <Nav />
       <main>
         <Hero />

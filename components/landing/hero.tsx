@@ -1,6 +1,9 @@
 import { Eyebrow } from "@/components/landing/chrome"
-import { HeroField } from "@/components/landing/hero-field"
 import { Icon } from "@/components/landing/icons"
+import { Section } from "../common/section"
+import ParticleCanvas from "./particle-canvas"
+import { Button } from "../ui/button"
+import { Badge } from "../ui/badge"
 
 const glance = [
   {
@@ -36,29 +39,29 @@ const legs = [
 
 export function Hero() {
   return (
-    <section className="hero" id="top">
-      <HeroField />
-      <div className="hero__veil" />
-      <div className="wrap">
-        <div className="hero__grid">
-          <Eyebrow>Desktop network manager</Eyebrow>
-          <h1>
-            See every connection.
-            <em>Decide what leaves.</em>
+    <Section
+      className="hero relative max-w-none! overflow-hidden px-0 pt-[clamp(56px,9vw,112px)] pb-[clamp(52px,6vw,80px)]"
+      id="top"
+    >
+      <ParticleCanvas />
+      <div className="relative z-4 mx-auto flex max-w-6xl flex-col px-8">
+        <div className="flex w-1/2 flex-col gap-2">
+          <Badge variant={'outline'} className="bg-primary/10 border-primary/30 h-auto px-3 py-1 text-sm text-primary font-mono">Alpha v0.1 · macOS</Badge>
+          <h1 className="font-medium! uppercase mt-2!">
+            See it. <em>Route it.</em> Stop it.
           </h1>
-          <p className="hero__sub">
-            Zeytun watches every connection your machine makes, routes traffic
-            per process, and hands you full control of DNS — so nothing reaches
-            the network without a rule you wrote.
+          <p className="text-muted-foreground">
+            Zeytun is a desktop network manager. Every connection your machine
+            opens, attributed to the app that opened it — and yours to route,
+            hold or refuse.
           </p>
-          <div className="hero__cta">
-            <a className="btn btn--primary" href="#waitlist">
+          <div className="mt-2 flex gap-2">
+            <Button>
               Join the waitlist
               <Icon name="arrowRight" />
-            </a>
-            <a className="btn btn--ghost" href="#visibility">
-              See how it works
-            </a>
+            </Button>
+            <Button variant={"secondary"}>See how it works</Button>
+            {/* <a className="btn btn--ghost" href="#visibility"></a> */}
           </div>
           <p className="hero__meta">
             <span>macOS · Windows · Linux</span>
@@ -100,6 +103,6 @@ export function Hero() {
           Scroll to explore
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

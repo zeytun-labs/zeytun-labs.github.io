@@ -30,7 +30,7 @@ export function Nav() {
   return (
     <header
       className={
-        "sticky top-4 z-50 mx-auto max-w-2xl rounded-full border border-border/40 bg-card/70 shadow-sm backdrop-blur transition-all duration-300" +
+        "fixed top-4 z-50 left-1/2 -translate-x-1/2 max-w-2xl md:w-2xl rounded-full border border-border/40 bg-card/70 shadow-sm backdrop-blur transition-all duration-300" +
         (stuck ? "" : "")
       }
     >
