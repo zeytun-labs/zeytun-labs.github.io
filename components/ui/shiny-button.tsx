@@ -24,7 +24,7 @@ export function ShinyButton({
         className
       )}
     >
-      <span className="z-10 flex items-center gap-2 text-nowrap text-lime-200 text-lg">
+      <span className="z-10 flex items-center gap-2 text-lg text-nowrap text-lime-200">
         {children}
       </span>
     </button>

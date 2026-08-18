@@ -38,7 +38,7 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <StatStrip />
+        {/* <StatStrip /> */}
         <Visibility />
         <Routing />
         <Dns />

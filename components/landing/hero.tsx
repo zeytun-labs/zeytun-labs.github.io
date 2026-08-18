@@ -1,51 +1,48 @@
-import { Eyebrow } from "@/components/landing/chrome"
-import { Icon } from "@/components/landing/icons"
 import { Section } from "../common/section"
 import ParticleCanvas from "./particle-canvas"
 import { Button } from "../ui/button"
-import { Badge } from "../ui/badge"
 import { AnimatedGradientText } from "../ui/animated-gradient-text"
 import { cn } from "@/lib/utils"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 import { ShinyButton } from "../ui/shiny-button"
 
-const glance = [
-  {
-    label: "Live connections",
-    value: "1,284",
-    note: <>across 37 processes</>,
-  },
-  {
-    label: "Blocked today",
-    value: "96",
-    note: (
-      <>
-        12 processes · <em>7 rules</em>
-      </>
-    ),
-  },
-  {
-    label: "DNS queries",
-    value: "18.4k",
-    note: (
-      <>
-        <em>DoH</em> · 0 leaks
-      </>
-    ),
-  },
-]
+// const glance = [
+//   {
+//     label: "Live connections",
+//     value: "1,284",
+//     note: <>across 37 processes</>,
+//   },
+//   {
+//     label: "Blocked today",
+//     value: "96",
+//     note: (
+//       <>
+//         12 processes · <em>7 rules</em>
+//       </>
+//     ),
+//   },
+//   {
+//     label: "DNS queries",
+//     value: "18.4k",
+//     note: (
+//       <>
+//         <em>DoH</em> · 0 leaks
+//       </>
+//     ),
+//   },
+// ]
 
-const legs = [
-  { name: "local", width: "18%", value: "4 ms" },
-  { name: "relay", width: "62%", value: "26 ms" },
-  { name: "exit", width: "31%", value: "12 ms" },
-]
+// const legs = [
+//   { name: "local", width: "18%", value: "4 ms" },
+//   { name: "relay", width: "62%", value: "26 ms" },
+//   { name: "exit", width: "31%", value: "12 ms" },
+// ]
 
 export function Hero() {
   return (
     <Section
-      className="hero relative max-w-none! overflow-hidden px-0 pt-[clamp(56px,9vw,112px)] pb-[clamp(52px,6vw,80px)]"
+      className="hero relative h-[calc(100vh-60px)] max-h-188 max-w-none! overflow-hidden px-0 pt-[clamp(56px,8vw,112px)] pb-[clamp(52px,8vw,80px)]"
       id="top"
     >
       <ParticleCanvas />
@@ -60,8 +57,8 @@ export function Hero() {
               Alpha v0.1 · macOS
             </span>
           </AnimatedGradientText>
-          <h1 className="mt-2! font-medium! uppercase">
-            See it. <em>Route it.</em> Stop it.
+          <h1 className="mt-2 font-medium uppercase font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] tracking-[-0.035em] ">
+            See it. <em className="text-primary block not-italic">Route it.</em> Stop it.
           </h1>
           <p className="text-muted-foreground">
             Zeytun is a desktop network manager. Every connection your machine
@@ -76,18 +73,16 @@ export function Hero() {
                 className="size-5.5!"
               />{" "}
             </ShinyButton>
-            <Button size={"lg"} variant={"secondary"} className={""}>
+            <Button
+              variant={"outline"}
+              className="h-auto! min-w-60.5 rounded-full px-10 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground!"
+            >
               See how it works
             </Button>
           </div>
-          <p className="hero__meta">
-            <span>macOS · Windows · Linux</span>
-            <span>Rust &amp; Go core</span>
-            <span>No account required</span>
-          </p>
         </div>
 
-        <div className="glance" data-reveal>
+        {/* <div className="glance" data-reveal>
           {glance.map((tile) => (
             <div className="gtile" key={tile.label}>
               <h4>{tile.label}</h4>
@@ -113,12 +108,12 @@ export function Hero() {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="scrollcue" aria-hidden="true">
+        {/* <div className="scrollcue" aria-hidden="true">
           <i />
           Scroll to explore
-        </div>
+        </div> */}
       </div>
     </Section>
   )

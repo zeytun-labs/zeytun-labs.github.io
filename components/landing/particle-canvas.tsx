@@ -181,7 +181,8 @@ const ParticleCanvas: React.FC = () => {
 
     function frame() {
       if (!running || !ctx || !canvas) return
-      ctx.fillStyle = "rgba(7,8,7)"
+      ctx.fillStyle = "oklch(0.153 0.006 107.1)"
+      // ctx.fillStyle = "rgba(7,8,7)"
       ctx.fillRect(0, 0, W, H)
 
       if (pointer.active) {
@@ -304,10 +305,11 @@ const ParticleCanvas: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 h-screen w-screen"
+      className="absolute inset-0 h-[calc(100vh-60px)] w-screen max-h-188"
       style={{
         width: "100vw",
-        height: "100vh",
+        height: "calc(100vh-60px)",
+        maxHeight: "752px",
         display: "block",
         backgroundColor: "transparent",
       }}

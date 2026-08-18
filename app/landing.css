@@ -44,18 +44,18 @@
 } */
 
 .landing {
-  position: relative;
-  min-height: 100dvh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.55;
-  font-weight: 400;
-  letter-spacing: -0.005em;
+  /* position: relative; */
+  /* min-height: 100dvh; */
+  /* background: var(--bg); */
+  /* color: var(--text); */
+  /* font-family: var(--sans); */
+  /* font-size: 16px; */
+  /* line-height: 1.55; */
+  /* font-weight: 400; */
+  /* letter-spacing: -0.005em; */
   /* `clip` instead of `hidden`: it contains the hero glow without turning the
      wrapper into a scroll container, which would break `position: sticky`. */
-  overflow-x: clip;
+  /* overflow-x: clip; */
 }
 /* .landing::before {
   content: "";
@@ -136,15 +136,15 @@
   background: var(--lime-line);
   flex: none;
 }
-.landing h1,
+/* .landing h1,
 .landing h2,
 .landing h3 {
   margin: 0;
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.06;
-}
-h2.h2 {
+} */
+/* h2.h2 {
   font-family: var(--display);
   font-weight: 700;
   font-size: clamp(30px, 4.4vw, 54px);
@@ -152,7 +152,7 @@ h2.h2 {
   letter-spacing: -0.025em;
   margin: 18px 0 0;
   max-width: 19ch;
-}
+} */
 .lede {
   margin: 20px 0 0;
   color: var(--text-2);
@@ -242,19 +242,8 @@ h2.h2 {
   gap: 40px;
   align-items: center;
 }
-.hero h1 {
-  font-family: var(--display);
-  font-weight: 700;
-  font-size: clamp(46px, 7.4vw, 96px);
-  line-height: 0.94;
-  letter-spacing: -0.035em;
-  margin: 22px 0 0;
-}
-.hero h1 em {
-  font-style: normal;
-  color: var(--lime);
-  display: block;
-}
+
+
 .hero__sub {
   margin: 26px 0 0;
   color: var(--text-2);
