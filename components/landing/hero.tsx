@@ -4,6 +4,11 @@ import { Section } from "../common/section"
 import ParticleCanvas from "./particle-canvas"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
+import { AnimatedGradientText } from "../ui/animated-gradient-text"
+import { cn } from "@/lib/utils"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
+import { ShinyButton } from "../ui/shiny-button"
 
 const glance = [
   {
@@ -46,8 +51,16 @@ export function Hero() {
       <ParticleCanvas />
       <div className="relative z-4 mx-auto flex max-w-6xl flex-col px-8">
         <div className="flex w-1/2 flex-col gap-2">
-          <Badge variant={'outline'} className="bg-primary/10 border-primary/30 h-auto px-3 py-1 text-sm text-primary font-mono">Alpha v0.1 · macOS</Badge>
-          <h1 className="font-medium! uppercase mt-2!">
+          <AnimatedGradientText>
+            <span
+              className={cn(
+                `inline animate-gradient bg-linear-to-r from-primary via-primary/40 to-primary bg-size-[var(--bg-size)_100%] bg-clip-text font-mono text-transparent`
+              )}
+            >
+              Alpha v0.1 · macOS
+            </span>
+          </AnimatedGradientText>
+          <h1 className="mt-2! font-medium! uppercase">
             See it. <em>Route it.</em> Stop it.
           </h1>
           <p className="text-muted-foreground">
@@ -56,11 +69,15 @@ export function Hero() {
             hold or refuse.
           </p>
           <div className="mt-2 flex gap-2">
-            <Button>
+            <ShinyButton>
+               Join the waitlist
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />{" "}
+            </ShinyButton>
+            {/* <Button size={'lg'}>
               Join the waitlist
-              <Icon name="arrowRight" />
+              <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
             </Button>
-            <Button variant={"secondary"}>See how it works</Button>
+            <Button size={'lg'} variant={"secondary"}>See how it works</Button> */}
             {/* <a className="btn btn--ghost" href="#visibility"></a> */}
           </div>
           <p className="hero__meta">
