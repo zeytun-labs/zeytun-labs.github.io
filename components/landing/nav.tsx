@@ -14,7 +14,7 @@ const links = [
 
 export function Nav() {
   const [stuck, setStuck] = useState(false)
-  
+
   const [blobStyle, setBlobStyle] = useState({ left: 0, width: 0, opacity: 0 })
   const navRef = useRef<HTMLElement>(null)
 
@@ -30,7 +30,7 @@ export function Nav() {
   return (
     <header
       className={
-        "fixed top-4 z-50 left-1/2 -translate-x-1/2 max-w-2xl md:w-2xl rounded-full border border-border/40 bg-card/70 shadow-sm backdrop-blur transition-all duration-300" +
+        "fixed top-4 left-1/2 z-50 max-w-2xl -translate-x-1/2 rounded-full border border-border/40 bg-card/70 shadow-sm backdrop-blur transition-all duration-300 md:w-2xl" +
         (stuck ? "" : "")
       }
     >
@@ -41,18 +41,18 @@ export function Nav() {
             Zeytun
           </span>
         </Link>
-        <nav 
+        <nav
           ref={navRef}
-          className="ms-auto! relative flex items-center gap-1"
-          onMouseLeave={() => setBlobStyle(prev => ({ ...prev, opacity: 0 }))}
+          className="relative ms-auto! flex items-center gap-1"
+          onMouseLeave={() => setBlobStyle((prev) => ({ ...prev, opacity: 0 }))}
         >
           <div
             className="absolute left-0 z-0 h-8 rounded-full bg-white/10 transition-all duration-300 ease-out"
             style={blobStyle}
           />
           {links.map((link) => (
-            <Link 
-              key={link.href} 
+            <Link
+              key={link.href}
               href={link.href}
               className="relative z-10 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground! transition-colors hover:text-foreground!"
               onMouseEnter={(e) => {
@@ -60,7 +60,7 @@ export function Nav() {
                 setBlobStyle({
                   left: el.offsetLeft,
                   width: el.offsetWidth,
-                  opacity: 1
+                  opacity: 1,
                 })
               }}
             >
@@ -68,7 +68,9 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <Button className="ms-2 text-primary-foreground!">Join the waitlist</Button>
+        <Button className="ms-2 text-primary-foreground!">
+          Join the waitlist
+        </Button>
       </div>
     </header>
   )

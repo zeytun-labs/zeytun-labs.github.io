@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function Page() {
   return (
-    <div className="min-h-screen relative overflow-x-clip landing">
+    <div className="landing relative min-h-screen overflow-x-clip">
       <Nav />
       <main>
         <Hero />

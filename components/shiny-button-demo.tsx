@@ -1,10 +1,12 @@
-import { ShinyButton } from "@/components/ui/shiny-button";
+import { ArrowRight } from "lucide-react"
+import { ShinyButton } from "@/components/ui/shiny-button"
 
 export default function ShinyButtonDemo() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center bg-black">
       <ShinyButton onClick={() => alert("Button clicked!")}>
-        Get unlimited access
+        Join the waitlist
+        <ArrowRight className="ml-2 h-4 w-4" />
       </ShinyButton>
     </div>
   )

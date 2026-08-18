@@ -70,15 +70,15 @@ export function Hero() {
           </p>
           <div className="mt-2 flex gap-2">
             <ShinyButton>
-               Join the waitlist
-              <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />{" "}
-            </ShinyButton>
-            {/* <Button size={'lg'}>
               Join the waitlist
-              <HugeiconsIcon icon={ArrowRight02Icon} />{" "}
+              <HugeiconsIcon
+                icon={ArrowRight02Icon}
+                className="size-5.5!"
+              />{" "}
+            </ShinyButton>
+            <Button size={"lg"} variant={"secondary"} className={""}>
+              See how it works
             </Button>
-            <Button size={'lg'} variant={"secondary"}>See how it works</Button> */}
-            {/* <a className="btn btn--ghost" href="#visibility"></a> */}
           </div>
           <p className="hero__meta">
             <span>macOS · Windows · Linux</span>

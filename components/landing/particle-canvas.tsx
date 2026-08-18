@@ -304,7 +304,7 @@ const ParticleCanvas: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-screen h-screen"
+      className="absolute inset-0 h-screen w-screen"
       style={{
         width: "100vw",
         height: "100vh",
