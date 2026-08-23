@@ -52,7 +52,6 @@ export function GridNet({ className }: { className?: string }) {
           strokeDasharray="0.15 1"
           strokeDashoffset="0.15"
           className="animate-dash"
-          filter="url(#glow)"
         />
         <path
           d="M 386 57.14 L 284.67 57.14 L 284.67 28.57 L 122 28.57 L 122 142.86 L -20 142.86"
@@ -65,7 +64,6 @@ export function GridNet({ className }: { className?: string }) {
           strokeDasharray="0.15 1"
           strokeDashoffset="0.15"
           className="animate-[dash_4s_linear_infinite_1s]"
-          filter="url(#glow)"
         />
 
         <path
@@ -79,7 +77,6 @@ export function GridNet({ className }: { className?: string }) {
           strokeDasharray="0.15 1"
           strokeDashoffset="0.15"
           className="animate-[dash_3.5s_linear_infinite_0.5s]"
-          filter="url(#glow)"
         />
         <path
           d="M -20 171.43 L 244 171.43 L 244 114.29 L 386 114.29"
@@ -92,7 +89,6 @@ export function GridNet({ className }: { className?: string }) {
           strokeDasharray="0.15 1"
           strokeDashoffset="0.15"
           className="animate-[dash_4.5s_linear_infinite_1.5s]"
-          filter="url(#glow)"
         />
       </svg>
     </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import { Eyebrow } from "@/components/landing/chrome"
+// import { Eyebrow } from "@/components/landing/chrome"
 import { Icon } from "@/components/landing/icons"
 
 export function Waitlist() {
@@ -13,7 +13,7 @@ export function Waitlist() {
     <section className="band" id="waitlist">
       <div className="wrap">
         <div className="cta" data-reveal>
-          <Eyebrow>Private beta</Eyebrow>
+          {/* <Eyebrow>Private beta</Eyebrow> */}
           <h2>Take your network back</h2>
           <p>
             Zeytun is in private beta on macOS, with Windows and Linux builds

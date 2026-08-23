@@ -1,4 +1,4 @@
-import { SectionHead } from "@/components/landing/chrome"
+// import { SectionHead } from "@/components/landing/chrome"
 import { Icon, type IconName } from "@/components/landing/icons"
 
 const feats = [
@@ -140,11 +140,11 @@ export function Dns() {
       <div className="wrap">
         <div className="split split--rev">
           <div className="split__copy">
-            <SectionHead
+            {/* <SectionHead
               eyebrow="DNS control"
               title="Resolution is a decision, not a default"
               lede="DNS is where most privacy stories quietly fall apart. Zeytun treats it as part of the routing table."
-            />
+            /> */}
             <ul className="feats">
               {feats.map((feat) => (
                 <li key={feat.title}>

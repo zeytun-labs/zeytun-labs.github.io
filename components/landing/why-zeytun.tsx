@@ -2,7 +2,8 @@
 import React, { useState, MouseEvent } from "react"
 import { cn } from "@/lib/utils"
 import { GridNet } from "./gird-net"
-import { AppWindow } from "./chrome"
+// import { AppWindow } from "./chrome"
+import { CheckpointWindow } from "./checkpoint-window"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Description, Heading, Section, Title } from "../common/section"
 import { Radar03Icon, Flag02Icon } from "@hugeicons/core-free-icons"
@@ -103,30 +104,11 @@ function DecideCard() {
       title="DECIDE"
       description="Turn Checkpoint on and unmatched connections wait for you instead of taking a default. Allow, block, or send it somewhere — once, or as a rule."
     >
-      <Fig>
+      <Fig className="relative">
         {/* Grid Line Traces Canvas (Vercel Style) */}
-        <GridNet className="opacity-70 mix-blend-screen" />
+        <GridNet className="opacity-70 mix-blend-screen absolute inset-0" />
 
-        {/* <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(15,15,15,0.8)_100%)]" /> */}
-
-        {/* Window Box */}
-        {/* <div className="relative z-20 w-full max-w-[240px] shadow-2xl transition-transform duration-700 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(132,204,22,0.1)]">
-          <AppWindow title="CHECKPOINT" small>
-            <div className="flex flex-col gap-4 bg-black/60 p-4 backdrop-blur-md">
-              <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                <div className="size-8 shrink-0 rounded-full bg-white/10" />
-                <div className="flex w-full flex-col gap-2">
-                  <div className="h-2 w-2/3 rounded bg-white/20" />
-                  <div className="h-2 w-1/3 rounded bg-white/10" />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="h-6 flex-1 rounded bg-white/10" />
-                <div className="h-6 flex-1 rounded bg-primary shadow-[0_0_8px_var(--primary)]" />
-              </div>
-            </div>
-          </AppWindow>
-        </div> */}
+        <CheckpointWindow />
       </Fig>
     </Card>
   )
@@ -300,16 +282,6 @@ export function WhyZeytun() {
         <DecideCard />
         <RouteCard />
       </div>
-{/* 
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @keyframes dash {
-          to { stroke-dashoffset: -400; }
-        }
-      `,
-        }}
-      /> */}
     </Section>
   )
 }

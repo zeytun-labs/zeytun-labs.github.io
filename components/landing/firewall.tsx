@@ -1,4 +1,4 @@
-import { SectionHead } from "@/components/landing/chrome"
+// import { SectionHead } from "@/components/landing/chrome"
 import { Icon, type IconName } from "@/components/landing/icons"
 
 const feats = [
@@ -68,11 +68,11 @@ export function Firewall() {
       <div className="wrap">
         <div className="split">
           <div className="split__copy">
-            <SectionHead
+            {/* <SectionHead
               eyebrow="Outbound firewall"
               title="Nothing leaves without a rule"
               lede="An inbound firewall protects you from the network. An outbound firewall protects the network from your machine: and that is where the interesting traffic is."
-            />
+            /> */}
             <ul className="feats">
               {feats.map((feat) => (
                 <li key={feat.title}>

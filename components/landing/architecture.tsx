@@ -1,4 +1,4 @@
-import { SectionHead } from "@/components/landing/chrome"
+// import { SectionHead } from "@/components/landing/chrome"
 import { Icon, type IconName } from "@/components/landing/icons"
 
 const layers = [
@@ -52,11 +52,11 @@ export function Architecture() {
       <div className="wrap">
         <div className="split">
           <div className="split__copy">
-            <SectionHead
+            {/* <SectionHead
               eyebrow="Architecture"
               title="A thin interface over a serious engine"
               lede="Zeytun is three pieces with clear jobs. Each one is small enough to reason about, and the one that moves your packets is written for exactly that."
-            />
+            /> */}
           </div>
 
           <div className="stack" data-reveal>

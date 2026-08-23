@@ -1,4 +1,4 @@
-import { AppRail, AppWindow, SectionHead } from "@/components/landing/chrome"
+// import { AppRail, AppWindow, SectionHead } from "@/components/landing/chrome"
 import { Icon } from "@/components/landing/icons"
 
 const feats = [
@@ -120,11 +120,11 @@ export function Visibility() {
   return (
     <section className="band" id="visibility">
       <div className="wrap">
-        <SectionHead
+        {/* <SectionHead
           eyebrow="Live visibility"
           title="Watch every connection as it happens"
           lede="Most tools tell you how much traffic left your machine. Zeytun tells you which process sent it, where it went, and which rule let it through."
-        />
+        /> */}
 
         <ul className="feats feats--row">
           {feats.map((feat) => (
@@ -139,8 +139,8 @@ export function Visibility() {
         </ul>
 
         <div className="appshot" data-reveal aria-hidden="true">
-          <AppWindow title="Zeytun" subtitle="Traffic monitor">
-            <AppRail active={0} />
+          {/* <AppWindow title="Zeytun" subtitle="Traffic monitor">
+            <AppRail active={0} /> */}
             <div className="tmw">
               <div className="tmc">
                 <div className="blk">
@@ -227,7 +227,7 @@ export function Visibility() {
                 </div>
               </div>
             </div>
-          </AppWindow>
+          {/* </AppWindow> */}
         </div>
         <p className="mock-note">
           Interface preview: numbers are illustrative.

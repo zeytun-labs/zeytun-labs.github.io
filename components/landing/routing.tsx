@@ -1,4 +1,4 @@
-import { AppRail, AppWindow, SectionHead } from "@/components/landing/chrome"
+// import { AppRail, AppWindow, SectionHead } from "@/components/landing/chrome"
 import { Icon } from "@/components/landing/icons"
 
 const feats = [
@@ -92,11 +92,11 @@ export function Routing() {
       <div className="wrap">
         <div className="split">
           <div className="split__copy">
-            <SectionHead
+            {/* <SectionHead
               eyebrow="Per-process routing"
               title="One machine, many exits"
               lede="Your browser, your terminal, and your updater have nothing in common. Give each of them the path it deserves."
-            />
+            /> */}
             <ul className="feats">
               {feats.map((feat) => (
                 <li key={feat.title}>
@@ -121,8 +121,8 @@ export function Routing() {
           </div>
 
           <div data-reveal aria-hidden="true">
-            <AppWindow title="Zeytun" subtitle="Routing">
-              <AppRail active={1} />
+            {/* <AppWindow title="Zeytun" subtitle="Routing"> */}
+              {/* <AppRail active={1} /> */}
               <div className="app__main">
                 <div className="seg">
                   {tabs.map((tab, i) => (
@@ -225,7 +225,7 @@ export function Routing() {
                   </span>
                 </div>
               </div>
-            </AppWindow>
+            {/* </AppWindow> */}
           </div>
         </div>
       </div>

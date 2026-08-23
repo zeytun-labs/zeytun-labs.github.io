@@ -1,4 +1,4 @@
-import { SectionHead } from "@/components/landing/chrome"
+// import { SectionHead } from "@/components/landing/chrome"
 
 const phases = [
   {
@@ -43,11 +43,11 @@ export function Roadmap() {
   return (
     <section className="band band--alt" id="roadmap">
       <div className="wrap">
-        <SectionHead
+        {/* <SectionHead
           eyebrow="Roadmap"
           title="Built in the open, in order"
           lede="Visibility first, then control, then everything that makes control comfortable. Here is the sequence."
-        />
+        /> */}
 
         <div className="phases">
           {phases.map((phase) => (
