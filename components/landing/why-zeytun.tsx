@@ -103,7 +103,7 @@ function DecideCard() {
     <Card
       icon={Flag02Icon}
       title="DECIDE"
-      description="Turn Checkpoint on and unmatched connections wait for you instead of taking a default. Allow, block, or send it somewhere — once, or as a rule."
+      description="Turn Checkpoint on and unmatched connections wait for you. Allow, block, or send it somewhere — once, or as a rule."
     >
       <Fig className="relative">
         <GridNet />
@@ -127,19 +127,43 @@ export function WhyZeytun() {
   return (
     <Section>
       <div className="mb-16 flex flex-col items-center text-center">
-        <Title>Why Zeytun</Title>
-        <Heading>Your network, finally legible</Heading>
-        <Description>
-          Most tools give you a switch and a status light.
-          <br className="hidden md:block" />
-          Zeytun gives you the whole picture, then hands you the controls.
-        </Description>
+        {[
+          <Title key="t">Why Zeytun</Title>,
+          <Heading key="h">Your network, finally legible</Heading>,
+          <Description key="d">
+            Most tools give you a switch and a status light.
+            <br className="hidden md:block" />
+            Zeytun gives you the whole picture, then hands you the controls.
+          </Description>,
+        ].map((el, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {el}
+          </motion.div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <SeeCard />
-        <DecideCard />
-        <RouteCard />
+        {[
+          <SeeCard key="see" />,
+          <DecideCard key="decide" />,
+          <RouteCard key="route" />,
+        ].map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 48 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {card}
+          </motion.div>
+        ))}
       </div>
     </Section>
   )
