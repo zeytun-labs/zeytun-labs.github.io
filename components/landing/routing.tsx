@@ -4,7 +4,7 @@ import { Icon } from "@/components/landing/icons"
 const feats = [
   {
     title: "Outbounds bound to processes",
-    body: "Send Firefox through a relay in Amsterdam, keep your package manager direct, and block a chatty updater — the rule follows the process, not a port number.",
+    body: "Send Firefox through a relay in Amsterdam, keep your package manager direct, and block a chatty updater: the rule follows the process, not a port number.",
   },
   {
     title: "Rules you can actually read",
@@ -63,7 +63,7 @@ const rows = [
     initials: "DK",
     color: "#818CF8",
     policy: "block",
-    rtt: "—",
+    rtt: "-",
     on: false,
   },
   {

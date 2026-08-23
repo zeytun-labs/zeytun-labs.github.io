@@ -1,27 +1,23 @@
 import type { Metadata, Viewport } from "next"
 
 import "./landing.css"
-import { Architecture } from "@/components/landing/architecture"
-import { Dns } from "@/components/landing/dns"
-import { Firewall } from "@/components/landing/firewall"
 import { Hero } from "@/components/landing/hero"
-import { Reveal } from "@/components/landing/reveal"
-import { Routing } from "@/components/landing/routing"
-import { Roadmap } from "@/components/landing/roadmap"
-import { SiteFooter } from "@/components/landing/site-footer"
-import { StatStrip } from "@/components/landing/stat-strip"
-import { Visibility } from "@/components/landing/visibility"
-import { Waitlist } from "@/components/landing/waitlist"
 import { Nav } from "@/components/landing/nav"
+import { FeaturesApple } from "@/components/landing/features-apple"
+import { WhyZeytun } from "@/components/landing/why-zeytun"
+import { ArchitectureRest } from "@/components/landing/architecture-rest"
+import { RoadmapNew } from "@/components/landing/roadmap-new"
+import { WaitlistNew } from "@/components/landing/waitlist-new"
+import { SiteFooterNew } from "@/components/landing/site-footer-new"
 
 const description =
-  "Zeytun is a desktop network manager. Watch every connection live, route traffic per process, take full control of DNS, and decide what leaves your machine."
+  "Zeytun is a desktop network manager. Every connection your machine opens, attributed to the app that opened it - and yours to route, hold or refuse."
 
 export const metadata: Metadata = {
-  title: "Zeytun — Desktop Network Manager",
+  title: "Zeytun - Desktop Network Manager",
   description,
   openGraph: {
-    title: "Zeytun — Desktop Network Manager",
+    title: "Zeytun - Desktop Network Manager",
     description,
     type: "website",
   },
@@ -38,17 +34,13 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        {/* <StatStrip /> */}
-        <Visibility />
-        <Routing />
-        <Dns />
-        <Firewall />
-        <Architecture />
-        <Roadmap />
-        <Waitlist />
+        <WhyZeytun />
+        <FeaturesApple />
+        <ArchitectureRest />
+        <RoadmapNew />
+        <WaitlistNew />
       </main>
-      <SiteFooter />
-      <Reveal />
+      <SiteFooterNew />
     </div>
   )
 }

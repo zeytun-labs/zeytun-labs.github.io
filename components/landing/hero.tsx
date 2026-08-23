@@ -57,12 +57,13 @@ export function Hero() {
               Alpha v0.1 · macOS
             </span>
           </AnimatedGradientText>
-          <h1 className="mt-2 font-medium uppercase font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] tracking-[-0.035em] ">
-            See it. <em className="text-primary block not-italic">Route it.</em> Stop it.
+          <h1 className="mt-2 font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] font-medium tracking-[-0.035em] uppercase">
+            See it. <em className="block text-primary not-italic">Route it.</em>{" "}
+            Stop it.
           </h1>
           <p className="text-muted-foreground">
             Zeytun is a desktop network manager. Every connection your machine
-            opens, attributed to the app that opened it — and yours to route,
+            opens, attributed to the app that opened it: and yours to route,
             hold or refuse.
           </p>
           <div className="mt-2 flex gap-2">

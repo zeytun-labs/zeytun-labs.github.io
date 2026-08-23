@@ -4,7 +4,7 @@ import { Icon, type IconName } from "@/components/landing/icons"
 const feats = [
   {
     title: "Encrypted on your terms",
-    body: "Pick the transport per server — DNS over HTTPS, QUIC, TLS, or plain UDP. Queries leave the way you configured them, not the way the operating system felt like resolving them.",
+    body: "Pick the transport per server: DNS over HTTPS, QUIC, TLS, or plain UDP. Queries leave the way you configured them, not the way the operating system felt like resolving them.",
   },
   {
     title: "Split resolution",
@@ -171,7 +171,7 @@ export function Dns() {
               ))}
             </div>
             <p className="segcap">
-              The app writes the same configuration you would write by hand —
+              The app writes the same configuration you would write by hand -
               and shows it to you.
             </p>
             <div className="code">

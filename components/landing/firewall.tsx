@@ -71,7 +71,7 @@ export function Firewall() {
             <SectionHead
               eyebrow="Outbound firewall"
               title="Nothing leaves without a rule"
-              lede="An inbound firewall protects you from the network. An outbound firewall protects the network from your machine — and that is where the interesting traffic is."
+              lede="An inbound firewall protects you from the network. An outbound firewall protects the network from your machine: and that is where the interesting traffic is."
             />
             <ul className="feats">
               {feats.map((feat) => (

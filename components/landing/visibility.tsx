@@ -111,7 +111,7 @@ const rows = [
     policy: "block",
     up: "0 B",
     down: "0 B",
-    rtt: "—",
+    rtt: "-",
     destination: "telemetry.docker.io:443",
   },
 ]
@@ -230,7 +230,7 @@ export function Visibility() {
           </AppWindow>
         </div>
         <p className="mock-note">
-          Interface preview — numbers are illustrative.
+          Interface preview: numbers are illustrative.
         </p>
       </div>
     </section>

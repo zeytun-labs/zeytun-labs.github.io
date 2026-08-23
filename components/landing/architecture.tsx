@@ -4,7 +4,7 @@ import { Icon, type IconName } from "@/components/landing/icons"
 const layers = [
   {
     tag: "L1",
-    title: "Castle — the desktop app",
+    title: "Castle: the desktop app",
     body: "Svelte 5 inside Tauri. It renders state and sends intent; it never touches a packet.",
     core: false,
   },

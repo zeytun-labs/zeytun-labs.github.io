@@ -24,7 +24,7 @@ export function Waitlist() {
           {joined ? (
             <div className="form__ok is-on">
               <Icon name="check" />
-              You are on the list — watch for a note from us.
+              You are on the list: watch for a note from us.
             </div>
           ) : (
             <form
@@ -52,7 +52,7 @@ export function Waitlist() {
 
           <p className="cta__fine">No spam · one email · unsubscribe anytime</p>
           <p className="mock-note">
-            This form is not wired to a provider yet — submissions are only
+            This form is not wired to a provider yet: submissions are only
             acknowledged in the browser.
           </p>
         </div>

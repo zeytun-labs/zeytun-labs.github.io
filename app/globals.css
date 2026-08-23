@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    --animate-dash: dash 3s linear infinite;
     --font-heading: var(--font-heading);
     --font-sans: var(--font-sans);
     --font-kaine: var(--font-kaine);
@@ -291,5 +292,14 @@
   }
   50% {
     scale: 1.2;
+  }
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1.15;
+  }
+  to {
+    stroke-dashoffset: -1.15;
   }
 }
