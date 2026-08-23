@@ -1,9 +1,4 @@
-"use client"
-
-import React, { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
-
-export function GridNet({ className }: { className?: string }) {
+export function GridNet() {
   return (
     <div className="relative h-full flex-1 mask-[linear-gradient(to_bottom,black_0%,transparent_100%)]">
       <svg
@@ -45,7 +40,7 @@ export function GridNet({ className }: { className?: string }) {
           d="M -20 28.58 L 81.33 28.58 L 81.33 85.71 L 244 85.71 L 244 28.58 L 386 28.58"
           fill="none"
           stroke="var(--sidebar-primary)"
-          strokeWidth="2"
+          strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength="1"
@@ -57,7 +52,7 @@ export function GridNet({ className }: { className?: string }) {
           d="M 386 57.14 L 284.67 57.14 L 284.67 28.57 L 122 28.57 L 122 142.86 L -20 142.86"
           fill="none"
           stroke="var(--sidebar-primary)"
-          strokeWidth="2"
+          strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength="1"
@@ -70,7 +65,7 @@ export function GridNet({ className }: { className?: string }) {
           d="M 325.33 -20 L 325.33 85.71 L 203.33 85.71 L 203.33 142.86 L 386 142.86"
           fill="none"
           stroke="var(--sidebar-primary)"
-          strokeWidth="2"
+          strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength="1"
@@ -82,7 +77,7 @@ export function GridNet({ className }: { className?: string }) {
           d="M -20 171.43 L 244 171.43 L 244 114.29 L 386 114.29"
           fill="none"
           stroke="var(--sidebar-primary)"
-          strokeWidth="2"
+          strokeWidth="1"
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength="1"
