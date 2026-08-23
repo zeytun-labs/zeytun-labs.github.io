@@ -15,10 +15,10 @@ export function GridNet({ className }: { className?: string }) {
       >
         <defs>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
@@ -42,7 +42,7 @@ export function GridNet({ className }: { className?: string }) {
         </g>
 
         <path
-          d="M 0 28.58 L 81.3 28.58 L 81.3 85.71 L 244 85.71 L 244 28.58 L 366 28.58"
+          d="M -20 28.58 L 81.33 28.58 L 81.33 85.71 L 244 85.71 L 244 28.58 L 386 28.58"
           fill="none"
           stroke="var(--sidebar-primary)"
           strokeWidth="2"
@@ -50,7 +50,48 @@ export function GridNet({ className }: { className?: string }) {
           strokeLinejoin="round"
           pathLength="1"
           strokeDasharray="0.15 1"
-          className="animate-[dash_4s_linear_infinite]"
+          strokeDashoffset="0.15"
+          className="animate-dash"
+          filter="url(#glow)"
+        />
+        <path
+          d="M 386 57.14 L 284.67 57.14 L 284.67 28.57 L 122 28.57 L 122 142.86 L -20 142.86"
+          fill="none"
+          stroke="var(--sidebar-primary)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          pathLength="1"
+          strokeDasharray="0.15 1"
+          strokeDashoffset="0.15"
+          className="animate-[dash_4s_linear_infinite_1s]"
+          filter="url(#glow)"
+        />
+
+        <path
+          d="M 325.33 -20 L 325.33 85.71 L 203.33 85.71 L 203.33 142.86 L 386 142.86"
+          fill="none"
+          stroke="var(--sidebar-primary)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          pathLength="1"
+          strokeDasharray="0.15 1"
+          strokeDashoffset="0.15"
+          className="animate-[dash_3.5s_linear_infinite_0.5s]"
+          filter="url(#glow)"
+        />
+        <path
+          d="M -20 171.43 L 244 171.43 L 244 114.29 L 386 114.29"
+          fill="none"
+          stroke="var(--sidebar-primary)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          pathLength="1"
+          strokeDasharray="0.15 1"
+          strokeDashoffset="0.15"
+          className="animate-[dash_4.5s_linear_infinite_1.5s]"
           filter="url(#glow)"
         />
       </svg>

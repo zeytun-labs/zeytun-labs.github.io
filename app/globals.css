@@ -297,9 +297,9 @@
 
 @keyframes dash {
   from {
-    stroke-dashoffset: 1.15;
+    stroke-dashoffset: 0.15;
   }
   to {
-    stroke-dashoffset: -1.15;
+    stroke-dashoffset: -1;
   }
 }
