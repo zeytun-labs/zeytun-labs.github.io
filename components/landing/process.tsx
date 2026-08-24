@@ -110,13 +110,17 @@ function ProcessFig() {
   )
   const [phase, setPhase] = useState<"idle" | "menu" | "detail">("idle")
   const [focus, setFocus] = useState(0)
+  const [picked, setPicked] = useState("Direct")
 
   useEffect(() => {
     const iv = setInterval(() => {
       setRows((rs) =>
         rs.map((p) => ({
           ...p,
-          speed: Math.min(60, Math.max(0.5, p.speed + (Math.random() - 0.5) * 12)),
+          speed: Math.min(
+            60,
+            Math.max(0.5, p.speed + (Math.random() - 0.5) * 12)
+          ),
           total: p.total + (Math.random() < 0.5 ? 0.1 : 0),
         }))
       )
@@ -137,7 +141,7 @@ function ProcessFig() {
   }, [phase])
 
   return (
-    <div className="relative max-w-100 ms-auto h-98.5">
+    <div className="relative ms-auto h-98.5 max-w-100">
       <AnimatePresence initial={false}>
         {rows.map((p) => {
           if (phase === "detail" && p.id !== focus) return null
@@ -146,9 +150,12 @@ function ProcessFig() {
             <motion.div
               key={p.id}
               layout
-              className="overflow-hidden mb-3"
+              className="mb-3 overflow-hidden"
               initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: phase === "menu" && !active ? 0.35 : 1, x: 0 }}
+              animate={{
+                opacity: phase === "menu" && !active ? 0.35 : 1,
+                x: 0,
+              }}
               exit={{ opacity: 0, height: 0, marginBottom: 0 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
@@ -172,7 +179,7 @@ function ProcessFig() {
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             style={{ top: focus * ROW_STEP + 14 }}
-            className="absolute left-[55%] z-20 w-max rounded-xl border border-border/60 bg-popover/90 backdrop-blur-md p-1 shadow-2xl shadow-black/50 origin-top-left"
+            className="absolute left-[55%] z-20 w-max origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
             {[
               { icon: QuillWrite01Icon, label: `Add Rule for ${APPS[focus]}` },
@@ -180,9 +187,12 @@ function ProcessFig() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-2 ps-2 pe-4 py-1 rounded-lg text-sm cursor-default"
+                className="flex cursor-default items-center gap-2 rounded-lg py-1 ps-2 pe-4 text-sm"
               >
-                <HugeiconsIcon icon={item.icon} className="size-4 text-foreground" />
+                <HugeiconsIcon
+                  icon={item.icon}
+                  className="size-4 text-foreground"
+                />
                 {item.label}
               </div>
             ))}
@@ -195,12 +205,34 @@ function ProcessFig() {
           <motion.div
             key="detail"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
+            animate={{ height: 162, opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="h-72 rounded-2xl border border-border/40 bg-card/70" />
+            <div className="rounded-2xl border border-border/40 bg-card/70 p-4">
+              <p className="text-xs tracking-wide text-muted-foreground uppercase">
+                Policy
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                {["Direct", "🇺🇸 Proxy-US", "🇪🇺 Proxy-EU", "Reject"].map(
+                  (pol) => (
+                    <button
+                      key={pol}
+                      onClick={() => setPicked(pol)}
+                      className={cn(
+                        "rounded-xl border text-center py-2.5 font-mono text-sm transition-colors",
+                        pol === picked
+                          ? "border-primary/30 bg-primary/10 text-primary"
+                          : "border-border/40 bg-card text-muted-foreground hover:border-border"
+                      )}
+                    >
+                      {pol}
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -222,11 +254,11 @@ function ProcessRow({
   return (
     <div
       className={cn(
-        "flex gap-4 px-4 py-2.5 rounded-2xl items-center h-[52px] border bg-card/70",
+        "flex h-[52px] items-center gap-4 rounded-2xl border bg-card/70 px-4 py-2.5",
         active ? "border-border" : "border-border/40"
       )}
     >
-      <span className="block size-7 rounded-lg bg-muted-foreground/40 shrink-0" />
+      <span className="block size-7 shrink-0 rounded-lg bg-muted-foreground/40" />
       <p className="font-mono">{name}</p>
       <div className="ms-auto text-end font-mono">
         <p className="text-sm leading-tight">{speed}</p>
