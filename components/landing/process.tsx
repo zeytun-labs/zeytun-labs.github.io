@@ -108,7 +108,9 @@ function ProcessFig() {
       total: [7, 24, 11, 2, 18][id],
     }))
   )
-  const [phase, setPhase] = useState<"idle" | "menu" | "detail">("idle")
+  const [phase, setPhase] = useState<
+    "idle" | "menu" | "detail" | "closing"
+  >("idle")
   const [focus, setFocus] = useState(0)
   const [picked, setPicked] = useState("Direct")
 
@@ -135,8 +137,16 @@ function ProcessFig() {
         setFocus(Math.floor(Math.random() * APPS.length))
         setPhase("menu")
       } else if (phase === "menu") setPhase("detail")
+      else if (phase === "detail") setPhase("closing")
       else setPhase("idle")
     }, dur)
+    return () => clearTimeout(t)
+  }, [phase])
+
+  useEffect(() => {
+    // closing: wait for the policy box exit (0.5s) before rows slide back in
+    if (phase !== "closing") return
+    const t = setTimeout(() => setPhase("idle"), 550)
     return () => clearTimeout(t)
   }, [phase])
 
@@ -144,7 +154,8 @@ function ProcessFig() {
     <div className="relative ms-auto h-98.5 max-w-100">
       <AnimatePresence initial={false}>
         {rows.map((p) => {
-          if (phase === "detail" && p.id !== focus) return null
+          if ((phase === "detail" || phase === "closing") && p.id !== focus)
+            return null
           const active = phase !== "idle" && p.id === focus
           return (
             <motion.div
