@@ -54,6 +54,9 @@ function PHeader() {
 function PBody() {
   return (
     <div className="grid grid-cols-2">
+      <div>
+        <ProcessFig />
+      </div>
       <div className="space-y-8">
         <Option
           title="Live per-app bandwidth"
@@ -69,9 +72,6 @@ function PBody() {
           title="Act from where you are"
           description="Right-click any process to write a rule for it, or kill its connections on the spot. No settings screen in between."
         />
-      </div>
-      <div>
-        <ProcessFig />
       </div>
     </div>
   )
@@ -95,22 +95,29 @@ function Option({
   )
 }
 
-const APPS = ["Telegram", "Safari", "Spotify", "Dropbox", "Signal"]
+const APPS = [
+  { name: "Telegram", icon: "/process/telegram.png" },
+  { name: "Safari", icon: "/process/safari.png" },
+  { name: "Spotify", icon: "/process/spotify.png" },
+  { name: "Notion", icon: "/process/notion.png" },
+  { name: "Chrome", icon: "/process/chrome.png" },
+]
 const ROW_STEP = 64 // h-[52px] row + mb-3
 
 function ProcessFig() {
   const [rows, setRows] = useState(
-    APPS.map((name, id) => ({
+    APPS.map(({ name, icon }, id) => ({
       id,
       name,
+      icon,
       // ponytail: fixed seeds — Math.random() in useState breaks SSR hydration; shuffle on mount if wanted
       speed: [34, 8, 21, 3, 12][id],
       total: [7, 24, 11, 2, 18][id],
     }))
   )
-  const [phase, setPhase] = useState<
-    "idle" | "menu" | "detail" | "closing"
-  >("idle")
+  const [phase, setPhase] = useState<"idle" | "menu" | "detail" | "closing">(
+    "idle"
+  )
   const [focus, setFocus] = useState(0)
   const [picked, setPicked] = useState("Direct")
 
@@ -151,7 +158,7 @@ function ProcessFig() {
   }, [phase])
 
   return (
-    <div className="relative ms-auto h-98.5 max-w-100">
+    <div className="relative me-auto mt-8 h-98.5 max-w-100">
       <AnimatePresence initial={false}>
         {rows.map((p) => {
           if ((phase === "detail" || phase === "closing") && p.id !== focus)
@@ -172,6 +179,7 @@ function ProcessFig() {
             >
               <ProcessRow
                 name={p.name}
+                icon={p.icon}
                 speed={`${Math.round(p.speed)}Mb/s`}
                 total={`total:${Math.floor(p.total)}GB`}
                 active={active}
@@ -193,7 +201,10 @@ function ProcessFig() {
             className="absolute left-[55%] z-20 w-max origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
             {[
-              { icon: QuillWrite01Icon, label: `Add Rule for ${APPS[focus]}` },
+              {
+                icon: QuillWrite01Icon,
+                label: `Add Rule for ${APPS[focus].name}`,
+              },
               { icon: ListXIcon, label: "Kill Connection" },
             ].map((item) => (
               <div
@@ -232,7 +243,7 @@ function ProcessFig() {
                       key={pol}
                       onClick={() => setPicked(pol)}
                       className={cn(
-                        "rounded-xl border text-center py-2.5 font-mono text-sm transition-colors",
+                        "rounded-xl border py-2.5 text-center font-mono text-sm transition-colors",
                         pol === picked
                           ? "border-primary/30 bg-primary/10 text-primary"
                           : "border-border/40 bg-card text-muted-foreground hover:border-border"
@@ -253,11 +264,13 @@ function ProcessFig() {
 
 function ProcessRow({
   name,
+  icon,
   speed,
   total,
   active,
 }: {
   name: string
+  icon: string
   speed: string
   total: string
   active: boolean
@@ -265,11 +278,16 @@ function ProcessRow({
   return (
     <div
       className={cn(
-        "flex h-[52px] items-center gap-4 rounded-2xl border bg-card/70 px-4 py-2.5",
+        "flex h-13 items-center gap-4 rounded-2xl border bg-card/70 px-4 py-2.5",
         active ? "border-border" : "border-border/40"
       )}
     >
-      <span className="block size-7 shrink-0 rounded-lg bg-muted-foreground/40" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={icon}
+        alt={name}
+        className="size-7 shrink-0 rounded-lg object-contain"
+      />
       <p className="font-mono">{name}</p>
       <div className="ms-auto text-end font-mono">
         <p className="text-sm leading-tight">{speed}</p>
