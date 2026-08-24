@@ -10,6 +10,7 @@ import { WaitlistNew } from "@/components/landing/waitlist-new"
 import { SiteFooterNew } from "@/components/landing/site-footer-new"
 import { TrafficMonitor } from "@/components/landing/traffic-monitor"
 import { Process } from "@/components/landing/process"
+import { Checkpoint } from "@/components/landing/checkpoint"
 
 const description =
   "Zeytun is a desktop network manager. Every connection your machine opens, attributed to the app that opened it - and yours to route, hold or refuse."
@@ -38,6 +39,7 @@ export default function Page() {
         <WhyZeytun />
         <TrafficMonitor />
         <Process />
+        <Checkpoint />
         <ArchitectureRest />
         <RoadmapNew />
         <WaitlistNew />
