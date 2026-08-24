@@ -1,6 +1,7 @@
 "use client"
 
-import { motion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react"
+import { useEffect, useState } from "react"
 import { Description, Heading, Section, Title } from "../common/section"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Asterisk02Icon } from "@hugeicons/core-free-icons"
@@ -89,15 +90,54 @@ function Option({
 }
 
 function AnimatedFig() {
+  type Conn = { id: string; ip: string; done: boolean; isTcp: boolean }
+  const [conns, setConns] = useState<Conn[]>([])
+
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = []
+    const r = (n: number) => Math.floor(Math.random() * n)
+    const add = () => {
+      const conn: Conn = {
+        id: crypto.randomUUID(),
+        ip: `${1 + r(223)}.${r(256)}.${r(256)}.${r(256)}:${1024 + r(64511)}`,
+        done: false,
+        isTcp: Math.random() < 0.7,
+      }
+      setConns((cs) => [...cs.slice(-5), conn])
+      timers.push(
+        setTimeout(
+          () =>
+            setConns((cs) =>
+              cs.map((c) => (c.id === conn.id ? { ...c, done: true } : c))
+            ),
+          1000 + Math.random() * 4000
+        )
+      )
+    }
+    for (let i = 0; i < 5; i++) add()
+    const loop = setInterval(add, 1500)
+    return () => {
+      clearInterval(loop)
+      timers.forEach(clearTimeout)
+    }
+  }, [])
+
   return (
-    <div className="flex flex-col gap-3 max-w-100 ms-auto">
-      <ConnectionRaw ip="104.62.12.6:4367" done={false} isTcp={true} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={false} isTcp={false} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={true} isTcp={true} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={true} isTcp={false} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={true} isTcp={false} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={true} isTcp={true} />
-      <ConnectionRaw ip="104.62.12.6:4367" done={true} isTcp={true} />
+    <div className="flex flex-col gap-3 max-w-100 ms-auto h-98.5">
+      <AnimatePresence initial={false}>
+        {conns.map((c) => (
+          <motion.div
+            key={c.id}
+            layout
+            initial={{ opacity: 0, x: 24, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ConnectionRaw ip={c.ip} done={c.done} isTcp={c.isTcp} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   )
 }
@@ -112,10 +152,10 @@ function ConnectionRaw({
   isTcp?: boolean
 }) {
   return (
-    <div className="flex gap-4 px-4 py-2.5 rounded-2xl items-center border border-border/40 bg-card/70">
+    <div className={cn("flex gap-4 px-4 py-2.5 rounded-2xl items-center border border-border/40 bg-card/70 transition-all", done ? 'opacity-100' : 'opacity-50')}>
       <span
         className={cn(
-          "block size-2 rounded-full",
+          "block size-2 rounded-full transition-all",
           done ? "bg-primary" : "bg-amber-500"
         )}
       />
