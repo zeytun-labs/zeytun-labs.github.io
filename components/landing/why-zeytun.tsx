@@ -7,9 +7,77 @@ import { CheckpointWindow } from "./checkpoint-window"
 import { RouteChip } from "./route-chip"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Description, Heading, Section, Title } from "../common/section"
-import { Radar03Icon, Flag02Icon, Directions02Icon } from "@hugeicons/core-free-icons"
+import {
+  Radar03Icon,
+  Flag02Icon,
+  Directions02Icon,
+} from "@hugeicons/core-free-icons"
 import { IconSvgObject } from "@hugeicons/core-free-icons/types"
-// We use custom inline SVGs to precisely match the target design
+
+export function WhyZeytun() {
+  return (
+    <Section>
+      <WZHeader />
+      <WZBody />
+    </Section>
+  )
+}
+
+function WZHeader() {
+  return (
+    <div className="mb-16 flex flex-col items-center text-center">
+      {[
+        <Title key="wz-t">Why Zeytun</Title>,
+        <Heading key="wz-h">Your network, finally legible</Heading>,
+        <Description key="wz-d">
+          Most tools give you a switch and a status light.
+          <br className="hidden md:block" />
+          Zeytun gives you the whole picture, then hands you the controls.
+        </Description>,
+      ].map((el, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{
+            duration: 0.7,
+            delay: i * 0.1,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {el}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+function WZBody() {
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+      {[
+        <SeeCard key="see" />,
+        <DecideCard key="decide" />,
+        <RouteCard key="route" />,
+      ].map((card, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 48 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{
+            duration: 0.7,
+            delay: i * 0.12,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          {card}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
 
 function Card({
   children,
@@ -26,7 +94,7 @@ function Card({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border border-border! bg-linear-to-b from-card/70 to-card/20 bg-clip-padding transition-colors pb-6",
+        "group relative flex flex-col overflow-hidden rounded-3xl border border-border! bg-linear-to-b from-card/70 to-card/20 bg-clip-padding pb-6 transition-colors",
         className
       )}
       {...props}
@@ -115,56 +183,14 @@ function DecideCard() {
 
 function RouteCard() {
   return (
-    <Card icon={Directions02Icon} title="ROUTE" description="Rules, policies, proxy chains and DNS. Traffic goes exactly where you send it, or nowhere at all.">
+    <Card
+      icon={Directions02Icon}
+      title="ROUTE"
+      description="Rules, policies, proxy chains and DNS. Traffic goes exactly where you send it, or nowhere at all."
+    >
       <Fig>
         <RouteChip />
       </Fig>
     </Card>
-  )
-}
-
-export function WhyZeytun() {
-  return (
-    <Section>
-      <div className="mb-16 flex flex-col items-center text-center">
-        {[
-          <Title key="t">Why Zeytun</Title>,
-          <Heading key="h">Your network, finally legible</Heading>,
-          <Description key="d">
-            Most tools give you a switch and a status light.
-            <br className="hidden md:block" />
-            Zeytun gives you the whole picture, then hands you the controls.
-          </Description>,
-        ].map((el, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {el}
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {[
-          <SeeCard key="see" />,
-          <DecideCard key="decide" />,
-          <RouteCard key="route" />,
-        ].map((card, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 48 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {card}
-          </motion.div>
-        ))}
-      </div>
-    </Section>
   )
 }

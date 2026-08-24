@@ -9,6 +9,7 @@ import { ArchitectureRest } from "@/components/landing/architecture-rest"
 import { RoadmapNew } from "@/components/landing/roadmap-new"
 import { WaitlistNew } from "@/components/landing/waitlist-new"
 import { SiteFooterNew } from "@/components/landing/site-footer-new"
+import { TrafficMonitor } from "@/components/landing/traffic-monitor"
 
 const description =
   "Zeytun is a desktop network manager. Every connection your machine opens, attributed to the app that opened it - and yours to route, hold or refuse."
@@ -32,9 +33,10 @@ export default function Page() {
   return (
     <div className="landing relative min-h-screen overflow-x-clip">
       <Nav />
-      <main>
+      <main className="space-y-42">
         <Hero />
         <WhyZeytun />
+        <TrafficMonitor />
         <FeaturesApple />
         <ArchitectureRest />
         <RoadmapNew />
