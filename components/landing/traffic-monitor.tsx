@@ -64,7 +64,7 @@ function TMBody() {
           description="Filter by host, process or port, and keep only the columns you care about."
         />
       </div>
-      <div>
+      <div className="pt-6">
         <AnimatedFig />
       </div>
     </div>
@@ -114,7 +114,7 @@ function AnimatedFig() {
         )
       )
     }
-    for (let i = 0; i < 5; i++) add()
+    for (let i = 0; i < 6; i++) add()
     const loop = setInterval(add, 1500)
     return () => {
       clearInterval(loop)
@@ -123,16 +123,17 @@ function AnimatedFig() {
   }, [])
 
   return (
-    <div className="flex flex-col gap-3 max-w-100 ms-auto h-98.5">
+    <div className="flex flex-col max-w-100 ms-auto h-98.5">
       <AnimatePresence initial={false}>
         {conns.map((c) => (
           <motion.div
             key={c.id}
             layout
+            className="overflow-hidden mb-3"
             initial={{ opacity: 0, x: 24, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, height: 0, marginBottom: 0, scale: 0.95 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <ConnectionRaw ip={c.ip} done={c.done} isTcp={c.isTcp} />
           </motion.div>
