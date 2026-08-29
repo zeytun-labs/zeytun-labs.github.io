@@ -64,7 +64,7 @@ function CBody() {
         />
 
         <Option
-          title="You can always walk away"
+          title="Walk away"
           description="If you don't answer, the FINAL rule applies when the timeout runs out. Nothing hangs waiting on you."
         />
       </div>
@@ -81,7 +81,7 @@ function Option({
   description: string
 }) {
   return (
-    <div className="space-y-0.5 p-6 py-6">
+    <div className="space-y-0.5 p-6">
       <div className="flex gap-1">
         <HugeiconsIcon
           icon={Asterisk02Icon}

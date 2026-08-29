@@ -3,7 +3,7 @@ import React from "react"
 import { cn } from "@/lib/utils"
 import { GridNet } from "./gird-net"
 import { motion } from "motion/react"
-import { CheckpointWindow } from "./checkpoint-window"
+import { CheckpointWindowMinimal } from "./checkpoint-window"
 import { RouteChip } from "./route-chip"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Description, Heading, Section, Title } from "../common/section"
@@ -175,7 +175,7 @@ function DecideCard() {
     >
       <Fig className="relative">
         <GridNet />
-        <CheckpointWindow />
+        <CheckpointWindowMinimal />
       </Fig>
     </Card>
   )
