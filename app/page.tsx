@@ -9,6 +9,7 @@ import { RoadmapNew } from "@/components/landing/roadmap-new"
 import { WaitlistNew } from "@/components/landing/waitlist-new"
 import { SiteFooterNew } from "@/components/landing/site-footer-new"
 import { TrafficMonitor } from "@/components/landing/traffic-monitor"
+import { Policy } from "@/components/landing/policy"
 import { Process } from "@/components/landing/process"
 import { Checkpoint } from "@/components/landing/checkpoint"
 
@@ -40,11 +41,12 @@ export default function Page() {
         <TrafficMonitor />
         <Process />
         <Checkpoint />
-        <ArchitectureRest />
+        <Policy />
+        {/* <ArchitectureRest />
         <RoadmapNew />
-        <WaitlistNew />
+        <WaitlistNew /> */}
       </main>
-      <SiteFooterNew />
+      {/* <SiteFooterNew /> */}
     </div>
   )
 }
