@@ -6,7 +6,8 @@ import { motion } from "motion/react"
 import { CheckpointWindowMinimal } from "./checkpoint-window"
 import { RouteChip } from "./route-chip"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Description, Heading, Section, Title } from "../common/section"
+import { Section } from "../common/section"
+import { SectionHead } from "./chrome"
 import {
   Radar03Icon,
   Flag02Icon,
@@ -16,40 +17,91 @@ import { IconSvgObject } from "@hugeicons/core-free-icons/types"
 
 export function WhyZeytun() {
   return (
-    <Section>
-      <WZHeader />
+    <Section id="model">
+      <SectionHead
+        eyebrow="How it works"
+        title="See. Decide. Route."
+        lede={
+          <>
+            Most tools give you a switch and a status light.
+            <br className="hidden md:block" />
+            Zeytun gives you the whole picture, then hands you the controls.
+          </>
+        }
+      />
       <WZBody />
+      <Glance />
     </Section>
   )
 }
 
-function WZHeader() {
+const glance = [
+  { label: "Network", value: "Wi-Fi" },
+  { label: "Outbound mode", value: "Rule-based" },
+  { label: "Inbound", value: "TUN" },
+  { label: "Active connections", value: "24" },
+]
+
+const legs = [
+  { name: "router", value: "1 ms", width: "6%" },
+  { name: "DNS", value: "12 ms", width: "35%" },
+  { name: "proxy", value: "21 ms", width: "62%" },
+]
+
+/**
+ * The status row the app shows above the ledger: what the machine is on, how
+ * it is routing, and where the latency actually goes.
+ */
+function Glance() {
   return (
-    <div className="mb-16 flex flex-col items-center text-center">
-      {[
-        <Title key="wz-t">Why Zeytun</Title>,
-        <Heading key="wz-h">Your network, finally legible</Heading>,
-        <Description key="wz-d">
-          Most tools give you a switch and a status light.
-          <br className="hidden md:block" />
-          Zeytun gives you the whole picture, then hands you the controls.
-        </Description>,
-      ].map((el, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{
-            duration: 0.7,
-            delay: i * 0.1,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-        >
-          {el}
-        </motion.div>
-      ))}
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="mt-6 grid grid-cols-1 gap-6 rounded-3xl border border-border/40 bg-card/40 p-6 md:grid-cols-2"
+    >
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
+        {glance.map((tile) => (
+          <div key={tile.label}>
+            <dt className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              {tile.label}
+            </dt>
+            <dd className="mt-1 font-heading text-2xl leading-none">
+              {tile.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className="flex flex-col gap-3 md:border-s md:border-border/40 md:ps-6">
+        <div className="flex items-baseline gap-2">
+          <span className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+            Network latency
+          </span>
+          <span className="ms-auto font-heading text-2xl leading-none text-primary">
+            34 ms
+          </span>
+        </div>
+        {legs.map((leg) => (
+          <div key={leg.name} className="flex items-center gap-3">
+            <span className="w-14 font-mono text-xs text-muted-foreground">
+              {leg.name}
+            </span>
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: leg.width }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                className="h-full rounded-full bg-primary/60"
+              />
+            </div>
+            <span className="w-12 text-end font-mono text-xs">{leg.value}</span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
   )
 }
 

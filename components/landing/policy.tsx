@@ -2,176 +2,226 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "motion/react"
-import { Description, Heading, Section, Title } from "../common/section"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Asterisk02Icon } from "@hugeicons/core-free-icons"
+
+import { Section } from "../common/section"
 import { Separator } from "./../ui/separator"
 import { cn } from "@/lib/utils"
+import {
+  Chip,
+  ChipRow,
+  Code,
+  Option,
+  Rise,
+  SectionHead,
+  WindowMock,
+} from "./chrome"
 
 export function Policy() {
   return (
-    <Section>
-      <div className="mb-16 flex flex-col items-center text-center">
-        {[
-          <Title key="pol-t">Policy</Title>,
-          <Heading key="pol-h">Policies, not just a server list</Heading>,
-          <Description key="pol-d">
-            Three outbound modes, eight protocols, and policies that nest inside each other. Build the exact topology you want, then let it keep choosing the fastest way out.
-          </Description>,
-        ].map((el, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{
-              duration: 0.7,
-              delay: i * 0.1,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
-            {el}
-          </motion.div>
-        ))}
+    <Section id="policy">
+      <SectionHead
+        eyebrow="Policy"
+        title="Don't just pick a server. Define the path."
+        lede="A proxy list tells you what is available. A policy tells Zeytun how to choose. Build policies out of proxies and other policies, then let them keep choosing the fastest way out."
+      />
+
+      <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+        <div className="space-y-8">
+          <Rise>
+            <Option
+              title="Policies inside policies"
+              description={
+                <>
+                  A member can be a proxy or another policy.{" "}
+                  <strong className="text-foreground">Manual</strong> picks by
+                  hand. <strong className="text-foreground">Auto</strong>{" "}
+                  measures latency and takes the lowest.
+                </>
+              }
+            />
+          </Rise>
+          <Separator />
+          <Rise delay={0.1}>
+            <Option
+              title="Balancing that fits the traffic"
+              description="Spread load across a pool, pin a session to one node, or fall back when one dies: Round Robin, Weighted, Least Connections, Consistent Hashing, Sticky Sessions, Failover."
+            />
+          </Rise>
+          <Separator />
+          <Rise delay={0.2}>
+            <Option
+              title="Proxy chains"
+              description="One hop isn't always enough. Send traffic through several in order."
+            />
+          </Rise>
+        </div>
+        <Rise delay={0.15}>
+          <PolicyFig />
+        </Rise>
       </div>
 
-      <div className="grid grid-cols-2">
-        <div className="space-y-8">
-          <Option
-            title="Policies inside policies"
-            description="A policy member can be a proxy or another policy. Manual picks by hand, Auto picks the lowest latency."
-          />
-          <Separator />
-          <Option
-            title="Balancing that fits the traffic"
-            description="Spread load across a pool, pin a session to one node, or fall back when one dies: Round Robin, Weighted Round Robin, Least Connections, Consistent Hashing, Sticky Sessions and Failover."
-          />
-          <Separator />
-          <Option
-            title="Proxy chains"
-            description="Send traffic through several hops in order when one is not enough to get out."
-          />
-        </div>
-        <div className="pt-6 relative">
-          <AnimatedFig />
-        </div>
-      </div>
+      <Rise>
+        <OutboundModes />
+      </Rise>
+
+      <Rise className="mt-12">
+        <p className="mb-4 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+          Protocols
+        </p>
+        <ChipRow items={PROTOCOLS} />
+      </Rise>
     </Section>
   )
 }
 
-function Option({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="space-y-0.5">
-      <div className="flex items-center gap-1">
-        <HugeiconsIcon icon={Asterisk02Icon} className="size-6 text-primary" />
-        <p className="font-heading text-2xl">{title}</p>
-      </div>
-      <p className="ps-7 text-muted-foreground">{description}</p>
-    </div>
-  )
-}
+const PROTOCOLS = [
+  "VLESS",
+  "VMess",
+  "Trojan",
+  "Shadowsocks",
+  "Hysteria2",
+  "TUIC",
+  "SOCKS",
+  "HTTP",
+] as const
 
-function Protocols() {
-  const protocols = [
-    "http", "socks", "shadowsocks", "trojan",
-    "vmess", "vless", "hysteria2", "tuic"
-  ]
-  return (
-    <div className="flex flex-wrap gap-2">
-      {protocols.map((p, i) => (
-        <motion.div
-          key={p}
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5, delay: i * 0.05 }}
-          className="px-3 py-1.5 rounded-full border border-border/40 bg-card/70 font-mono text-xs text-muted-foreground"
-        >
-          {p}
-        </motion.div>
-      ))}
-    </div>
-  )
-}
+/**
+ * The three outbound modes are a mutually exclusive switch in the app, so the
+ * mock cycles through them rather than showing all three as equals.
+ */
+const MODES = [
+  {
+    name: "Direct",
+    description: "sends everything straight out.",
+  },
+  {
+    name: "Global",
+    description: "sends everything through one policy.",
+  },
+  {
+    name: "Rule",
+    description: "hands the decision to your rule list.",
+  },
+] as const
 
-function AnimatedFig() {
-  const [activeIdx, setActiveIdx] = useState(0)
+function OutboundModes() {
+  const [active, setActive] = useState(2)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIdx((prev: number) => (prev + 1) % 3)
-    }, 2000)
-    return () => clearInterval(timer)
+    const iv = setInterval(() => setActive((a) => (a + 1) % MODES.length), 2400)
+    return () => clearInterval(iv)
   }, [])
 
   return (
-    <div className="max-w-100 ms-auto flex flex-col gap-3 relative z-10">
-      <PolicyCard 
-        type="AUTO" 
-        name="Auto-Select" 
-        details="3 Members" 
-        active={activeIdx === 0} 
-      />
-      <PolicyCard 
-        type="BALANCER" 
-        name="Load Balancer" 
-        details="Round Robin • 5 Members" 
-        active={activeIdx === 1} 
-      />
-      <PolicyCard 
-        type="MANUAL" 
-        name="Direct Route" 
-        details="1 Member" 
-        active={activeIdx === 2} 
-      />
-      
-      <div className="mt-4 p-4 rounded-2xl border border-border/40 bg-card/40">
-        <div className="text-sm font-medium mb-3">Protocols</div>
-        <Protocols />
+    <div className="mt-16 rounded-3xl border border-border/40 bg-card/40 p-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center">
+        <div className="flex rounded-full border border-border/40 bg-card/70 p-1">
+          {MODES.map((m, i) => (
+            <span
+              key={m.name}
+              className={cn(
+                "rounded-full px-4 py-1.5 font-mono text-xs transition-colors",
+                i === active
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground"
+              )}
+            >
+              {m.name}
+            </span>
+          ))}
+        </div>
+        <p className="text-muted-foreground">
+          <strong className="font-heading text-lg text-foreground">
+            {MODES[active].name}
+          </strong>{" "}
+          {MODES[active].description}
+        </p>
       </div>
+      <p className="mt-4 text-sm text-muted-foreground">
+        Switching modes takes effect at once — no restart, no reconnect.
+      </p>
     </div>
   )
 }
 
-function PolicyCard({ type, name, details, active }: { type: string, name: string, details: string, active: boolean }) {
+/** Members and latencies from the v3 mock — one of them is a nested policy. */
+const MEMBERS = [
+  { name: "nld-hys-01", latency: 48, kind: "proxy" as const },
+  { name: "fra-reality", latency: 62, kind: "proxy" as const },
+  { name: "ams-ss", latency: null, kind: "proxy" as const },
+  { name: "eu-fallback", latency: 48, kind: "policy" as const },
+]
+
+function PolicyFig() {
+  const [pick, setPick] = useState(0)
+
+  useEffect(() => {
+    // Auto policies re-measure and re-pick; the lowest latency wins
+    const iv = setInterval(() => {
+      setPick((p) => {
+        const next = (p + 1) % MEMBERS.length
+        // never "pick" the dead node — that is the whole point of Auto
+        return MEMBERS[next].latency === null
+          ? (next + 1) % MEMBERS.length
+          : next
+      })
+    }, 2200)
+    return () => clearInterval(iv)
+  }, [])
+
   return (
-    <motion.div
-      layout
-      animate={{
-        scale: active ? 1.02 : 1,
-        backgroundColor: active ? "rgba(var(--card-rgb), 0.8)" : "rgba(var(--card-rgb), 0.4)",
-        borderColor: active ? "rgba(var(--primary-rgb), 0.5)" : "rgba(var(--border-rgb), 0.4)"
-      }}
-      className={cn(
-        "flex items-center gap-4 p-4 rounded-2xl border transition-colors",
-        active ? "shadow-[0_0_15px_rgba(var(--primary-rgb),0.1)]" : ""
-      )}
-    >
-      <div className={cn(
-        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-        active ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
-      )}>
-        <HugeiconsIcon icon={Asterisk02Icon} className="size-5" />
+    <WindowMock title="Policy" bodyClassName="p-4">
+      <div className="mb-4 flex items-baseline gap-2">
+        <span className="font-heading text-xl">streaming-pool</span>
+        <Chip on className="ms-auto">
+          Auto
+        </Chip>
       </div>
-      <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider">{type}</span>
-        <span className="text-sm font-medium truncate">{name}</span>
-        <span className="text-xs text-muted-foreground truncate">{details}</span>
+
+      <div className="space-y-2">
+        {MEMBERS.map((m, i) => (
+          <motion.div
+            key={m.name}
+            animate={{ opacity: m.latency === null ? 0.45 : 1 }}
+            className={cn(
+              "flex items-center gap-3 rounded-xl border px-3 py-2.5 font-mono text-xs transition-colors",
+              i === pick
+                ? "border-primary/40 bg-primary/5"
+                : "border-border/40 bg-card/70"
+            )}
+          >
+            <span
+              className={cn(
+                "size-1.5 shrink-0 rounded-full",
+                m.latency === null
+                  ? "bg-destructive/60"
+                  : i === pick
+                    ? "bg-primary"
+                    : "bg-muted-foreground/40"
+              )}
+            />
+            <span className="truncate">{m.name}</span>
+            {m.kind === "policy" && (
+              <span className="shrink-0 rounded bg-muted px-1.5 text-[10px] text-muted-foreground">
+                policy
+              </span>
+            )}
+            <span
+              className={cn(
+                "ms-auto shrink-0",
+                i === pick ? "text-primary" : "text-muted-foreground"
+              )}
+            >
+              {m.latency === null ? "—" : `${m.latency} ms`}
+            </span>
+          </motion.div>
+        ))}
       </div>
-      {active && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="size-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
-        />
-      )}
-    </motion.div>
+
+      <p className="mt-4 font-mono text-[11px] text-muted-foreground">
+        A member can be a proxy or another policy. <Code>Auto</Code> keeps
+        re-measuring.
+      </p>
+    </WindowMock>
   )
 }

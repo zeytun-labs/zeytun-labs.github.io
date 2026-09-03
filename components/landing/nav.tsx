@@ -2,14 +2,20 @@
 
 import { useEffect, useState, useRef } from "react"
 
-import { Mark } from "@/components/landing/icons"
+import { Mark } from "@/components/landing/mark"
 import Link from "next/link"
 import { Button } from "../ui/button"
+import { cn } from "@/lib/utils"
 
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+// All four are commented out for now: Product/Roadmap were the only two links
+// and they made the nav look half-finished on their own. Uncomment the set once
+// Blog and Docs exist (MDX in-repo, static export covers both) — then the row
+// reads as real navigation instead of two stray anchors.
+const links: { href: string; label: string }[] = [
+  // { href: "#model", label: "Product" },
+  // { href: "#roadmap", label: "Roadmap" },
+  // { href: "/blog", label: "Blog" },
+  // { href: "/docs", label: "Docs" },
 ]
 
 export function Nav() {
@@ -29,10 +35,12 @@ export function Nav() {
 
   return (
     <header
-      className={
-        "sticky top-4 z-50 mx-auto max-w-2xl rounded-full border border-border/40 bg-card/70 shadow-sm backdrop-blur transition-all duration-300 md:w-2xl" +
-        (stuck ? "" : "")
-      }
+      className={cn(
+        "sticky top-4 z-50 mx-auto max-w-2xl rounded-full border transition-all duration-300 md:w-2xl",
+        stuck
+          ? "border-border/60 bg-card/80 shadow-lg backdrop-blur-md"
+          : "border-border/40 bg-card/40 shadow-sm backdrop-blur-sm"
+      )}
     >
       <div className="flex px-3 py-3">
         <Link className="flex items-center gap-2 px-3" href="/">
@@ -68,7 +76,10 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <Button className="ms-2 text-primary-foreground!">
+        <Button
+          render={<a href="#waitlist" />}
+          className="ms-2 text-primary-foreground!"
+        >
           Join the waitlist
         </Button>
       </div>

@@ -2,135 +2,153 @@
 
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
-import { Description, Heading, Section, Title } from "../common/section"
 import { HugeiconsIcon } from "@hugeicons/react"
-import {
-  Asterisk02Icon,
-  ListXIcon,
-  QuillWrite01Icon,
-} from "@hugeicons/core-free-icons"
+import { ListXIcon, QuillWrite01Icon } from "@hugeicons/core-free-icons"
+
+import { Section } from "../common/section"
 import { Separator } from "./../ui/separator"
 import { cn } from "@/lib/utils"
+import { Option, Rise, SectionHead } from "./chrome"
 
 export function Process() {
   return (
-    <Section>
-      <PHeader />
+    <Section id="process">
+      <SectionHead
+        eyebrow="Process"
+        title="Know which app is talking."
+        lede="Traffic doesn't come from nowhere. Process collapses the ledger into the applications behind it, with live speed and the details you need to act."
+      />
       <PBody />
     </Section>
   )
 }
 
-function PHeader() {
-  return (
-    <div className="mb-16 flex flex-col items-center text-center">
-      {[
-        <Title key="p-t">Process</Title>,
-        <Heading key="p-h">Which app is doing that</Heading>,
-        <Description key="p-d">
-          {
-            "Traffic doesn't come from nowhere. Process collapses the ledger into the applications behind it, with live speed and the details you need to act."
-          }
-        </Description>,
-      ].map((el, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{
-            duration: 0.7,
-            delay: i * 0.1,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-        >
-          {el}
-        </motion.div>
-      ))}
-    </div>
-  )
-}
-
 function PBody() {
   return (
-    <div className="grid grid-cols-2">
-      <div>
+    <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+      <Rise className="order-2 md:order-1" delay={0.15}>
         <ProcessFig />
-      </div>
-      <div className="space-y-8">
-        <Option
-          title="Live per-app bandwidth"
-          description="Current up and down speed for every application, next to the total it has moved."
-        />
+      </Rise>
+      <div className="order-1 space-y-8 md:order-2">
+        <Rise>
+          <Option
+            title="Live per-app bandwidth"
+            description="Current up and down speed for every application, next to the total it has moved."
+          />
+        </Rise>
         <Separator />
-        <Option
-          title="Where it actually goes"
-          description="Active and closed connection counts, the host it talks to most, and the binary the traffic came from."
-        />
+        <Rise delay={0.1}>
+          <Option
+            title="Where it actually goes"
+            description="Active and closed connection counts, the host it talks to most, and the binary the traffic came from."
+          />
+        </Rise>
         <Separator />
-        <Option
-          title="Act from where you are"
-          description="Right-click any process to write a rule for it, or kill its connections on the spot. No settings screen in between."
-        />
+        <Rise delay={0.2}>
+          <Option
+            title="Act from where you are"
+            description="Right-click a process to write a rule for it, or kill its live connections on the spot. No settings screen in between."
+          />
+        </Rise>
       </div>
     </div>
   )
 }
 
-function Option({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="space-y-0.5">
-      <div className="flex items-center gap-1">
-        <HugeiconsIcon icon={Asterisk02Icon} className="size-6 text-primary" />
-        <p className="font-heading text-2xl">{title}</p>
-      </div>
-      <p className="ps-7 text-muted-foreground">{description}</p>
-    </div>
-  )
-}
-
+/** Speeds and totals are the v3 mock values, in the app's own formatting. */
 const APPS = [
-  { name: "Telegram", icon: "/process/telegram.png" },
-  { name: "Safari", icon: "/process/safari.png" },
-  { name: "Spotify", icon: "/process/spotify.png" },
-  { name: "Notion", icon: "/process/notion.png" },
-  { name: "Chrome", icon: "/process/chrome.png" },
+  {
+    name: "Telegram",
+    icon: "/process/telegram.png",
+    speed: 412,
+    total: "842 MB",
+    up: "16 KB/s",
+    down: "396 KB/s",
+    active: 3,
+    closed: 27,
+    host: "149.154.167.91:443",
+    path: "/Applications/Telegram.app",
+  },
+  {
+    name: "Safari",
+    icon: "/process/safari.png",
+    speed: 2100,
+    total: "6.4 GB",
+    up: "44 KB/s",
+    down: "2.0 MB/s",
+    active: 11,
+    closed: 214,
+    host: "cloudflare-dns.com:443",
+    path: "/Applications/Safari.app",
+  },
+  {
+    name: "Spotify",
+    icon: "/process/spotify.png",
+    speed: 96,
+    total: "1.2 GB",
+    up: "6 KB/s",
+    down: "90 KB/s",
+    active: 2,
+    closed: 41,
+    host: "audio-fa.scdn.co:443",
+    path: "/Applications/Spotify.app",
+  },
+  {
+    name: "Notion",
+    icon: "/process/notion.png",
+    speed: 18,
+    total: "96 MB",
+    up: "3 KB/s",
+    down: "15 KB/s",
+    active: 1,
+    closed: 8,
+    host: "notion.so:443",
+    path: "/Applications/Notion.app",
+  },
+  {
+    name: "Chrome",
+    icon: "/process/chrome.png",
+    speed: 0,
+    total: "318 MB",
+    up: "0 B/s",
+    down: "0 B/s",
+    active: 0,
+    closed: 62,
+    host: "142.250.185.78:443",
+    path: "/Applications/Google Chrome.app",
+  },
 ]
-const ROW_STEP = 64 // h-[52px] row + mb-3
+
+const ROW_STEP = 64 // row height + mb-3
+
+function fmt(kbps: number) {
+  if (kbps === 0) return "0 B/s"
+  return kbps >= 1000 ? `${(kbps / 1000).toFixed(1)} MB/s` : `${kbps} KB/s`
+}
 
 function ProcessFig() {
   const [rows, setRows] = useState(
-    APPS.map(({ name, icon }, id) => ({
-      id,
-      name,
-      icon,
-      // ponytail: fixed seeds — Math.random() in useState breaks SSR hydration; shuffle on mount if wanted
-      speed: [34, 8, 21, 3, 12][id],
-      total: [7, 24, 11, 2, 18][id],
-    }))
+    // ponytail: fixed seeds — Math.random() in useState breaks SSR hydration
+    APPS.map((a, id) => ({ id, speed: a.speed }))
   )
   const [phase, setPhase] = useState<"idle" | "menu" | "detail" | "closing">(
     "idle"
   )
   const [focus, setFocus] = useState(0)
-  const [picked, setPicked] = useState("Direct")
 
   useEffect(() => {
     const iv = setInterval(() => {
       setRows((rs) =>
-        rs.map((p) => ({
-          ...p,
-          speed: Math.min(
-            60,
-            Math.max(0.5, p.speed + (Math.random() - 0.5) * 12)
-          ),
-          total: p.total + (Math.random() < 0.5 ? 0.1 : 0),
+        rs.map((r) => ({
+          ...r,
+          // keep an idle app idle; jitter the rest around its seed
+          speed:
+            APPS[r.id].speed === 0
+              ? 0
+              : Math.max(
+                  4,
+                  Math.round(r.speed + (Math.random() - 0.5) * r.speed * 0.4)
+                ),
         }))
       )
     }, 900)
@@ -138,7 +156,14 @@ function ProcessFig() {
   }, [])
 
   useEffect(() => {
-    const dur = phase === "idle" ? 4200 : phase === "menu" ? 2800 : 4800
+    const dur =
+      phase === "idle"
+        ? 4200
+        : phase === "menu"
+          ? 2200
+          : phase === "detail"
+            ? 5000
+            : 550
     const t = setTimeout(() => {
       if (phase === "idle") {
         setFocus(Math.floor(Math.random() * APPS.length))
@@ -150,23 +175,18 @@ function ProcessFig() {
     return () => clearTimeout(t)
   }, [phase])
 
-  useEffect(() => {
-    // closing: wait for the policy box exit (0.5s) before rows slide back in
-    if (phase !== "closing") return
-    const t = setTimeout(() => setPhase("idle"), 550)
-    return () => clearTimeout(t)
-  }, [phase])
+  const app = APPS[focus]
 
   return (
     <div className="relative me-auto mt-8 h-98.5 max-w-100">
       <AnimatePresence initial={false}>
-        {rows.map((p) => {
-          if ((phase === "detail" || phase === "closing") && p.id !== focus)
+        {rows.map((r) => {
+          if ((phase === "detail" || phase === "closing") && r.id !== focus)
             return null
-          const active = phase !== "idle" && p.id === focus
+          const active = phase !== "idle" && r.id === focus
           return (
             <motion.div
-              key={p.id}
+              key={r.id}
               layout
               className="mb-3 overflow-hidden"
               initial={{ opacity: 0, x: 24 }}
@@ -178,10 +198,10 @@ function ProcessFig() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
               <ProcessRow
-                name={p.name}
-                icon={p.icon}
-                speed={`${Math.round(p.speed)}Mb/s`}
-                total={`total:${Math.floor(p.total)}GB`}
+                name={APPS[r.id].name}
+                icon={APPS[r.id].icon}
+                speed={fmt(r.speed)}
+                total={`total: ${APPS[r.id].total}`}
                 active={active}
               />
             </motion.div>
@@ -201,11 +221,8 @@ function ProcessFig() {
             className="absolute left-[55%] z-20 w-max origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
             {[
-              {
-                icon: QuillWrite01Icon,
-                label: `Add Rule for ${APPS[focus].name}`,
-              },
-              { icon: ListXIcon, label: "Kill Connection" },
+              { icon: QuillWrite01Icon, label: "Create rule…" },
+              { icon: ListXIcon, label: "Kill connections" },
             ].map((item) => (
               <div
                 key={item.label}
@@ -227,37 +244,53 @@ function ProcessFig() {
           <motion.div
             key="detail"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 162, opacity: 1 }}
+            animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="rounded-2xl border border-border/40 bg-card/70 p-4">
-              <p className="text-xs tracking-wide text-muted-foreground uppercase">
-                Policy
-              </p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {["Direct", "🇺🇸 Proxy-US", "🇪🇺 Proxy-EU", "Reject"].map(
-                  (pol) => (
-                    <button
-                      key={pol}
-                      onClick={() => setPicked(pol)}
-                      className={cn(
-                        "rounded-xl border py-2.5 text-center font-mono text-sm transition-colors",
-                        pol === picked
-                          ? "border-primary/30 bg-primary/10 text-primary"
-                          : "border-border/40 bg-card text-muted-foreground hover:border-border"
-                      )}
-                    >
-                      {pol}
-                    </button>
-                  )
-                )}
-              </div>
+            <div className="space-y-3 rounded-2xl border border-border/40 bg-card/70 p-4">
+              <Detail label="Bandwidth">
+                <span className="text-foreground">↓ {app.down}</span>
+                <span className="text-muted-foreground">↑ {app.up}</span>
+              </Detail>
+              <Detail label="Connections">
+                <span className="text-foreground">{app.active} active</span>
+                <span className="text-muted-foreground">
+                  {app.closed} closed
+                </span>
+              </Detail>
+              <Detail label="Details">
+                <span className="truncate text-muted-foreground">
+                  {app.host}
+                </span>
+              </Detail>
+              <Detail label="Binary">
+                <span className="truncate text-muted-foreground">
+                  {app.path}
+                </span>
+              </Detail>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+function Detail({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex min-w-0 items-baseline gap-3">
+      <span className="w-24 shrink-0 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
+        {label}
+      </span>
+      <span className="flex min-w-0 gap-4 font-mono text-xs">{children}</span>
     </div>
   )
 }

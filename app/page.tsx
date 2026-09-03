@@ -1,17 +1,20 @@
 import type { Metadata, Viewport } from "next"
 
-import "./landing.css"
-import { Hero } from "@/components/landing/hero"
 import { Nav } from "@/components/landing/nav"
+import { Hero } from "@/components/landing/hero"
+import { Problem } from "@/components/landing/problem"
 import { WhyZeytun } from "@/components/landing/why-zeytun"
-import { ArchitectureRest } from "@/components/landing/architecture-rest"
-import { RoadmapNew } from "@/components/landing/roadmap-new"
-import { WaitlistNew } from "@/components/landing/waitlist-new"
-import { SiteFooterNew } from "@/components/landing/site-footer-new"
 import { TrafficMonitor } from "@/components/landing/traffic-monitor"
-import { Policy } from "@/components/landing/policy"
 import { Process } from "@/components/landing/process"
 import { Checkpoint } from "@/components/landing/checkpoint"
+import { Rules } from "@/components/landing/rules"
+import { Policy } from "@/components/landing/policy"
+import { Dns } from "@/components/landing/dns"
+import { Architecture } from "@/components/landing/architecture"
+import { EverythingElse } from "@/components/landing/everything-else"
+import { Roadmap } from "@/components/landing/roadmap"
+import { Waitlist } from "@/components/landing/waitlist"
+import { SiteFooter } from "@/components/landing/site-footer"
 
 const description =
   "Zeytun is a desktop network manager. Every connection your machine opens, attributed to the app that opened it - and yours to route, hold or refuse."
@@ -33,20 +36,25 @@ export const viewport: Viewport = {
 
 export default function Page() {
   return (
-    <div className="landing relative min-h-screen overflow-x-clip">
+    <div className="relative min-h-screen overflow-x-clip px-6">
       <Nav />
+      {/* v3 arc: see → decide → route → trust */}
       <main className="space-y-42">
         <Hero />
+        <Problem />
         <WhyZeytun />
         <TrafficMonitor />
         <Process />
         <Checkpoint />
+        <Rules />
         <Policy />
-        {/* <ArchitectureRest />
-        <RoadmapNew />
-        <WaitlistNew /> */}
+        <Dns />
+        <Architecture />
+        <EverythingElse />
+        <Roadmap />
+        <Waitlist />
       </main>
-      {/* <SiteFooterNew /> */}
+      <SiteFooter />
     </div>
   )
 }

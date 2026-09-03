@@ -136,6 +136,17 @@
   html {
     @apply font-sans;
     }
+
+  /* A blanket motion kill-switch can't be expressed as a utility class, so it
+     lives here. Everything else the landing page needs is a Tailwind utility. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 }
 /* ✨ Shiny Button Component ✨ */
 @property --gradient-angle {

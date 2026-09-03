@@ -2,176 +2,222 @@
 
 import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
-import { Description, Heading, Section, Title } from "../common/section"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Asterisk02Icon } from "@hugeicons/core-free-icons"
+
+import { Section } from "../common/section"
 import { Separator } from "./../ui/separator"
 import { cn } from "@/lib/utils"
+import { Option, Rise, SectionHead } from "./chrome"
+import { churnRows, initialRows, jitterRows, type Row } from "./ledger"
+
 export function TrafficMonitor() {
   return (
-    <Section>
-      <TMHeader />
+    <Section id="traffic">
+      <SectionHead
+        eyebrow="Traffic Monitor"
+        title="A live ledger, not a speed graph."
+        lede="The connections your machine is making right now: what opened them, which policy they took, and where they actually went. No averages, no five-minute window — rows."
+      />
       <TMBody />
     </Section>
   )
 }
 
-function TMHeader() {
+function TMBody() {
   return (
-    <div className="mb-16 flex flex-col items-center text-center">
-      {[
-        <Title key="tm-t">Traffic Monitor</Title>,
-        <Heading key="tm-h">A live ledger, not a speed graph</Heading>,
-        <Description key="tm-d">
-          The connections your machine is making right now — what opened them,
-          which policy they took, and where they actually went.
-        </Description>,
-      ].map((el, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{
-            duration: 0.7,
-            delay: i * 0.1,
-            ease: [0.16, 1, 0.3, 1],
-          }}
+    <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+      <div className="space-y-8">
+        <Rise>
+          <Option
+            title="By client or by host"
+            description="Group the same ledger by the app that opened each connection or by the host it reached, each with a live count."
+          />
+        </Rise>
+        <Separator />
+        <Rise delay={0.1}>
+          <Option
+            title="Recent or active"
+            description="Look back over everything that has opened recently, or narrow to the connections still alive right now."
+          />
+        </Rise>
+        <Separator />
+        <Rise delay={0.2}>
+          <Option
+            title="Narrow it down"
+            description={
+              <>
+                Filter by host, process or port. Keep only the columns you care
+                about — status, network, start time, client, policy, up, down,
+                duration, method, URL.
+              </>
+            }
+          />
+        </Rise>
+      </div>
+      <Rise delay={0.15}>
+        <LedgerFig />
+      </Rise>
+    </div>
+  )
+}
+
+/**
+ * Rows churn and jitter on intervals so the mock reads as a live ledger rather
+ * than a shuffle. The data and the churn rule live in `ledger.ts` so they can
+ * be checked without a browser.
+ */
+function LedgerFig() {
+  const [tab, setTab] = useState<"recent" | "active">("recent")
+  const [group, setGroup] = useState<"client" | "host">("client")
+  const [rows, setRows] = useState<Row[]>(initialRows)
+
+  useEffect(() => {
+    const jitter = setInterval(() => setRows(jitterRows), 900)
+
+    let n = 0
+    const churn = setInterval(() => {
+      n += 1
+      setRows((rs) => churnRows(rs, n))
+    }, 2600)
+
+    // the tabs and the grouping toggle themselves so the control row reads as
+    // interactive without needing the visitor to click
+    const cycle = setInterval(() => {
+      setTab((t) => (t === "recent" ? "active" : "recent"))
+      setGroup((g) => (g === "client" ? "host" : "client"))
+    }, 5200)
+
+    return () => {
+      clearInterval(jitter)
+      clearInterval(churn)
+      clearInterval(cycle)
+    }
+  }, [])
+
+  const shown = tab === "active" ? rows.filter((r) => r.active) : rows
+
+  // No window chrome: the ledger sits on the page the way the Process figure
+  // does. The rows carry the borders, so a frame around them just doubles up.
+  return (
+    <div className="mt-2 max-w-115">
+      <div className="mb-3 flex items-center gap-2">
+        <Segmented
+          value={tab}
+          options={[
+            { value: "recent", label: "Recent" },
+            { value: "active", label: "Active" },
+          ]}
+        />
+        <span className="ms-auto font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
+          Group
+        </span>
+        <Segmented
+          value={group}
+          options={[
+            { value: "client", label: "Client" },
+            { value: "host", label: "Host" },
+          ]}
+        />
+      </div>
+
+      <div className="h-90">
+        <AnimatePresence initial={false}>
+          {shown.map((r) => (
+            <motion.div
+              key={r.id}
+              layout
+              className="mb-2 overflow-hidden"
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <LedgerRow row={r} group={group} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
+function Segmented<T extends string>({
+  value,
+  options,
+}: {
+  value: T
+  options: readonly { value: T; label: string }[]
+}) {
+  return (
+    <div className="flex rounded-full border border-border/40 bg-card/70 p-0.5">
+      {options.map((o) => (
+        <span
+          key={o.value}
+          className={cn(
+            "rounded-full px-2.5 py-0.5 font-mono text-[11px] transition-colors",
+            o.value === value
+              ? "bg-primary/10 text-primary"
+              : "text-muted-foreground"
+          )}
         >
-          {el}
-        </motion.div>
+          {o.label}
+        </span>
       ))}
     </div>
   )
 }
 
-function TMBody() {
+function LedgerRow({ row, group }: { row: Row; group: "client" | "host" }) {
   return (
-    <div className="grid grid-cols-2">
-      <div className="space-y-8">
-        <Option
-          title="By client or by host"
-          description="Group the same ledger by the app that opened each connection, or by the host it reached, each with a live count."
-        />
-        <Separator />
-        <Option
-          title="Recent or active"
-          description="See everything that has opened recently, or narrow to the connections still alive right now."
-        />
-        <Separator />
-        <Option
-          title="Narrow it down"
-          description="Filter by host, process or port, and keep only the columns you care about."
-        />
-      </div>
-      <div className="pt-6">
-        <AnimatedFig />
-      </div>
-    </div>
-  )
-}
-
-function Option({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <div className="space-y-0.5">
-      <div className="flex items-center gap-1">
-        <HugeiconsIcon icon={Asterisk02Icon} className="size-6 text-primary" />
-        <p className="font-heading text-2xl">{title}</p>
-      </div>
-      <p className="ps-7 text-muted-foreground">{description}</p>
-    </div>
-  )
-}
-
-function AnimatedFig() {
-  type Conn = { id: string; ip: string; done: boolean; isTcp: boolean }
-  const [conns, setConns] = useState<Conn[]>([])
-
-  useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = []
-    const r = (n: number) => Math.floor(Math.random() * n)
-    const add = () => {
-      const conn: Conn = {
-        id: crypto.randomUUID(),
-        ip: `${1 + r(223)}.${r(256)}.${r(256)}.${r(256)}:${1024 + r(64511)}`,
-        done: false,
-        isTcp: Math.random() < 0.7,
-      }
-      setConns((cs) => [...cs.slice(-5), conn])
-      timers.push(
-        setTimeout(
-          () =>
-            setConns((cs) =>
-              cs.map((c) => (c.id === conn.id ? { ...c, done: true } : c))
-            ),
-          1000 + Math.random() * 4000
-        )
-      )
-    }
-    for (let i = 0; i < 6; i++) add()
-    const loop = setInterval(add, 1500)
-    return () => {
-      clearInterval(loop)
-      timers.forEach(clearTimeout)
-    }
-  }, [])
-
-  return (
-    <div className="flex flex-col max-w-100 ms-auto h-98.5">
-      <AnimatePresence initial={false}>
-        {conns.map((c) => (
-          <motion.div
-            key={c.id}
-            layout
-            className="overflow-hidden mb-3"
-            initial={{ opacity: 0, x: 24, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, height: 0, marginBottom: 0, scale: 0.95 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <ConnectionRaw ip={c.ip} done={c.done} isTcp={c.isTcp} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-function ConnectionRaw({
-  done,
-  ip,
-  isTcp,
-}: {
-  done: boolean
-  ip: string
-  isTcp?: boolean
-}) {
-  return (
-    <div className={cn("flex gap-4 px-4 py-2.5 rounded-2xl items-center border border-border/40 bg-card/70 transition-all", done ? 'opacity-100' : 'opacity-50')}>
+    <div
+      className={cn(
+        "flex h-13 items-center gap-3 rounded-2xl border bg-card/70 px-4 font-mono text-xs",
+        row.active ? "border-border" : "border-border/40"
+      )}
+    >
       <span
         className={cn(
-          "block size-2 rounded-full transition-all",
-          done ? "bg-primary" : "bg-amber-500"
+          "size-1.5 shrink-0 rounded-full",
+          row.active ? "bg-primary" : "bg-muted-foreground/40"
         )}
       />
-      <p className="font-mono">{ip}</p>
-
-      <div
+      <span
         className={cn(
-          "ms-auto font-mono rounded-full px-2",
-          isTcp
-            ? "bg-cyan-500/10 text-cyan-500"
-            : "bg-pink-500/10 text-pink-500"
+          "shrink-0 rounded-full px-1.5 text-[10px]",
+          row.tcp
+            ? "bg-cyan-500/10 text-cyan-400"
+            : "bg-pink-500/10 text-pink-400"
         )}
       >
-        {isTcp ? "TCP" : "UDP"}
-      </div>
+        {row.tcp ? "TCP" : "UDP"}
+      </span>
+
+      {group === "client" ? (
+        <span className="flex min-w-0 items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={row.icon}
+            alt=""
+            className="size-5 shrink-0 rounded object-contain"
+          />
+          <span className="truncate">{row.app}</span>
+        </span>
+      ) : (
+        <span className="min-w-0 truncate">{row.host}</span>
+      )}
+
+      <span className="ms-auto hidden shrink-0 rounded-full bg-muted px-1.5 text-[10px] text-muted-foreground lg:block">
+        {row.policy}
+      </span>
+      {/* Fixed columns for the digits: the numbers jitter between 1 and 3
+          digits, and letting the span size to its content made the policy badge
+          jump left every tick. The arrows stay outside the fixed boxes so glyph
+          metrics don't matter. */}
+      <span className="flex shrink-0 items-center gap-0.5 text-[11px] text-muted-foreground tabular-nums">
+        <span className="text-foreground">↓</span>
+        <span className="w-[3ch] text-end text-foreground">{row.down}</span>
+        <span className="ms-1">↑</span>
+        <span className="w-[2ch] text-end">{row.up}</span>
+      </span>
     </div>
   )
 }

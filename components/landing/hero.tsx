@@ -7,47 +7,36 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 import { ShinyButton } from "../ui/shiny-button"
 
-// const glance = [
-//   {
-//     label: "Live connections",
-//     value: "1,284",
-//     note: <>across 37 processes</>,
-//   },
-//   {
-//     label: "Blocked today",
-//     value: "96",
-//     note: (
-//       <>
-//         12 processes · <em>7 rules</em>
-//       </>
-//     ),
-//   },
-//   {
-//     label: "DNS queries",
-//     value: "18.4k",
-//     note: (
-//       <>
-//         <em>DoH</em> · 0 leaks
-//       </>
-//     ),
-//   },
-// ]
-
-// const legs = [
-//   { name: "local", width: "18%", value: "4 ms" },
-//   { name: "relay", width: "62%", value: "26 ms" },
-//   { name: "exit", width: "31%", value: "12 ms" },
-// ]
+/**
+ * Live-feel counters under the CTAs. Illustrative of a real session rather
+ * than fetched — the strip exists to say "this is a running thing" before the
+ * first mock appears.
+ */
+const stats = [
+  { label: "Live connections", value: "1,284", note: "across 37 processes" },
+  { label: "Blocked today", value: "96", note: "12 processes · 7 rules" },
+  { label: "DNS queries", value: "18.4k", note: "DoH · 0 leaks" },
+]
 
 export function Hero() {
   return (
     <Section
-      className="hero relative h-[calc(100vh-60px)] max-h-188 max-w-none! overflow-hidden px-0 pt-[clamp(56px,8vw,112px)] pb-[clamp(52px,8vw,80px)]"
+      // The hero takes the whole viewport and no more — `min-h`, never `max-h`.
+      // A height cap was clipping the particle field on tall displays: the
+      // canvas is the hero box, so a hero shorter than the screen cuts the logo
+      // mid-assembly. Tall screens are kept sane by the content band below
+      // (`my-auto`), which centres the text instead of stretching it.
+      // `-mx-6` cancels the page gutter so the field runs edge to edge.
+      className="relative -mx-6 flex min-h-[calc(100svh-60px)] max-w-none! flex-col overflow-hidden px-0 pt-[clamp(56px,8vw,112px)] pb-[clamp(52px,8vw,80px)]"
       id="top"
     >
       <ParticleCanvas />
-      <div className="relative z-4 mx-auto flex max-w-6xl flex-col px-8">
-        <div className="flex w-1/2 flex-col gap-2">
+      <div className="relative z-4 mx-auto flex w-full max-w-6xl flex-1 flex-col px-8">
+        {/* `my-auto` centres the copy in the leftover space and still leaves the
+            scroll cue pinned to the bottom — so a tall display grows the empty
+            band evenly above and below instead of stranding the text at the top,
+            which is the reason the height cap existed in the first place. */}
+        <div className="my-auto flex flex-col gap-2 md:w-3/5">
           <AnimatedGradientText>
             <span
               className={cn(
@@ -61,60 +50,49 @@ export function Hero() {
             See it. <em className="block text-primary not-italic">Route it.</em>{" "}
             Stop it.
           </h1>
-          <p className="text-muted-foreground">
+          <p className="max-w-xl text-muted-foreground">
             Zeytun is a desktop network manager. Every connection your machine
-            opens, attributed to the app that opened it: and yours to route,
+            opens — attributed to the app that opened it, and yours to route,
             hold or refuse.
           </p>
-          <div className="mt-2 flex gap-2">
-            <ShinyButton>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <ShinyButton href="#waitlist">
               Join the waitlist
-              <HugeiconsIcon
-                icon={ArrowRight02Icon}
-                className="size-5.5!"
-              />{" "}
+              <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
             </ShinyButton>
             <Button
-              variant={"outline"}
+              render={<a href="#model" />}
+              variant="outline"
               className="h-auto! min-w-60.5 rounded-full px-10 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground!"
             >
               See how it works
             </Button>
           </div>
+
+          <dl className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <dt className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                  {stat.label}
+                </dt>
+                <dd className="mt-1 font-heading text-3xl leading-none">
+                  {stat.value}
+                </dd>
+                <dd className="mt-1 font-mono text-xs text-muted-foreground/70">
+                  {stat.note}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
-        {/* <div className="glance" data-reveal>
-          {glance.map((tile) => (
-            <div className="gtile" key={tile.label}>
-              <h4>{tile.label}</h4>
-              <b>{tile.value}</b>
-              <i>{tile.note}</i>
-            </div>
-          ))}
-          <div className="hero__card gcard">
-            <h3>Active route · handshake</h3>
-            <div className="lat">
-              <b>42</b>
-              <i>ms round-trip</i>
-            </div>
-            <div className="legs">
-              {legs.map((leg) => (
-                <div className="leg" key={leg.name}>
-                  <span>{leg.name}</span>
-                  <div className="bar">
-                    <i style={{ width: leg.width }} />
-                  </div>
-                  <b>{leg.value}</b>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div className="scrollcue" aria-hidden="true">
-          <i />
-          Scroll to explore
-        </div> */}
+        <a
+          href="#problem"
+          className="hidden flex-col items-center gap-2 self-center font-mono text-xs tracking-widest text-muted-foreground uppercase transition-colors hover:text-foreground md:flex"
+        >
+          <span className="block h-8 w-px animate-pulse bg-linear-to-b from-transparent to-primary" />
+          Scroll
+        </a>
       </div>
     </Section>
   )

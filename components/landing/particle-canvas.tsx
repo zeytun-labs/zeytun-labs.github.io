@@ -258,6 +258,11 @@ const ParticleCanvas: React.FC = () => {
     }
 
     const handleResize = () => {
+      // ResizeObserver fires once on observe(), and scroll-driven browser-chrome
+      // changes fire it with unchanged dimensions — both would restart the
+      // assembly for nothing. Only a real size change rebuilds.
+      const r = canvas.getBoundingClientRect()
+      if (Math.abs(r.width - W) < 1 && Math.abs(r.height - H) < 1) return
       clearTimeout(resizeTimeout)
       resizeTimeout = window.setTimeout(() => {
         stop()
@@ -265,11 +270,16 @@ const ParticleCanvas: React.FC = () => {
       }, 220)
     }
 
+    // ResizeObserver watches the canvas itself, not the window: the hero box can
+    // change height without a window resize (webfont swap reflowing the
+    // headline, a scrollbar appearing, content outgrowing a short viewport), and
+    // a stale measurement is exactly what clips the logo mid-assembly.
+    const ro = new ResizeObserver(handleResize)
+    ro.observe(canvas)
     window.addEventListener("pointermove", handlePointerMove as EventListener, {
       passive: true,
     })
     window.addEventListener("pointerleave", handlePointerLeave)
-    window.addEventListener("resize", handleResize)
     document.addEventListener("visibilitychange", handleVisibilityChange)
 
     let observer: IntersectionObserver
@@ -296,25 +306,17 @@ const ParticleCanvas: React.FC = () => {
         handlePointerMove as EventListener
       )
       window.removeEventListener("pointerleave", handlePointerLeave)
-      window.removeEventListener("resize", handleResize)
+      ro.disconnect()
       document.removeEventListener("visibilitychange", handleVisibilityChange)
       if (observer) observer.disconnect()
     }
   }, [])
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 h-[calc(100vh-60px)] w-screen max-h-188"
-      style={{
-        width: "100vw",
-        height: "calc(100vh-60px)",
-        maxHeight: "752px",
-        display: "block",
-        backgroundColor: "transparent",
-      }}
-    />
-  )
+  // The canvas must never carry its own height math: `inset-0` makes it exactly
+  // the hero box, so whatever the hero measures, the particle field measures
+  // too. It used to restate the hero's `calc(100vh-60px)` + a 752px cap inline,
+  // which cut the cloud off mid-flight on any viewport taller than the cap.
+  return <canvas ref={canvasRef} className="absolute inset-0 block size-full" />
 }
 
 export default ParticleCanvas

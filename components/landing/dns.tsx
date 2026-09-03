@@ -1,206 +1,177 @@
-// import { SectionHead } from "@/components/landing/chrome"
-import { Icon, type IconName } from "@/components/landing/icons"
+"use client"
 
-const feats = [
-  {
-    title: "Encrypted on your terms",
-    body: "Pick the transport per server: DNS over HTTPS, QUIC, TLS, or plain UDP. Queries leave the way you configured them, not the way the operating system felt like resolving them.",
-  },
-  {
-    title: "Split resolution",
-    body: "Send .lan to the router, work domains to the corporate resolver, and everything else to a public one. Rules are evaluated in order, top to bottom.",
-  },
-  {
-    title: "Nothing resolves in the dark",
-    body: "Every query is attributed to the process that asked for it, so a hard-coded resolver inside some app shows up in the log instead of quietly working.",
-  },
-]
+import { useEffect, useState } from "react"
+import { motion } from "motion/react"
 
-const transports: { icon: IconName; title: string; body: string }[] = [
-  {
-    icon: "lock",
-    title: "DNS over HTTPS",
-    body: "RFC 8484 with a pooled connection per server.",
-  },
-  {
-    icon: "zap",
-    title: "DNS over QUIC",
-    body: "Fewer round trips when the resolver supports it.",
-  },
-  {
-    icon: "shield",
-    title: "DNS over TLS",
-    body: "Classic port 853 for resolvers that speak it.",
-  },
-  {
-    icon: "globe",
-    title: "FakeIP",
-    body: "Synthetic addresses so hostnames survive into routing.",
-  },
-  {
-    icon: "list",
-    title: "Hosts & mDNS",
-    body: "Static answers and local discovery without editing files.",
-  },
-  {
-    icon: "server",
-    title: "Independent caches",
-    body: "One resolver's answers never pollute another's.",
-  },
-]
-
-const tabs = ["Servers", "Rules", "Cache", "Log"]
-
-type Token = ["" | "c-key" | "c-val" | "c-dim", string]
-
-const snippet: Token[][] = [
-  [["c-dim", "// resolver policy, evaluated top to bottom"]],
-  [["", "{"]],
-  [
-    ["c-key", '  "servers"'],
-    ["", ": ["],
-  ],
-  [
-    ["", "    { "],
-    ["c-key", '"tag"'],
-    ["", ": "],
-    ["c-val", '"secure"'],
-    ["", ", "],
-    ["c-key", '"type"'],
-    ["", ": "],
-    ["c-val", '"https"'],
-    ["", ","],
-  ],
-  [
-    ["", "      "],
-    ["c-key", '"server"'],
-    ["", ": "],
-    ["c-val", '"dns.quad9.net"'],
-    ["", " },"],
-  ],
-  [
-    ["", "    { "],
-    ["c-key", '"tag"'],
-    ["", ": "],
-    ["c-val", '"lan"'],
-    ["", ", "],
-    ["c-key", '"type"'],
-    ["", ": "],
-    ["c-val", '"local"'],
-    ["", " }"],
-  ],
-  [["", "  ],"]],
-  [
-    ["c-key", '  "rules"'],
-    ["", ": ["],
-  ],
-  [
-    ["", "    { "],
-    ["c-key", '"rule_set"'],
-    ["", ": "],
-    ["c-val", '"ads"'],
-    ["", ", "],
-    ["c-key", '"action"'],
-    ["", ": "],
-    ["c-val", '"reject"'],
-    ["", " },"],
-  ],
-  [
-    ["", "    { "],
-    ["c-key", '"domain_suffix"'],
-    ["", ": "],
-    ["c-val", '".lan"'],
-    ["", ","],
-  ],
-  [
-    ["", "      "],
-    ["c-key", '"server"'],
-    ["", ": "],
-    ["c-val", '"lan"'],
-    ["", " }"],
-  ],
-  [["", "  ],"]],
-  [
-    ["c-key", '  "strategy"'],
-    ["", ": "],
-    ["c-val", '"prefer_ipv4"'],
-    ["", ","],
-  ],
-  [
-    ["c-key", '  "independent_cache"'],
-    ["", ": "],
-    ["c-val", "true"],
-  ],
-  [["", "}"]],
-]
+import { Section } from "../common/section"
+import { cn } from "@/lib/utils"
+import { ChipRow, Code, Option, Rise, SectionHead, WindowMock } from "./chrome"
 
 export function Dns() {
   return (
-    <section className="band" id="dns">
-      <div className="wrap">
-        <div className="split split--rev">
-          <div className="split__copy">
-            {/* <SectionHead
-              eyebrow="DNS control"
-              title="Resolution is a decision, not a default"
-              lede="DNS is where most privacy stories quietly fall apart. Zeytun treats it as part of the routing table."
-            /> */}
-            <ul className="feats">
-              {feats.map((feat) => (
-                <li key={feat.title}>
-                  <Icon name="globe" />
-                  <div>
-                    <b>{feat.title}</b>
-                    <p>{feat.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+    <Section id="dns">
+      <SectionHead
+        eyebrow="DNS"
+        title="Your DNS follows the rules too."
+        lede="DNS is part of the path, not a text field in a settings pane. Zeytun opens all of it: route queries, split local from remote, and inspect any lookup."
+      />
 
-          <div data-reveal>
-            <div className="seg seg--line" aria-hidden="true">
-              {tabs.map((tab, i) => (
-                <button
-                  className={i === 1 ? "is-on" : undefined}
-                  key={tab}
-                  tabIndex={-1}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-            <p className="segcap">
-              The app writes the same configuration you would write by hand -
-              and shows it to you.
-            </p>
-            <div className="code">
-              <pre>
-                {snippet.map((line, i) => (
-                  <span key={i}>
-                    {line.map(([cls, text], j) => (
-                      <span className={cls || undefined} key={j}>
-                        {text}
-                      </span>
-                    ))}
-                    {"\n"}
-                  </span>
-                ))}
-              </pre>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_minmax(0,26rem)]">
+        <div className="divide-y divide-border/40">
+          <Row
+            title="Match before you resolve"
+            description="The FakeIP engine matches a domain before it resolves, so DNS can't leak around your routing rules. Flush the core and FakeIP caches in one click."
+          />
+          <Row
+            title="Local stays local"
+            description="External names resolve through the proxy, internal names stay on your network. Keep your own host entries for the machines no resolver knows about."
+          />
+          <Row
+            title="DNS gets its own rules"
+            description="An ordered rule list for queries, matched the way traffic is — by domain, by suffix, or by a rule-set you already use for routing. Send a query to your router, to a resolver of your choice, or refuse to answer it."
+          />
+          <Row
+            title="Every transport"
+            description={<ChipRow className="mt-3" items={TRANSPORTS} />}
+          />
         </div>
 
-        <div className="grid4">
-          {transports.map((transport) => (
-            <div className="mini" key={transport.title} data-reveal>
-              <Icon name={transport.icon} />
-              <b>{transport.title}</b>
-              <p>{transport.body}</p>
+        <Rise delay={0.15}>
+          <ResolverFig />
+        </Rise>
+      </div>
+    </Section>
+  )
+}
+
+function Row({
+  title,
+  description,
+}: {
+  title: string
+  description: React.ReactNode
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="py-7"
+    >
+      <Option title={title} description={description} />
+    </motion.div>
+  )
+}
+
+const TRANSPORTS = ["DoH", "DoT", "QUIC", "TCP", "UDP"] as const
+
+const SERVERS = [
+  {
+    name: "cloudflare-dns.com",
+    transport: "DoH",
+    latency: "12 ms",
+    scope: "remote",
+  },
+  { name: "192.168.1.1", transport: "UDP", latency: "1 ms", scope: "local" },
+]
+
+/** Query → matched rule → server. The lookup cycles through the three rules. */
+const LOOKUPS = [
+  { query: "nas.local", rule: "lan → local", answer: "192.168.1.24" },
+  { query: "ads.doubleclick.net", rule: "ads → block", answer: "refused" },
+  { query: "github.com", rule: "github.com → remote", answer: "140.82.121.4" },
+]
+
+const HOSTS = ["router.lan", "nas.local", "build.internal"]
+
+function ResolverFig() {
+  const [i, setI] = useState(0)
+
+  useEffect(() => {
+    const iv = setInterval(() => setI((n) => (n + 1) % LOOKUPS.length), 2400)
+    return () => clearInterval(iv)
+  }, [])
+
+  const lookup = LOOKUPS[i]
+  const blocked = lookup.answer === "refused"
+
+  return (
+    <WindowMock title="DNS" bodyClassName="space-y-4 p-4">
+      <div>
+        <Label>Servers</Label>
+        <div className="space-y-2">
+          {SERVERS.map((s) => (
+            <div
+              key={s.name}
+              className="flex items-center gap-2 rounded-xl border border-border/40 bg-card/70 px-3 py-2 font-mono text-xs"
+            >
+              <span className="truncate">{s.name}</span>
+              <span className="shrink-0 rounded bg-muted px-1.5 text-[10px] text-muted-foreground">
+                {s.transport}
+              </span>
+              <span className="ms-auto shrink-0 text-muted-foreground">
+                {s.latency}
+              </span>
+              <span
+                className={cn(
+                  "shrink-0 text-[10px] italic",
+                  s.scope === "local" ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                {s.scope}
+              </span>
             </div>
           ))}
         </div>
       </div>
-    </section>
+
+      <div>
+        <Label>Query</Label>
+        <motion.div
+          key={lookup.query}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-2 rounded-xl border border-border/40 bg-card/70 p-3 font-mono text-xs"
+        >
+          <p className="truncate text-foreground">{lookup.query}</p>
+          <p className="flex items-center gap-2 text-muted-foreground">
+            <span className="text-primary">matched</span>
+            <Code>{lookup.rule}</Code>
+          </p>
+          <p
+            className={cn(
+              "truncate",
+              blocked ? "text-destructive/80" : "text-muted-foreground"
+            )}
+          >
+            → {lookup.answer}
+          </p>
+        </motion.div>
+      </div>
+
+      <div>
+        <Label>Hosts</Label>
+        <div className="flex flex-wrap gap-2 font-mono text-xs text-muted-foreground">
+          {HOSTS.map((h) => (
+            <span
+              key={h}
+              className="rounded-lg border border-border/40 bg-card/70 px-2 py-1"
+            >
+              {h}
+            </span>
+          ))}
+        </div>
+      </div>
+    </WindowMock>
+  )
+}
+
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-2 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
+      {children}
+    </p>
   )
 }
