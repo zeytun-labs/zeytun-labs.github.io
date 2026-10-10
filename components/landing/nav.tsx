@@ -77,6 +77,7 @@ export function Nav() {
           ))}
         </nav>
         <Button
+          nativeButton={false}
           render={<a href="#waitlist" />}
           className="ms-2 text-primary-foreground!"
         >

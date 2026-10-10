@@ -61,6 +61,7 @@ export function Hero() {
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
             </ShinyButton>
             <Button
+              nativeButton={false}
               render={<a href="#model" />}
               variant="outline"
               className="h-auto! min-w-60.5 rounded-full px-10 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground!"
