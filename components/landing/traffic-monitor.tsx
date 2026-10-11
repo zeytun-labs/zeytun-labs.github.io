@@ -1,13 +1,14 @@
 "use client"
 
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { Section } from "../common/section"
 import { Separator } from "./../ui/separator"
 import { cn } from "@/lib/utils"
 import { Option, Rise, SectionHead } from "./chrome"
 import { churnRows, initialRows, jitterRows, type Row } from "./ledger"
+import { useDemoActivity } from "@/hooks/use-demo-activity"
 
 export function TrafficMonitor() {
   return (
@@ -15,7 +16,7 @@ export function TrafficMonitor() {
       <SectionHead
         eyebrow="Traffic Monitor"
         title="A live ledger, not a speed graph."
-        lede="The connections your machine is making right now: what opened them, which policy they took, and where they actually went. No averages, no five-minute window — rows."
+        lede="Inspect active and recent connections handled by Zeytun: available app details, the selected policy, and the destination reached."
       />
       <TMBody />
     </Section>
@@ -66,21 +67,22 @@ function TMBody() {
  * be checked without a browser.
  */
 function LedgerFig() {
+  const { ref, canAnimate } = useDemoActivity()
   const [tab, setTab] = useState<"recent" | "active">("recent")
   const [group, setGroup] = useState<"client" | "host">("client")
   const [rows, setRows] = useState<Row[]>(initialRows)
+  const churnCount = useRef(0)
 
   useEffect(() => {
+    if (!canAnimate) return
+
     const jitter = setInterval(() => setRows(jitterRows), 900)
 
-    let n = 0
     const churn = setInterval(() => {
-      n += 1
-      setRows((rs) => churnRows(rs, n))
+      churnCount.current += 1
+      setRows((rs) => churnRows(rs, churnCount.current))
     }, 2600)
 
-    // the tabs and the grouping toggle themselves so the control row reads as
-    // interactive without needing the visitor to click
     const cycle = setInterval(() => {
       setTab((t) => (t === "recent" ? "active" : "recent"))
       setGroup((g) => (g === "client" ? "host" : "client"))
@@ -91,14 +93,22 @@ function LedgerFig() {
       clearInterval(churn)
       clearInterval(cycle)
     }
-  }, [])
+  }, [canAnimate])
 
   const shown = tab === "active" ? rows.filter((r) => r.active) : rows
 
   // No window chrome: the ledger sits on the page the way the Process figure
   // does. The rows carry the borders, so a frame around them just doubles up.
   return (
-    <div className="mt-2 max-w-115">
+    <div ref={ref} className="mt-2 w-full max-w-115">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Live Ledger
+        </span>
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Illustrative preview
+        </span>
+      </div>
       <div className="mb-3 flex items-center gap-2">
         <Segmented
           value={tab}

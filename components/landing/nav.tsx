@@ -4,8 +4,9 @@ import { useEffect, useState, useRef } from "react"
 
 import { Mark } from "@/components/landing/mark"
 import Link from "next/link"
-import { Button } from "../ui/button"
+import { buttonVariants } from "../ui/button"
 import { cn } from "@/lib/utils"
+import { DOWNLOAD_URL } from "@/lib/site"
 
 // All four are commented out for now: Product/Roadmap were the only two links
 // and they made the nav look half-finished on their own. Uncomment the set once
@@ -36,53 +37,60 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "sticky top-4 z-50 mx-auto max-w-2xl rounded-full border transition-all duration-300 md:w-2xl",
+        "sticky top-4 z-50 mx-auto w-full max-w-2xl rounded-full border transition-all duration-300 md:w-2xl",
         stuck
           ? "border-border/60 bg-card/80 shadow-lg backdrop-blur-md"
           : "border-border/40 bg-card/40 shadow-sm backdrop-blur-sm"
       )}
     >
-      <div className="flex px-3 py-3">
-        <Link className="flex items-center gap-2 px-3" href="/">
+      <div className="flex items-center justify-between px-3 py-2 sm:py-2.5">
+        <Link className="flex items-center gap-2" href="/">
           <Mark className="size-6 text-primary" />
           <span className="translate-y-px font-kaine text-xl leading-none font-extrabold text-lime-100">
             Zeytun
           </span>
         </Link>
-        <nav
-          ref={navRef}
-          className="relative ms-auto! flex items-center gap-1"
-          onMouseLeave={() => setBlobStyle((prev) => ({ ...prev, opacity: 0 }))}
+        {links.length > 0 && (
+          <nav
+            ref={navRef}
+            className="relative ms-auto flex items-center gap-1"
+            onMouseLeave={() => setBlobStyle((prev) => ({ ...prev, opacity: 0 }))}
+          >
+            <div
+              className="absolute left-0 z-0 h-8 rounded-full bg-white/10 transition-all duration-300 ease-out"
+              style={blobStyle}
+            />
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="relative z-10 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground! transition-colors hover:text-foreground!"
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget
+                  setBlobStyle({
+                    left: el.offsetLeft,
+                    width: el.offsetWidth,
+                    opacity: 1,
+                  })
+                }}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
+        <a
+          href={DOWNLOAD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            buttonVariants({ size: "sm" }),
+            "ms-auto shrink-0 text-xs sm:text-sm text-primary-foreground! px-3 sm:px-4"
+          )}
         >
-          <div
-            className="absolute left-0 z-0 h-8 rounded-full bg-white/10 transition-all duration-300 ease-out"
-            style={blobStyle}
-          />
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="relative z-10 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground! transition-colors hover:text-foreground!"
-              onMouseEnter={(e) => {
-                const el = e.currentTarget
-                setBlobStyle({
-                  left: el.offsetLeft,
-                  width: el.offsetWidth,
-                  opacity: 1,
-                })
-              }}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <Button
-          nativeButton={false}
-          render={<a href="#waitlist" />}
-          className="ms-2 text-primary-foreground!"
-        >
-          Join the waitlist
-        </Button>
+          <span className="hidden sm:inline">Download beta</span>
+          <span className="sm:hidden">Download</span>
+        </a>
       </div>
     </header>
   )

@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useReducer } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Menu01Icon } from "@hugeicons/core-free-icons"
+import { useDemoActivity } from "@/hooks/use-demo-activity"
 
 import { Section } from "../common/section"
 import { cn } from "@/lib/utils"
@@ -175,102 +176,145 @@ const RULES = [
   },
 ]
 
+type RuleState = {
+  order: number[]
+  dragging: number | null
+  step: number
+}
+
+type RuleAction = { type: "tick" }
+
+function ruleReducer(state: RuleState, action: RuleAction): RuleState {
+  if (action.type === "tick") {
+    const nextStep = state.step + 1
+    if (nextStep % 2 === 1) {
+      const from = 1 + (Math.floor(nextStep / 2) % 3)
+      const nextOrder = [...state.order]
+      const movedId = nextOrder[from]
+      nextOrder.splice(from, 1)
+      nextOrder.splice(from - 1, 0, movedId)
+      return {
+        order: nextOrder,
+        dragging: movedId,
+        step: nextStep,
+      }
+    } else {
+      return {
+        ...state,
+        dragging: null,
+        step: nextStep,
+      }
+    }
+  }
+  return state
+}
+
 function RuleTableFig() {
-  const [order, setOrder] = useState(RULES.map((_, i) => i))
-  const [dragging, setDragging] = useState<number | null>(null)
+  const { ref, canAnimate } = useDemoActivity()
+  const [state, dispatch] = useReducer(ruleReducer, {
+    order: RULES.map((_, i) => i),
+    dragging: null,
+    step: 0,
+  })
 
   useEffect(() => {
-    // one rule is lifted and dropped one slot higher, forever — priority is
-    // the whole point of the section
-    let step = 0
+    if (!canAnimate) return
     const iv = setInterval(() => {
-      step += 1
-      if (step % 2 === 1) {
-        const from = 1 + (((step / 2) | 0) % 3)
-        setDragging(order[from])
-        setOrder((o) => {
-          const next = [...o]
-          const [moved] = next.splice(from, 1)
-          next.splice(from - 1, 0, moved)
-          return next
-        })
-      } else {
-        setDragging(null)
-      }
+      dispatch({ type: "tick" })
     }, 1600)
     return () => clearInterval(iv)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [canAnimate])
 
   return (
-    <WindowMock title="Rules" bodyClassName="p-4">
-      <div className="mb-2 hidden grid-cols-[16px_1fr_auto_auto_28px] items-center gap-3 px-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase md:grid">
-        <span />
-        <span>Match</span>
-        <span>Policy</span>
-        <span className="w-14 text-end">Expires</span>
-        <span />
-      </div>
-
-      <div className="space-y-2">
-        <AnimatePresence initial={false}>
-          {order.map((id) => {
-            const r = RULES[id]
-            return (
-              <motion.div
-                key={r.type + r.value}
-                layout
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                animate={{ opacity: r.on ? 1 : 0.45 }}
-                className={cn(
-                  "grid grid-cols-[16px_1fr_auto] items-center gap-3 rounded-xl border bg-card/70 px-3 py-2.5 font-mono text-xs md:grid-cols-[16px_1fr_auto_auto_28px]",
-                  dragging === id
-                    ? "border-primary/40 bg-primary/5 shadow-lg shadow-black/30"
-                    : "border-border/40"
-                )}
-              >
-                <HugeiconsIcon
-                  icon={Menu01Icon}
-                  className="size-4 text-muted-foreground/50"
-                />
-                <span className="flex min-w-0 items-center gap-2">
-                  <Chip className="shrink-0 px-1.5 py-0.5 text-[10px]">
-                    {r.type}
-                  </Chip>
-                  <span className="truncate text-muted-foreground">
-                    {r.value}
-                  </span>
-                </span>
-                <span className="hidden text-foreground md:block">
-                  {r.policy}
-                </span>
-                <span className="hidden w-14 text-end text-muted-foreground md:block">
-                  {r.expiry}
-                </span>
-                <Switch on={r.on} />
-              </motion.div>
-            )
-          })}
-        </AnimatePresence>
-
-        <div className="grid grid-cols-[16px_1fr_auto] items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2.5 font-mono text-xs md:grid-cols-[16px_1fr_auto_auto_28px]">
+    <div ref={ref}>
+      <WindowMock title="Rules" bodyClassName="p-4">
+        <div className="mb-2 hidden grid-cols-[16px_1fr_auto_auto_28px] items-center gap-3 px-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase md:grid">
           <span />
-          <span className="flex items-center gap-2">
-            <Chip on className="shrink-0 px-1.5 py-0.5 text-[10px]">
-              FINAL
-            </Chip>
-            <span className="truncate text-muted-foreground">
-              everything that matched nothing
-            </span>
-          </span>
-          <span className="hidden text-primary md:block">streaming-pool</span>
-          <span className="hidden w-14 text-end text-muted-foreground md:block">
-            —
-          </span>
+          <span>Match</span>
+          <span>Policy</span>
+          <span className="w-14 text-end">Expires</span>
           <span />
         </div>
-      </div>
-    </WindowMock>
+
+        <div className="space-y-2">
+          <AnimatePresence initial={false}>
+            {state.order.map((id) => {
+              const r = RULES[id]
+              return (
+                <motion.div
+                  key={r.type + r.value}
+                  layout
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  animate={{ opacity: r.on ? 1 : 0.45 }}
+                  className={cn(
+                    "rounded-xl border bg-card/70 px-3 py-2.5 font-mono text-xs",
+                    "flex flex-col gap-1.5 md:grid md:grid-cols-[16px_minmax(0,1fr)_auto_auto_28px] md:items-center md:gap-3",
+                    state.dragging === id
+                      ? "border-primary/40 bg-primary/5 shadow-lg shadow-black/30"
+                      : "border-border/40"
+                  )}
+                >
+                  <div className="flex items-center gap-2 min-w-0 md:contents">
+                    <HugeiconsIcon
+                      icon={Menu01Icon}
+                      className="size-4 shrink-0 text-muted-foreground/50"
+                    />
+                    <div className="flex min-w-0 flex-1 items-center gap-2">
+                      <Chip className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                        {r.type}
+                      </Chip>
+                      <span className="truncate text-muted-foreground min-w-0">
+                        {r.value}
+                      </span>
+                    </div>
+                    <div className="md:hidden">
+                      <Switch on={r.on} />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between ps-6 text-[11px] md:contents">
+                    <span className="text-foreground">
+                      {r.policy}
+                    </span>
+                    <span className="text-muted-foreground md:w-14 md:text-end">
+                      {r.expiry}
+                    </span>
+                  </div>
+
+                  <div className="hidden md:block">
+                    <Switch on={r.on} />
+                  </div>
+                </motion.div>
+              )
+            })}
+          </AnimatePresence>
+
+          <div
+            className={cn(
+              "rounded-xl border border-primary/30 bg-primary/5 px-3 py-2.5 font-mono text-xs",
+              "flex flex-col gap-1.5 md:grid md:grid-cols-[16px_minmax(0,1fr)_auto_auto_28px] md:items-center md:gap-3"
+            )}
+          >
+            <div className="flex items-center gap-2 min-w-0 md:contents">
+              <span className="hidden md:block" />
+              <div className="flex min-w-0 flex-1 items-center gap-2 flex-wrap sm:flex-nowrap">
+                <Chip on className="shrink-0 px-1.5 py-0.5 text-[10px]">
+                  FINAL
+                </Chip>
+                <span className="text-muted-foreground text-xs break-words">
+                  everything that matched nothing
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-[11px] md:contents">
+              <span className="text-primary">streaming-pool</span>
+              <span className="text-muted-foreground md:w-14 md:text-end">—</span>
+            </div>
+            <span className="hidden md:block" />
+          </div>
+        </div>
+      </WindowMock>
+    </div>
   )
 }
 

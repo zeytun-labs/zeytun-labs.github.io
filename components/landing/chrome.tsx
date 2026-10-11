@@ -194,8 +194,11 @@ export function WindowMock({
         <div className="size-2.5 rounded-full bg-muted-foreground/30" />
         <div className="size-2.5 rounded-full bg-muted-foreground/30" />
         <div className="size-2.5 rounded-full bg-muted-foreground/30" />
-        <span className="mx-auto pe-8 font-heading text-xs font-bold tracking-widest text-muted-foreground/60 uppercase">
+        <span className="ms-2 font-heading text-xs font-bold tracking-widest text-muted-foreground/60 uppercase">
           {title}
+        </span>
+        <span className="ms-auto font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Illustrative preview
         </span>
       </div>
       <div className={cn("p-3", bodyClassName)}>{children}</div>

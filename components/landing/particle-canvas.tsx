@@ -55,10 +55,40 @@ const ParticleCanvas: React.FC = () => {
       raf = 0
     let resizeTimeout: number = 0
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    let disposed = false
+    let particlesReady = false
+    let isIntersecting = false
+    let pageVisible = document.visibilityState === "visible"
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let reduced = motionQuery.matches
+    let buildGeneration = 0
+
+    function reconcile() {
+      if (disposed) return
+      const shouldRun =
+        particlesReady && isIntersecting && pageVisible && !reduced
+
+      if (shouldRun) {
+        if (!running) {
+          running = true
+          raf = requestAnimationFrame(frame)
+        }
+      } else {
+        if (running) {
+          running = false
+          if (raf) {
+            cancelAnimationFrame(raf)
+            raf = 0
+          }
+        }
+        if (reduced && particlesReady) {
+          still()
+        }
+      }
+    }
 
     function size() {
-      if (!canvas || !ctx) return
+      if (!canvas || !ctx || disposed) return
       const r = canvas.getBoundingClientRect()
       W = Math.max(320, r.width)
       H = Math.max(320, r.height)
@@ -68,6 +98,7 @@ const ParticleCanvas: React.FC = () => {
     }
 
     function build() {
+      if (disposed) return
       size()
       const wide = W >= 1000
       cx = W * (wide ? 0.72 : 0.5)
@@ -89,8 +120,10 @@ const ParticleCanvas: React.FC = () => {
         PATHS.map((d) => '<path d="' + d + '" fill="#ffffff"/>').join("") +
         "</svg>"
 
+      const currentGen = ++buildGeneration
       const img = new Image()
       img.onload = () => {
+        if (disposed || currentGen !== buildGeneration) return
         const off = document.createElement("canvas")
         off.width = S
         off.height = S
@@ -127,11 +160,12 @@ const ParticleCanvas: React.FC = () => {
             }
           }
         }
-        if (reduce) {
+
+        particlesReady = true
+        if (reduced) {
           still()
-        } else {
-          start()
         }
+        reconcile()
       }
       img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg)
     }
@@ -150,7 +184,7 @@ const ParticleCanvas: React.FC = () => {
     }
 
     function paint() {
-      if (!ctx) return
+      if (!ctx || disposed) return
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i]
         const q = project(p)
@@ -168,7 +202,7 @@ const ParticleCanvas: React.FC = () => {
     }
 
     function still() {
-      if (!ctx || !canvas) return
+      if (!ctx || !canvas || disposed) return
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i]
         p.x = p.tx
@@ -180,9 +214,8 @@ const ParticleCanvas: React.FC = () => {
     }
 
     function frame() {
-      if (!running || !ctx || !canvas) return
+      if (!running || !ctx || !canvas || disposed) return
       ctx.fillStyle = "oklch(0.153 0.006 107.1)"
-      // ctx.fillStyle = "rgba(7,8,7)"
       ctx.fillRect(0, 0, W, H)
 
       if (pointer.active) {
@@ -224,22 +257,15 @@ const ParticleCanvas: React.FC = () => {
       raf = requestAnimationFrame(frame)
     }
 
-    function start() {
-      if (running || reduce) return
-      running = true
-      raf = requestAnimationFrame(frame)
-    }
-
-    function stop() {
-      running = false
-      if (raf) cancelAnimationFrame(raf)
-      raf = 0
-    }
-
     const handlePointerMove = (e: PointerEvent) => {
-      if (!canvas) return
+      if (!canvas || disposed || reduced) return
       const r = canvas.getBoundingClientRect()
-      if (e.clientY < r.top || e.clientY > r.bottom) {
+      if (
+        e.clientX < r.left ||
+        e.clientX > r.right ||
+        e.clientY < r.top ||
+        e.clientY > r.bottom
+      ) {
         pointer.active = false
         return
       }
@@ -253,27 +279,27 @@ const ParticleCanvas: React.FC = () => {
     }
 
     const handleVisibilityChange = () => {
-      if (document.hidden) stop()
-      else start()
+      pageVisible = document.visibilityState === "visible"
+      if (!pageVisible) pointer.active = false
+      reconcile()
+    }
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      reduced = e.matches
+      if (reduced) pointer.active = false
+      reconcile()
     }
 
     const handleResize = () => {
-      // ResizeObserver fires once on observe(), and scroll-driven browser-chrome
-      // changes fire it with unchanged dimensions — both would restart the
-      // assembly for nothing. Only a real size change rebuilds.
+      if (disposed || !canvas) return
       const r = canvas.getBoundingClientRect()
       if (Math.abs(r.width - W) < 1 && Math.abs(r.height - H) < 1) return
       clearTimeout(resizeTimeout)
       resizeTimeout = window.setTimeout(() => {
-        stop()
         build()
       }, 220)
     }
 
-    // ResizeObserver watches the canvas itself, not the window: the hero box can
-    // change height without a window resize (webfont swap reflowing the
-    // headline, a scrollbar appearing, content outgrowing a short viewport), and
-    // a stale measurement is exactly what clips the logo mid-assembly.
     const ro = new ResizeObserver(handleResize)
     ro.observe(canvas)
     window.addEventListener("pointermove", handlePointerMove as EventListener, {
@@ -281,42 +307,55 @@ const ParticleCanvas: React.FC = () => {
     })
     window.addEventListener("pointerleave", handlePointerLeave)
     document.addEventListener("visibilitychange", handleVisibilityChange)
+    motionQuery.addEventListener("change", handleMotionChange)
 
-    let observer: IntersectionObserver
+    let observer: IntersectionObserver | null = null
     if ("IntersectionObserver" in window) {
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((en) => {
-            if (en.isIntersecting) start()
-            else stop()
+            isIntersecting = en.isIntersecting
+            reconcile()
           })
         },
         { threshold: 0 }
       )
       observer.observe(canvas)
+    } else {
+      isIntersecting = true
+      reconcile()
     }
 
     build()
 
     return () => {
-      stop()
+      disposed = true
+      buildGeneration++
+      running = false
+      if (raf) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
       clearTimeout(resizeTimeout)
       window.removeEventListener(
         "pointermove",
         handlePointerMove as EventListener
       )
       window.removeEventListener("pointerleave", handlePointerLeave)
-      ro.disconnect()
       document.removeEventListener("visibilitychange", handleVisibilityChange)
-      if (observer) observer.disconnect()
+      motionQuery.removeEventListener("change", handleMotionChange)
+      ro.disconnect()
+      observer?.disconnect()
     }
   }, [])
 
-  // The canvas must never carry its own height math: `inset-0` makes it exactly
-  // the hero box, so whatever the hero measures, the particle field measures
-  // too. It used to restate the hero's `calc(100vh-60px)` + a 752px cap inline,
-  // which cut the cloud off mid-flight on any viewport taller than the cap.
-  return <canvas ref={canvasRef} className="absolute inset-0 block size-full" />
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 block size-full opacity-35 min-[1000px]:opacity-100"
+    />
+  )
 }
 
 export default ParticleCanvas

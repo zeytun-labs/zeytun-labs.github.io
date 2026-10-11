@@ -130,12 +130,16 @@
   * {
     @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
-    }
   html {
     @apply font-sans;
-    }
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
 
   /* A blanket motion kill-switch can't be expressed as a utility class, so it
      lives here. Everything else the landing page needs is a Tailwind utility. */

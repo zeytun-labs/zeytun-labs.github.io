@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { Mark } from "@/components/landing/mark"
+import { ISSUES_URL, SOURCE_URL } from "@/lib/site"
 
 const columns = [
   {
@@ -17,19 +18,16 @@ const columns = [
   {
     title: "Resources",
     links: [
-      // pages don't exist yet — uncomment with the MDX docs/blog build
-      // { label: "Documentation", href: "/docs" },
-      // { label: "Changelog", href: "/blog" },
       { label: "Roadmap", href: "#roadmap" },
+      { label: "Download", href: "#download" },
       { label: "Support", href: "mailto:hi@zeytun.app" },
     ],
   },
   {
     title: "Elsewhere",
     links: [
-      { label: "X", href: "#" },
-      { label: "GitHub", href: "#" },
-      { label: "Telegram", href: "#" },
+      { label: "GitHub", href: SOURCE_URL },
+      { label: "Issues", href: ISSUES_URL },
       { label: "Contact", href: "mailto:hi@zeytun.app" },
     ],
   },
@@ -51,8 +49,8 @@ export function SiteFooter() {
               See it. Route it. Stop it.
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              A desktop network manager for people who want to see and decide
-              every connection.
+              A free, open-source network manager for macOS, with connection
+              visibility and routing controls.
             </p>
           </div>
 
@@ -64,12 +62,23 @@ export function SiteFooter() {
               <ul className="flex flex-col gap-3">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.href.startsWith("http") ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -80,9 +89,17 @@ export function SiteFooter() {
         <div className="mt-16 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Zeytun. All rights reserved.</span>
           <span className="max-w-lg sm:text-end">
-            <code className="font-mono">zeytun-core</code> is derived from
-            sing-box and distributed under GPLv3. The Zeytun app is closed
-            source.
+            Zeytun is free and open source under{" "}
+            <a
+              href={SOURCE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              GPL-3.0
+            </a>
+            . <code className="font-mono">zeytun-core</code> is derived from
+            sing-box.
           </span>
         </div>
       </div>

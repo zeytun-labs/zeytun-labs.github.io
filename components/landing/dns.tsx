@@ -6,6 +6,7 @@ import { motion } from "motion/react"
 import { Section } from "../common/section"
 import { cn } from "@/lib/utils"
 import { ChipRow, Code, Option, Rise, SectionHead, WindowMock } from "./chrome"
+import { useDemoActivity } from "@/hooks/use-demo-activity"
 
 export function Dns() {
   return (
@@ -20,11 +21,11 @@ export function Dns() {
         <div className="divide-y divide-border/40">
           <Row
             title="Match before you resolve"
-            description="The FakeIP engine matches a domain before it resolves, so DNS can't leak around your routing rules. Flush the core and FakeIP caches in one click."
+            description="Use FakeIP and DNS routing rules to resolve supported queries along the configured path. Flush the core and FakeIP caches in one click."
           />
           <Row
             title="Local stays local"
-            description="External names resolve through the proxy, internal names stay on your network. Keep your own host entries for the machines no resolver knows about."
+            description="Configure local and remote resolvers, choose where matching DNS queries go, and keep host entries for your own machines."
           />
           <Row
             title="DNS gets its own rules"
@@ -86,85 +87,90 @@ const LOOKUPS = [
 const HOSTS = ["router.lan", "nas.local", "build.internal"]
 
 function ResolverFig() {
+  const { ref, canAnimate, reducedMotion } = useDemoActivity()
   const [i, setI] = useState(0)
 
   useEffect(() => {
+    if (!canAnimate) return
     const iv = setInterval(() => setI((n) => (n + 1) % LOOKUPS.length), 2400)
     return () => clearInterval(iv)
-  }, [])
+  }, [canAnimate])
 
-  const lookup = LOOKUPS[i]
+  const currentIdx = reducedMotion ? 0 : i
+  const lookup = LOOKUPS[currentIdx]
   const blocked = lookup.answer === "refused"
 
   return (
-    <WindowMock title="DNS" bodyClassName="space-y-4 p-4">
-      <div>
-        <Label>Servers</Label>
-        <div className="space-y-2">
-          {SERVERS.map((s) => (
-            <div
-              key={s.name}
-              className="flex items-center gap-2 rounded-xl border border-border/40 bg-card/70 px-3 py-2 font-mono text-xs"
-            >
-              <span className="truncate">{s.name}</span>
-              <span className="shrink-0 rounded bg-muted px-1.5 text-[10px] text-muted-foreground">
-                {s.transport}
-              </span>
-              <span className="ms-auto shrink-0 text-muted-foreground">
-                {s.latency}
-              </span>
-              <span
-                className={cn(
-                  "shrink-0 text-[10px] italic",
-                  s.scope === "local" ? "text-primary" : "text-muted-foreground"
-                )}
+    <div ref={ref}>
+      <WindowMock title="DNS" bodyClassName="space-y-4 p-4">
+        <div>
+          <Label>Servers</Label>
+          <div className="space-y-2">
+            {SERVERS.map((s) => (
+              <div
+                key={s.name}
+                className="flex items-center gap-2 rounded-xl border border-border/40 bg-card/70 px-3 py-2 font-mono text-xs"
               >
-                {s.scope}
-              </span>
-            </div>
-          ))}
+                <span className="truncate">{s.name}</span>
+                <span className="shrink-0 rounded bg-muted px-1.5 text-[10px] text-muted-foreground">
+                  {s.transport}
+                </span>
+                <span className="ms-auto shrink-0 text-muted-foreground">
+                  {s.latency}
+                </span>
+                <span
+                  className={cn(
+                    "shrink-0 text-[10px] italic",
+                    s.scope === "local" ? "text-primary" : "text-muted-foreground"
+                  )}
+                >
+                  {s.scope}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div>
-        <Label>Query</Label>
-        <motion.div
-          key={lookup.query}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="space-y-2 rounded-xl border border-border/40 bg-card/70 p-3 font-mono text-xs"
-        >
-          <p className="truncate text-foreground">{lookup.query}</p>
-          <p className="flex items-center gap-2 text-muted-foreground">
-            <span className="text-primary">matched</span>
-            <Code>{lookup.rule}</Code>
-          </p>
-          <p
-            className={cn(
-              "truncate",
-              blocked ? "text-destructive/80" : "text-muted-foreground"
-            )}
+        <div>
+          <Label>Query</Label>
+          <motion.div
+            key={lookup.query}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-2 rounded-xl border border-border/40 bg-card/70 p-3 font-mono text-xs"
           >
-            → {lookup.answer}
-          </p>
-        </motion.div>
-      </div>
-
-      <div>
-        <Label>Hosts</Label>
-        <div className="flex flex-wrap gap-2 font-mono text-xs text-muted-foreground">
-          {HOSTS.map((h) => (
-            <span
-              key={h}
-              className="rounded-lg border border-border/40 bg-card/70 px-2 py-1"
+            <p className="truncate text-foreground">{lookup.query}</p>
+            <p className="flex items-center gap-2 text-muted-foreground">
+              <span className="text-primary">matched</span>
+              <Code>{lookup.rule}</Code>
+            </p>
+            <p
+              className={cn(
+                "truncate",
+                blocked ? "text-destructive/80" : "text-muted-foreground"
+              )}
             >
-              {h}
-            </span>
-          ))}
+              → {lookup.answer}
+            </p>
+          </motion.div>
         </div>
-      </div>
-    </WindowMock>
+
+        <div>
+          <Label>Hosts</Label>
+          <div className="flex flex-wrap gap-2 font-mono text-xs text-muted-foreground">
+            {HOSTS.map((h) => (
+              <span
+                key={h}
+                className="rounded-lg border border-border/40 bg-card/70 px-2 py-1"
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+        </div>
+      </WindowMock>
+    </div>
   )
 }
 

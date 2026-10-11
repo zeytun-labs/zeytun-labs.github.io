@@ -33,7 +33,7 @@ const questions = [
   },
   {
     q: "What happens next time?",
-    a: "Hold the connection and decide. Answer once and the decision becomes a rule.",
+    a: "Hold an eligible connection and decide. Turn on Remember to reuse a routing choice as a process rule.",
     section: "Checkpoint",
     href: "#checkpoint",
   },

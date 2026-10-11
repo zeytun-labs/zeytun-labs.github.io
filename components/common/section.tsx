@@ -6,7 +6,7 @@ export function Section({
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   return (
-    <section className={cn("mx-auto max-w-6xl", className)} {...props}>
+    <section className={cn("mx-auto max-w-6xl scroll-mt-28", className)} {...props}>
       {children}
     </section>
   )

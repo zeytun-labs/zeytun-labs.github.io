@@ -1,7 +1,7 @@
 "use client"
 
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ListXIcon, QuillWrite01Icon } from "@hugeicons/core-free-icons"
 
@@ -9,6 +9,7 @@ import { Section } from "../common/section"
 import { Separator } from "./../ui/separator"
 import { cn } from "@/lib/utils"
 import { Option, Rise, SectionHead } from "./chrome"
+import { useDemoActivity } from "@/hooks/use-demo-activity"
 
 export function Process() {
   return (
@@ -16,7 +17,7 @@ export function Process() {
       <SectionHead
         eyebrow="Process"
         title="Know which app is talking."
-        lede="Traffic doesn't come from nowhere. Process collapses the ledger into the applications behind it, with live speed and the details you need to act."
+        lede="Review available process details for traffic handled by Zeytun, with live bandwidth and shortcuts to create rules or close connections."
       />
       <PBody />
     </Section>
@@ -126,7 +127,15 @@ function fmt(kbps: number) {
   return kbps >= 1000 ? `${(kbps / 1000).toFixed(1)} MB/s` : `${kbps} KB/s`
 }
 
+const PHASE_DURATIONS: Record<"idle" | "menu" | "detail" | "closing", number> = {
+  idle: 4200,
+  menu: 2200,
+  detail: 5000,
+  closing: 550,
+}
+
 function ProcessFig() {
+  const { ref, canAnimate } = useDemoActivity()
   const [rows, setRows] = useState(
     // ponytail: fixed seeds — Math.random() in useState breaks SSR hydration
     APPS.map((a, id) => ({ id, speed: a.speed }))
@@ -136,49 +145,71 @@ function ProcessFig() {
   )
   const [focus, setFocus] = useState(0)
 
+  const remainingRef = useRef<number>(PHASE_DURATIONS.idle)
+  const startTimeRef = useRef<number>(0)
+
   useEffect(() => {
+    if (!canAnimate) return
     const iv = setInterval(() => {
       setRows((rs) =>
-        rs.map((r) => ({
-          ...r,
-          // keep an idle app idle; jitter the rest around its seed
-          speed:
-            APPS[r.id].speed === 0
-              ? 0
-              : Math.max(
-                  4,
-                  Math.round(r.speed + (Math.random() - 0.5) * r.speed * 0.4)
-                ),
-        }))
+        rs.map((r) => {
+          const seed = APPS[r.id].speed
+          return {
+            ...r,
+            speed:
+              seed === 0
+                ? 0
+                : Math.max(
+                    4,
+                    Math.round(seed * (0.8 + Math.random() * 0.4))
+                  ),
+          }
+        })
       )
     }, 900)
     return () => clearInterval(iv)
-  }, [])
+  }, [canAnimate])
 
   useEffect(() => {
-    const dur =
-      phase === "idle"
-        ? 4200
-        : phase === "menu"
-          ? 2200
-          : phase === "detail"
-            ? 5000
-            : 550
+    if (!canAnimate) return
+
+    startTimeRef.current = Date.now()
     const t = setTimeout(() => {
       if (phase === "idle") {
         setFocus(Math.floor(Math.random() * APPS.length))
         setPhase("menu")
-      } else if (phase === "menu") setPhase("detail")
-      else if (phase === "detail") setPhase("closing")
-      else setPhase("idle")
-    }, dur)
-    return () => clearTimeout(t)
-  }, [phase])
+        remainingRef.current = PHASE_DURATIONS.menu
+      } else if (phase === "menu") {
+        setPhase("detail")
+        remainingRef.current = PHASE_DURATIONS.detail
+      } else if (phase === "detail") {
+        setPhase("closing")
+        remainingRef.current = PHASE_DURATIONS.closing
+      } else {
+        setPhase("idle")
+        remainingRef.current = PHASE_DURATIONS.idle
+      }
+    }, remainingRef.current)
+
+    return () => {
+      clearTimeout(t)
+      const elapsed = Date.now() - startTimeRef.current
+      remainingRef.current = Math.max(0, remainingRef.current - elapsed)
+    }
+  }, [phase, canAnimate])
 
   const app = APPS[focus]
 
   return (
-    <div className="relative me-auto mt-8 h-98.5 max-w-100">
+    <div ref={ref} className="relative me-auto mt-8 h-98.5 w-full max-w-100">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Process Activity
+        </span>
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Illustrative preview
+        </span>
+      </div>
       <AnimatePresence initial={false}>
         {rows.map((r) => {
           if ((phase === "detail" || phase === "closing") && r.id !== focus)
@@ -218,7 +249,7 @@ function ProcessFig() {
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             style={{ top: focus * ROW_STEP + 14 }}
-            className="absolute left-[55%] z-20 w-max origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md"
+            className="absolute right-0 sm:right-auto sm:left-[55%] z-20 max-w-full w-max origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md"
           >
             {[
               { icon: QuillWrite01Icon, label: "Create rule…" },

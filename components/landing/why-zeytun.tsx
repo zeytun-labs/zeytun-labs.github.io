@@ -59,47 +59,57 @@ function Glance() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="mt-6 grid grid-cols-1 gap-6 rounded-3xl border border-border/40 bg-card/40 p-6 md:grid-cols-2"
+      className="mt-6 flex flex-col gap-4 rounded-3xl border border-border/40 bg-card/40 p-6"
     >
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
-        {glance.map((tile) => (
-          <div key={tile.label}>
-            <dt className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
-              {tile.label}
-            </dt>
-            <dd className="mt-1 font-heading text-2xl leading-none">
-              {tile.value}
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-      <div className="flex flex-col gap-3 md:border-s md:border-border/40 md:ps-6">
-        <div className="flex items-baseline gap-2">
-          <span className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
-            Network latency
-          </span>
-          <span className="ms-auto font-heading text-2xl leading-none text-primary">
-            34 ms
-          </span>
-        </div>
-        {legs.map((leg) => (
-          <div key={leg.name} className="flex items-center gap-3">
-            <span className="w-14 font-mono text-xs text-muted-foreground">
-              {leg.name}
-            </span>
-            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: leg.width }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full rounded-full bg-primary/60"
-              />
+      <div className="flex items-center justify-between border-b border-border/40 pb-3">
+        <span className="font-heading text-xs font-bold tracking-widest text-muted-foreground/60 uppercase">
+          Live Status Glance
+        </span>
+        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+          Illustrative preview
+        </span>
+      </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
+          {glance.map((tile) => (
+            <div key={tile.label}>
+              <dt className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                {tile.label}
+              </dt>
+              <dd className="mt-1 font-heading text-2xl leading-none">
+                {tile.value}
+              </dd>
             </div>
-            <span className="w-12 text-end font-mono text-xs">{leg.value}</span>
+          ))}
+        </dl>
+
+        <div className="flex flex-col gap-3 md:border-s md:border-border/40 md:ps-6">
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              Network latency
+            </span>
+            <span className="ms-auto font-heading text-2xl leading-none text-primary">
+              34 ms
+            </span>
           </div>
-        ))}
+          {legs.map((leg) => (
+            <div key={leg.name} className="flex items-center gap-3">
+              <span className="w-14 font-mono text-xs text-muted-foreground">
+                {leg.name}
+              </span>
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: leg.width }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                  className="h-full rounded-full bg-primary/60"
+                />
+              </div>
+              <span className="w-12 text-end font-mono text-xs">{leg.value}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </motion.div>
   )
@@ -190,7 +200,7 @@ function SeeCard() {
     <Card
       icon={Radar03Icon}
       title="SEE"
-      description="Every connection attributed to the app that opened it, with live upload and download per process, host and policy."
+      description="Inspect connections handled by Zeytun, with available app details and live upload and download by process, host and policy."
     >
       <Fig>
         {/* Radar Animation */}
@@ -223,7 +233,7 @@ function DecideCard() {
     <Card
       icon={Flag02Icon}
       title="DECIDE"
-      description="Turn Checkpoint on and unmatched connections wait for you. Allow, block, or send it somewhere — once, or as a rule."
+      description="In Rule-based mode, enable Connection Ask to pause unmatched TCP connections while you choose a route or rejection."
     >
       <Fig className="relative">
         <GridNet />
@@ -238,7 +248,7 @@ function RouteCard() {
     <Card
       icon={Directions02Icon}
       title="ROUTE"
-      description="Rules, policies, proxy chains and DNS. Traffic goes exactly where you send it, or nowhere at all."
+      description="Use rules, policies, proxy chains and DNS settings to control the traffic Zeytun handles."
     >
       <Fig>
         <RouteChip />

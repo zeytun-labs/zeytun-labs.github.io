@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 export function CheckpointWindowMinimal() {
   return (
-    <div className="absolute z-20 mb-4 w-full max-w-60 animate-[ckpt_3s_ease-in-out_infinite]">
+    <div className="absolute z-20 mb-4 w-full max-w-60 animate-[ckpt_3s_ease-in-out_infinite] motion-reduce:animate-none motion-reduce:opacity-100 motion-reduce:transform-none">
       <div className="overflow-hidden rounded-2xl border border-border bg-card">
         <div className="flex px-2.5 pb-0">
           <div className="flex gap-1 pt-2.5">

@@ -13,17 +13,17 @@ import { Dns } from "@/components/landing/dns"
 import { Architecture } from "@/components/landing/architecture"
 import { EverythingElse } from "@/components/landing/everything-else"
 import { Roadmap } from "@/components/landing/roadmap"
-import { Waitlist } from "@/components/landing/waitlist"
+import { Download } from "@/components/landing/download"
 import { SiteFooter } from "@/components/landing/site-footer"
 
 const description =
-  "Zeytun is a desktop network manager. Every connection your machine opens, attributed to the app that opened it - and yours to route, hold or refuse."
+  "Zeytun is a free, open-source network manager for macOS. Inspect the connections it handles, review app and destination details, and control routing with rules, policies and DNS settings."
 
 export const metadata: Metadata = {
-  title: "Zeytun - Desktop Network Manager",
+  title: "Zeytun — Open-source network manager for macOS",
   description,
   openGraph: {
-    title: "Zeytun - Desktop Network Manager",
+    title: "Zeytun — Open-source network manager for macOS",
     description,
     type: "website",
   },
@@ -39,7 +39,7 @@ export default function Page() {
     <div className="relative min-h-screen overflow-x-clip px-6">
       <Nav />
       {/* v3 arc: see → decide → route → trust */}
-      <main className="space-y-42">
+      <main id="main-content" className="space-y-42">
         <Hero />
         <Problem />
         <WhyZeytun />
@@ -52,7 +52,7 @@ export default function Page() {
         <Architecture />
         <EverythingElse />
         <Roadmap />
-        <Waitlist />
+        <Download />
       </main>
       <SiteFooter />
     </div>

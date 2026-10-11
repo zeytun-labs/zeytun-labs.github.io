@@ -7,14 +7,15 @@ import { Code, Option, Rise, SectionHead } from "./chrome"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ChevronDownIcon, CommandLineIcon } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
+import { useDemoActivity } from "@/hooks/use-demo-activity"
 
 export function Checkpoint() {
   return (
     <Section id="checkpoint">
       <SectionHead
         eyebrow="Checkpoint"
-        title="Nothing new connects without asking."
-        lede="Turn Checkpoint on and Zeytun stops guessing. When a connection matches no rule, it is held at the door and you are asked — with the app, the destination and your options in front of you."
+        title="Decide before unmatched TCP connections continue."
+        lede="Enable Connection Ask in Rule-based mode to pause unmatched TCP connections while you choose direct access, a proxy route, or rejection. If you do not respond, the configured FINAL route applies after the timeout."
       />
       <CBody />
     </Section>
@@ -33,7 +34,7 @@ function CBody() {
           <Option
             className="p-6"
             title="It holds"
-            description="Nothing moves until you answer. The connection is parked in the core, not dropped."
+            description="The core pauses eligible TCP connections until you answer or the configured timeout applies."
           />
         </Rise>
         <Rise delay={0.1}>
@@ -53,14 +54,7 @@ function CBody() {
           <Option
             className="p-6"
             title="Answer once"
-            description={
-              <>
-                Turn on <strong className="text-foreground">Remember</strong>{" "}
-                and your decision becomes a process rule you can find, edit,
-                reorder or disable later. Leave it off and the decision lives
-                until the core reloads.
-              </>
-            }
+            description="Remember a routing choice as a process rule you can edit later. Without Remember, no permanent rule is created."
           />
         </Rise>
         <Rise delay={0.2}>
@@ -89,22 +83,25 @@ const POLICIES = ["streaming-pool", "eu-fallback", "Direct"] as const
 const LOOP = 7 // steps of 1.2s: window in @1, dropdown @2, picked @3, remember @5
 
 function AnimatedFig() {
+  const { ref, canAnimate, reducedMotion } = useDemoActivity()
   const [step, setStep] = useState(0)
 
   useEffect(() => {
+    if (!canAnimate) return
     const timer = setInterval(() => setStep((prev) => (prev + 1) % LOOP), 1200)
     return () => clearInterval(timer)
-  }, [])
+  }, [canAnimate])
 
-  const picked = step >= 3 ? POLICIES[0] : "Direct"
+  const effectiveStep = reducedMotion ? 3 : step
+  const picked = effectiveStep >= 3 ? POLICIES[0] : "Direct"
 
   return (
-    <div className="relative flex h-full min-h-100 items-center justify-center">
+    <div ref={ref} className="relative flex h-full min-h-100 items-center justify-center">
       {/* the connection that is being held, in the terminal that opened it */}
       <div
         className={cn(
           "absolute inset-y-8 start-0 end-0 flex flex-col overflow-hidden rounded-xl border border-border bg-muted/20 font-mono text-xs transition-all duration-500",
-          step > 0
+          effectiveStep > 0
             ? "scale-95 opacity-40 blur-[2px]"
             : "blur-0 scale-100 opacity-80"
         )}
@@ -126,7 +123,7 @@ function AnimatedFig() {
       </div>
 
       <AnimatePresence mode="wait">
-        {step > 0 && (
+        {effectiveStep > 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -138,6 +135,7 @@ function AnimatedFig() {
               <div
                 className="absolute -inset-full animate-[spin_3s_linear_infinite]"
                 style={{
+                  animationPlayState: canAnimate ? "running" : "paused",
                   background:
                     "conic-gradient(from 90deg at 50% 50%, transparent 0%, transparent 80%,oklch(0.841 0.238 128.85) 100%)",
                 }}
@@ -145,9 +143,12 @@ function AnimatedFig() {
             </div>
 
             <div className="relative z-10 m-px h-[calc(100%-2px)] w-[calc(100%-2px)] rounded-2xl bg-card">
-              <div className="flex items-center justify-center rounded-t-2xl border-b border-border bg-muted/30 px-4 py-2">
+              <div className="flex items-center justify-between rounded-t-2xl border-b border-border bg-muted/30 px-4 py-2">
                 <span className="font-heading text-xs font-bold tracking-widest text-muted-foreground/60 uppercase">
                   Checkpoint
+                </span>
+                <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+                  Illustrative preview
                 </span>
               </div>
 
@@ -184,13 +185,13 @@ function AnimatedFig() {
                         icon={ChevronDownIcon}
                         className={cn(
                           "size-4 text-muted-foreground opacity-50 transition-transform duration-300",
-                          step === 2 && "rotate-180"
+                          effectiveStep === 2 && "rotate-180"
                         )}
                       />
                     </div>
                   </div>
                   <AnimatePresence>
-                    {step === 2 && (
+                    {effectiveStep === 2 && (
                       <motion.div
                         initial={{ opacity: 0, y: -5, scale: 0.95 }}
                         animate={{ opacity: 1, y: 4, scale: 1 }}
@@ -215,37 +216,37 @@ function AnimatedFig() {
                   </AnimatePresence>
                 </div>
 
-                <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span
                     className={cn(
                       "flex h-3.5 w-6 shrink-0 rounded-full p-0.5 transition-colors",
-                      step >= 5
+                      effectiveStep >= 5
                         ? "justify-end bg-primary/70"
                         : "justify-start bg-muted"
                     )}
                   >
                     <span className="block size-2.5 rounded-full bg-background" />
                   </span>
-                  Remember (add process rule)
-                </label>
+                  <span>Remember (add process rule)</span>
+                </div>
 
                 <div className="flex gap-2 pt-1">
-                  <button
+                  <span
                     className={cn(
-                      "flex-1 rounded-full px-3 py-1.5 text-xs font-medium text-primary-foreground! transition-all",
-                      step >= 6
+                      "flex-1 text-center select-none rounded-full px-3 py-1.5 text-xs font-medium text-primary-foreground! transition-all",
+                      effectiveStep >= 6
                         ? "bg-primary ring-2 ring-primary/40"
                         : "bg-primary"
                     )}
                   >
                     Allow
-                  </button>
-                  <button className="flex-1 rounded-full bg-white/5 px-3 py-1.5 font-mono text-xs font-medium text-muted-foreground! transition-colors">
+                  </span>
+                  <span className="flex-1 text-center select-none rounded-full bg-white/5 px-3 py-1.5 font-mono text-xs font-medium text-muted-foreground! transition-colors">
                     Use FINAL
-                  </button>
-                  <button className="flex-1 rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground! transition-colors">
+                  </span>
+                  <span className="flex-1 text-center select-none rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground! transition-colors">
                     Block
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>

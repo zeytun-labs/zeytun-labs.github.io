@@ -29,7 +29,7 @@ const POINTS = [
     layer: 1,
     title: "Rules that apply live",
     description:
-      "Add, edit or reorder a rule and it takes effect immediately. Change a rule mid-download and the download keeps going; streams and calls stay up too.",
+      "Add, edit or reorder routing rules while the core is running. Existing connections are closed so new connections can follow the updated rules; active downloads and calls may reconnect.",
   },
   {
     layer: 2,
@@ -52,7 +52,7 @@ const POINTS = [
     layer: 0,
     title: "It stays on your machine",
     description:
-      "The ledger, the per-app history and the logs live in a local SQLite database on your Mac. There is no account, and no telemetry pipeline in the app.",
+      "Profiles and traffic statistics are stored locally on your Mac. The connection inspector and live log views keep recent data locally during use. No account is required.",
   },
 ] as const
 

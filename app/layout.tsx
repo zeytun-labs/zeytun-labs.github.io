@@ -33,7 +33,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={cn(
-        "font-sans antialiased",
+        "dark font-sans antialiased",
         fontMono.variable,
         geist.variable,
         spaceGroteskHeading.variable,
@@ -41,6 +41,12 @@ export default function RootLayout({
       )}
     >
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none"
+        >
+          Skip to content
+        </a>
         <ThemeProvider>
           <SmoothScroll />
           {children}

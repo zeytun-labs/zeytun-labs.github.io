@@ -3,16 +3,26 @@
 import type React from "react"
 import { cn } from "@/lib/utils"
 
-type ShinyButtonProps = {
+type BaseShinyButtonProps = {
   children: React.ReactNode
-  /** Render as a link instead of a button (same visuals). */
-  href?: string
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+  className?: string
+}
+
+type ShinyButtonAsAnchor = BaseShinyButtonProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    href: string
+  }
+
+type ShinyButtonAsButton = BaseShinyButtonProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    href?: never
+  }
+
+export type ShinyButtonProps = ShinyButtonAsAnchor | ShinyButtonAsButton
 
 export function ShinyButton({
   children,
   className = "",
-  href,
   ...props
 }: ShinyButtonProps) {
   const classes = cn(
@@ -29,16 +39,18 @@ export function ShinyButton({
     </span>
   )
 
-  if (href) {
+  if ("href" in props && typeof props.href === "string") {
+    const { href, ...anchorProps } = props
     return (
-      <a href={href} className={classes}>
+      <a href={href} className={classes} {...anchorProps}>
         {inner}
       </a>
     )
   }
 
+  const { type = "button", ...buttonProps } = props as React.ButtonHTMLAttributes<HTMLButtonElement>
   return (
-    <button {...props} className={classes}>
+    <button type={type} {...buttonProps} className={classes}>
       {inner}
     </button>
   )

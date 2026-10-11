@@ -94,11 +94,10 @@ const PHASES: {
     title: "Something you can trust on macOS.",
     lede: "The first goal is correctness.",
     items: [
-      "Process attribution that holds up under pressure",
-      "DNS that never slips past your rules",
-      "A core that recovers on its own",
-      "Checkpoint on every unmatched connection, every time",
-      "Alpha → beta → stable v1",
+      "Beta → stable v1",
+      "More reliable process attribution for captured traffic",
+      "Improve DNS routing and recovery",
+      "Refine Connection Ask for unmatched TCP traffic",
     ],
   },
   {

@@ -1,21 +1,49 @@
-# Next.js template
+# Zeytun Web
 
-This is a Next.js template with shadcn/ui.
+The official website and landing page for [Zeytun](https://github.com/zeytun-labs/zeytun), an open-source network manager for macOS.
 
-## Adding components
+## Tech Stack
 
-To add components to your app, run the following command:
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **UI Components**: Tailwind CSS v4, Base UI, Lucide Icons, Hugeicons
+- **Motion & Scroll**: Motion (Framer Motion), Lenis smooth scrolling, Custom 3D Particle Canvas
+- **Package Manager**: pnpm
+
+## Development
 
 ```bash
-npx shadcn@latest add button
+# Install dependencies
+pnpm install
+
+# Run development server
+pnpm dev
+
+# Type check
+pnpm typecheck
+
+# Lint
+pnpm lint
+
+# Production build (Static export)
+pnpm build
 ```
 
-This will place the ui components in the `components` directory.
+## Environment Variables
 
-## Using components
+Copy `.env.example` to `.env.local` to override default settings:
 
-To use the components in your app, import them as follows:
+```bash
+# Optional direct download URL override (HTTPS required).
+# Defaults to the official releases page: https://github.com/zeytun-labs/zeytun-app/releases
+NEXT_PUBLIC_ZEYTUN_DOWNLOAD_URL=
 
-```tsx
-import { Button } from "@/components/ui/button";
+# Canonical production site URL.
+# Leave empty until the production domain is confirmed.
+NEXT_PUBLIC_SITE_URL=
 ```
+
+## Architecture & Animations
+
+- **Single Dark Theme**: The landing page is strictly dark-themed (`forcedTheme="dark"`).
+- **Interactive Demos**: Live interactive ledgers (Traffic Monitor, Process, Checkpoint, Rules, Policy, DNS) pause automatically when out of viewport or when the tab is inactive via `useDemoActivity`.
+- **Accessibility & Reduced Motion**: Automatically disables continuous RAF loops and Lenis scrolling when `prefers-reduced-motion: reduce` is enabled, rendering clear, deterministic previews.
