@@ -2,6 +2,7 @@ export const STATS_REPO = "zeytun-labs/zeytun-app"
 export const STAR_URL = "https://github.com/zeytun-labs/zeytun-app"
 export const RELEASES_URL = "https://github.com/zeytun-labs/zeytun-app/releases"
 export const SOURCE_URL = "https://github.com/zeytun-labs/zeytun"
+export const LICENSE_URL = `${SOURCE_URL}/blob/main/LICENSE`
 export const ISSUES_URL = "https://github.com/zeytun-labs/zeytun-app/issues"
 
 export const DOWNLOAD_URL =

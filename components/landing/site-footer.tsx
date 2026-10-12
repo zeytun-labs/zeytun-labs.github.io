@@ -1,7 +1,13 @@
 import Link from "next/link"
 
 import { Mark } from "@/components/landing/mark"
-import { ISSUES_URL, SOURCE_URL, STAR_URL, SOCIAL_LINKS } from "@/lib/site"
+import {
+  ISSUES_URL,
+  SOURCE_URL,
+  STAR_URL,
+  SOCIAL_LINKS,
+  LICENSE_URL,
+} from "@/lib/site"
 
 const columns = [
   {
@@ -42,8 +48,7 @@ export function SiteFooter() {
               See it. Route it. Stop it.
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              A free, open-source network manager for macOS, with connection
-              visibility and routing controls.
+              Network visibility and routing for macOS.
             </p>
           </div>
 
@@ -55,11 +60,18 @@ export function SiteFooter() {
               <ul className="flex flex-col gap-2.5">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    {link.href.startsWith("http") || link.href.startsWith("mailto:") ? (
+                    {link.href.startsWith("http") ||
+                    link.href.startsWith("mailto:") ? (
                       <a
                         href={link.href}
-                        target={link.href.startsWith("mailto:") ? undefined : "_blank"}
-                        rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                        target={
+                          link.href.startsWith("mailto:") ? undefined : "_blank"
+                        }
+                        rel={
+                          link.href.startsWith("mailto:")
+                            ? undefined
+                            : "noopener noreferrer"
+                        }
                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
@@ -80,11 +92,11 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 Zeytun. All rights reserved.</span>
+          <span>© 2026 Zeytun.</span>
           <span className="max-w-lg sm:text-end">
-            Zeytun is free and open source under{" "}
+            Licensed under{" "}
             <a
-              href={SOURCE_URL}
+              href={LICENSE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-foreground"

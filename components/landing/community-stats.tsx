@@ -35,7 +35,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
       <SectionHead
         eyebrow="Community"
         title="Built in the open."
-        lede="Follow the project, try the beta, and help shape what comes next."
+        lede="Follow development on GitHub, share feedback, or contribute a change."
       />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <div className={`${card} col-span-2 min-h-72 p-6 sm:p-8`}>
@@ -58,7 +58,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
                 rel="noopener noreferrer"
                 className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/50 bg-background/40 px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary"
               >
-                <span>Get beta</span>
+                <span>Download beta</span>
                 <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
             </div>
@@ -71,7 +71,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
                   className="size-1.5 rounded-full bg-primary"
                   aria-hidden="true"
                 />
-                macOS installer downloads
+                macOS DMG downloads
               </p>
             </div>
             <div className="mt-auto grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
@@ -146,7 +146,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
               GPL‑3.0
             </h3>
             <p className="mt-3 font-mono text-[10px] text-muted-foreground sm:text-xs">
-              Free to use & contribute
+              Browse the code & contribute
             </p>
           </div>
         </a>

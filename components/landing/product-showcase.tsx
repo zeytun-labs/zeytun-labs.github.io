@@ -2,19 +2,17 @@
 
 import { useId, useState, useRef } from "react"
 import {
-  AnimatePresence,
   LayoutGroup,
   motion,
   useReducedMotion,
   type Variants,
 } from "motion/react"
 import { Section } from "../common/section"
-import { SectionHead } from "./chrome"
+import { Title } from "../common/section"
 import { ProcessFig } from "./process"
 import { AnimatedFig } from "./checkpoint"
 import { RuleTableFig } from "./rules"
 import { cn } from "@/lib/utils"
-
 type TabKey = "see" | "decide" | "route"
 
 const TABS: {
@@ -28,21 +26,20 @@ const TABS: {
     label: "See",
     title: "Know which app is talking.",
     description:
-      "Review available app details and live bandwidth for traffic handled by Zeytun.",
+      "See app details and live bandwidth for the connections Zeytun handles.",
   },
   {
     key: "decide",
     label: "Decide",
     title: "Decide before it continues.",
     description:
-      "Connection Ask pauses unmatched TCP connections in Rule-based mode while you choose.",
+      "In Rule-based mode, Connection Ask pauses unmatched TCP connections. Allow, reroute, or block them.",
   },
   {
     key: "route",
     label: "Route",
     title: "Give it the right path.",
-    description:
-      "Send matching traffic directly, through a proxy policy, or to rejection.",
+    description: "Connect directly, route through a proxy, or block traffic.",
   },
 ]
 
@@ -63,16 +60,16 @@ export function ProductShowcase() {
       scale: 1,
       transition: {
         duration: reducedMotion ? 0 : 0.32,
-        delay: reducedMotion ? 0 : 0.08,
+        delay: reducedMotion ? 0 : 0.12,
         ease: [0.16, 1, 0.3, 1],
       },
     },
     hidden: {
       opacity: 0,
-      x: reducedMotion ? 0 : -16,
-      y: reducedMotion ? 0 : 6,
-      scale: reducedMotion ? 1 : 0.985,
-      transition: { duration: reducedMotion ? 0 : 0.18 },
+      x: 0,
+      y: 0,
+      scale: 1,
+      transition: { duration: reducedMotion ? 0 : 0.12 },
     },
   }
 
@@ -101,93 +98,123 @@ export function ProductShowcase() {
     }
   }
 
-  const activeMeta = TABS.find((t) => t.key === activeTab) ?? TABS[0]
-
   return (
     <Section id="model">
-      <SectionHead
-        eyebrow="Product Showcase"
-        title="Your connections. Your decisions."
-        lede="See what connects, decide what happens, and choose the route."
-      />
+      <div className="grid gap-8 lg:grid-cols-[minmax(250px,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-12">
+        <div className="flex min-w-0 flex-col items-start">
+          <Title className="mb-6">How it works</Title>
 
-      <div className="mx-auto flex max-w-4xl flex-col items-center">
-        {/* Accessible tablist */}
-        <LayoutGroup id={layoutId}>
-          <div
-            role="tablist"
-            aria-label="Product showcase stages"
-            className="mb-8 flex rounded-full border border-border/40 bg-card/60 p-1.5 shadow-sm backdrop-blur-sm"
-          >
-            {TABS.map((tab, idx) => {
-              const isSelected = activeTab === tab.key
+          <LayoutGroup id={layoutId}>
+            <div
+              role="tablist"
+              aria-label="Product showcase stages"
+              className="mb-7 flex rounded-full border border-border/40 bg-card/60 p-1.5 shadow-sm backdrop-blur-sm"
+            >
+              {TABS.map((tab, idx) => {
+                const isSelected = activeTab === tab.key
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    ref={(el) => {
+                      tabRefs.current[idx] = el
+                    }}
+                    role="tab"
+                    id={`tab-${tab.key}`}
+                    aria-selected={isSelected}
+                    aria-controls={`panel-${tab.key}`}
+                    tabIndex={isSelected ? 0 : -1}
+                    onClick={() => selectTab(tab.key)}
+                    onKeyDown={(e) => onKeyDown(e, idx)}
+                    className={cn(
+                      "relative isolate cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+                      isSelected
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {isSelected && (
+                      <motion.span
+                        layoutId="active-tab-blob"
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/15 shadow-xs"
+                        transition={
+                          reducedMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 480, damping: 36 }
+                        }
+                      />
+                    )}
+                    {tab.label}
+                  </button>
+                )
+              })}
+            </div>
+          </LayoutGroup>
+
+          {/* Reserve the tallest complete copy; each description still
+              follows its own title without an empty line in between. */}
+          <div className="grid w-full max-w-md">
+            {TABS.map((tab) => {
+              const selected = activeTab === tab.key
               return (
-                <button
+                <div
                   key={tab.key}
-                  type="button"
-                  ref={(el) => {
-                    tabRefs.current[idx] = el
+                  aria-hidden={!selected}
+                  inert={!selected}
+                  className="relative col-start-1 row-start-1 flex flex-col gap-3"
+                  style={{
+                    zIndex: selected ? 1 : 0,
+                    pointerEvents: selected ? "auto" : "none",
                   }}
-                  role="tab"
-                  id={`tab-${tab.key}`}
-                  aria-selected={isSelected}
-                  aria-controls={`panel-${tab.key}`}
-                  tabIndex={isSelected ? 0 : -1}
-                  onClick={() => selectTab(tab.key)}
-                  onKeyDown={(e) => onKeyDown(e, idx)}
-                  className={cn(
-                    "relative isolate cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
-                    isSelected
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
                 >
-                  {isSelected && (
-                    <motion.span
-                      layoutId="active-tab-blob"
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/15 shadow-xs"
-                      transition={
-                        reducedMotion
-                          ? { duration: 0 }
-                          : { type: "spring", stiffness: 480, damping: 36 }
-                      }
-                    />
-                  )}
-                  {tab.label}
-                </button>
+                  <motion.h2
+                    initial={false}
+                    animate={{
+                      opacity: selected ? 1 : 0,
+                      y: selected || reducedMotion ? 0 : 4,
+                    }}
+                    transition={{
+                      duration: reducedMotion ? 0 : 0.18,
+                      delay: selected && !reducedMotion ? 0.1 : 0,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="font-heading text-3xl tracking-tight text-foreground md:text-4xl"
+                  >
+                    {tab.title}
+                  </motion.h2>
+                  <motion.p
+                    initial={false}
+                    animate={{
+                      opacity: selected ? 1 : 0,
+                      y: selected || reducedMotion ? 0 : 6,
+                    }}
+                    transition={{
+                      duration: reducedMotion ? 0 : 0.22,
+                      delay: selected && !reducedMotion ? 0.16 : 0,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="text-sm leading-relaxed text-muted-foreground md:text-base"
+                  >
+                    {tab.description}
+                  </motion.p>
+                </div>
               )
             })}
           </div>
-        </LayoutGroup>
+        </div>
 
-        {/* Unified showcase container */}
-        <div className="w-full rounded-3xl border border-border/40 bg-card/40 p-6 md:p-8">
-          {/* Active text summary */}
-          <div className="mb-6 min-h-[132px] border-b border-border/40 pb-5 sm:min-h-[96px]">
-            <AnimatePresence initial={false} mode="wait">
-              <motion.div
-                key={activeMeta.key}
-                initial={{ opacity: 0, y: reducedMotion ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: reducedMotion ? 0 : -8 }}
-                transition={{
-                  duration: reducedMotion ? 0 : 0.2,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="flex flex-col gap-1"
-              >
-                <h3 className="font-heading text-2xl tracking-tight text-foreground md:text-3xl">
-                  {activeMeta.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
-                  {activeMeta.description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        <div className="relative isolate flex h-[540px] items-center justify-center overflow-hidden rounded-3xl border border-border/40 bg-card/20 px-4 py-4 sm:px-8 md:h-[460px] md:py-8">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(to_right,color-mix(in_oklch,var(--border)_35%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--border)_35%,transparent)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_at_center,black_8%,transparent_82%)] bg-size-[48px_48px]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-1/2 z-0 size-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/10 blur-[100px]"
+          />
 
-          <div className="grid min-h-[440px] items-center md:min-h-[420px]">
+          <div className="relative z-10 h-full w-full">
             {TABS.map((tab) => {
               const isSelected = activeTab === tab.key
               return (
@@ -216,7 +243,7 @@ export function ProductShowcase() {
                         : "none",
                     pointerEvents: isSelected ? "auto" : "none",
                   }}
-                  className="col-start-1 row-start-1 w-full min-w-0 items-center justify-center"
+                  className="absolute inset-0 min-w-0 items-center justify-center"
                 >
                   {tab.key === "see" && <ProcessFig active={isSelected} />}
                   {tab.key === "decide" && <AnimatedFig active={isSelected} />}

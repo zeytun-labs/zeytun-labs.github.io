@@ -4,27 +4,33 @@ import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 import { Section, Title } from "../common/section"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, ISSUES_URL, RELEASES_URL, SOURCE_URL } from "@/lib/site"
+import { AsciiWaves } from "./ascii-waves"
 
 export function Download() {
   const isFallback = DOWNLOAD_URL === RELEASES_URL
 
   return (
-    <Section className="max-w-4xl text-center" id="download">
-      <div className="relative flex flex-col items-center overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/40 p-10 md:p-20">
+    <Section className="text-center" id="download">
+      <div
+        data-download-card
+        className="relative flex flex-col items-center overflow-hidden rounded-[2.5rem] border border-border/40 bg-card/40 p-10 md:p-20"
+      >
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 flex items-center justify-center"
+          className="pointer-events-none absolute inset-0 isolate z-0 flex items-center justify-center"
         >
-          <div className="size-64 rounded-full bg-primary/20 blur-[100px]" />
+          <AsciiWaves />
+          <div className="absolute top-1/2 left-1/2 size-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--background)_10%,transparent_75%)]" />
         </div>
 
-        <div className="relative flex flex-col items-center">
+        <div className="relative z-10 flex flex-col items-center">
           <Title>Beta · macOS</Title>
           <h2 className="mb-4 font-heading text-4xl tracking-tight md:text-5xl">
             Your network. Your rules.
           </h2>
           <p className="mb-8 max-w-lg text-lg text-muted-foreground">
-            Try the Zeytun beta for macOS. Free and open source.
+            Try it with your apps and share your feedback.
           </p>
 
           <div className="flex flex-col items-center gap-3">
@@ -38,7 +44,7 @@ export function Download() {
             </ShinyButton>
             {isFallback && (
               <p className="text-xs text-muted-foreground/80">
-                Choose the macOS Apple Silicon DMG on GitHub Releases.
+                On GitHub Releases, download the Apple Silicon .dmg file.
               </p>
             )}
           </div>

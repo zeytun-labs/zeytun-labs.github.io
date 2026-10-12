@@ -136,7 +136,7 @@ const PHASE_DURATIONS: Record<"idle" | "menu" | "detail" | "closing", number> =
   }
 
 export function ProcessFig({ active = true }: { active?: boolean } = {}) {
-  const { ref, canAnimate } = useDemoActivity(active)
+  const { ref, canAnimate, reducedMotion } = useDemoActivity(active)
   const [rows, setRows] = useState(
     // ponytail: fixed seeds — Math.random() in useState breaks SSR hydration
     APPS.map((a, id) => ({ id, speed: a.speed }))
@@ -203,110 +203,127 @@ export function ProcessFig({ active = true }: { active?: boolean } = {}) {
   const app = APPS[focus]
 
   return (
-    <div ref={ref} className="relative mx-auto h-98.5 w-full max-w-112">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
-          Process Activity
-        </span>
-        <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
-          Illustrative preview
-        </span>
-      </div>
-      <AnimatePresence initial={false}>
+    <div
+      ref={ref}
+      className="relative mx-auto grid h-98.5 w-full max-w-112 items-center"
+    >
+      <div className="relative flow-root w-full">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+            Process Activity
+          </span>
+          <span className="font-mono text-[10px] tracking-wider text-muted-foreground/50 uppercase">
+            Illustrative preview
+          </span>
+        </div>
         {rows.map((r) => {
-          if ((phase === "detail" || phase === "closing") && r.id !== focus)
-            return null
-          const active = phase !== "idle" && r.id === focus
+          const collapsed =
+            (phase === "detail" || phase === "closing") && r.id !== focus
+          const selected = phase !== "idle" && r.id === focus
           return (
             <motion.div
               key={r.id}
-              layout
-              className="mb-3 overflow-hidden"
-              initial={{ opacity: 0, x: 24 }}
+              aria-hidden={collapsed}
+              className="overflow-hidden"
+              initial={false}
               animate={{
-                opacity: phase === "menu" && !active ? 0.35 : 1,
-                x: 0,
+                height: collapsed ? 0 : 52,
+                marginBottom: collapsed ? 0 : 12,
+                opacity: collapsed
+                  ? 0
+                  : phase === "menu" && !selected
+                    ? 0.35
+                    : 1,
               }}
-              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{
+                duration: reducedMotion ? 0 : 0.4,
+                ease: [0.16, 1, 0.3, 1],
+              }}
             >
               <ProcessRow
                 name={APPS[r.id].name}
                 icon={APPS[r.id].icon}
                 speed={fmt(r.speed)}
                 total={`total: ${APPS[r.id].total}`}
-                active={active}
+                active={selected}
               />
             </motion.div>
           )
         })}
-      </AnimatePresence>
 
-      <AnimatePresence>
-        {phase === "menu" && (
-          <motion.div
-            key="menu"
-            initial={{ opacity: 0, scale: 0.9, y: 4 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{ top: focus * ROW_STEP + 14 }}
-            className="absolute right-0 z-20 w-max max-w-full origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md sm:right-auto sm:left-[55%]"
-          >
-            {[
-              { icon: QuillWrite01Icon, label: "Create rule…" },
-              { icon: ListXIcon, label: "Kill connections" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="flex cursor-default items-center gap-2 rounded-lg py-1 ps-2 pe-4 text-sm"
-              >
-                <HugeiconsIcon
-                  icon={item.icon}
-                  className="size-4 text-foreground"
-                />
-                {item.label}
+        <AnimatePresence>
+          {phase === "menu" && (
+            <motion.div
+              key="menu"
+              initial={{ opacity: 0, scale: 0.9, y: 4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              style={{ top: focus * ROW_STEP + 38 }}
+              className="absolute right-0 z-20 w-max max-w-full origin-top-left rounded-xl border border-border/60 bg-popover/90 p-1 shadow-2xl shadow-black/50 backdrop-blur-md sm:right-auto sm:left-[55%]"
+            >
+              {[
+                { icon: QuillWrite01Icon, label: "Create rule…" },
+                { icon: ListXIcon, label: "Kill connections" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex cursor-default items-center gap-2 rounded-lg py-1 ps-2 pe-4 text-sm"
+                >
+                  <HugeiconsIcon
+                    icon={item.icon}
+                    className="size-4 text-foreground"
+                  />
+                  {item.label}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {phase === "detail" && (
+            <motion.div
+              key="detail"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: "auto",
+                opacity: 1,
+                transition: { delay: reducedMotion ? 0 : 0.4 },
+              }}
+              exit={{ height: 0, opacity: 0, transition: { delay: 0 } }}
+              transition={{
+                duration: reducedMotion ? 0 : 0.35,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-3 rounded-2xl border border-border/40 bg-card/70 p-4">
+                <Detail label="Bandwidth">
+                  <span className="text-foreground">↓ {app.down}</span>
+                  <span className="text-muted-foreground">↑ {app.up}</span>
+                </Detail>
+                <Detail label="Connections">
+                  <span className="text-foreground">{app.active} active</span>
+                  <span className="text-muted-foreground">
+                    {app.closed} closed
+                  </span>
+                </Detail>
+                <Detail label="Details">
+                  <span className="truncate text-muted-foreground">
+                    {app.host}
+                  </span>
+                </Detail>
+                <Detail label="Binary">
+                  <span className="truncate text-muted-foreground">
+                    {app.path}
+                  </span>
+                </Detail>
               </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {phase === "detail" && (
-          <motion.div
-            key="detail"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="space-y-3 rounded-2xl border border-border/40 bg-card/70 p-4">
-              <Detail label="Bandwidth">
-                <span className="text-foreground">↓ {app.down}</span>
-                <span className="text-muted-foreground">↑ {app.up}</span>
-              </Detail>
-              <Detail label="Connections">
-                <span className="text-foreground">{app.active} active</span>
-                <span className="text-muted-foreground">
-                  {app.closed} closed
-                </span>
-              </Detail>
-              <Detail label="Details">
-                <span className="truncate text-muted-foreground">
-                  {app.host}
-                </span>
-              </Detail>
-              <Detail label="Binary">
-                <span className="truncate text-muted-foreground">
-                  {app.path}
-                </span>
-              </Detail>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   )
 }

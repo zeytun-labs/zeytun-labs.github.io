@@ -30,7 +30,7 @@ export function Hero() {
             See it. <em className="block text-primary not-italic">Route it.</em>{" "}
             Stop it.
           </h1>
-          <p className="max-w-xl text-lg text-muted-foreground break-words">
+          <p className="max-w-xl text-lg break-words text-muted-foreground">
             A free, open-source network manager for macOS. Inspect app
             connections, choose their routes, and decide what gets through.
           </p>
@@ -48,21 +48,21 @@ export function Hero() {
               nativeButton={false}
               render={<a href="#model" />}
               variant="outline"
-              className="h-auto! w-full sm:w-auto min-w-0 sm:min-w-60.5 rounded-full px-8 sm:px-10 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground!"
+              className="h-auto! w-full min-w-0 rounded-full px-8 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground! sm:w-auto sm:min-w-60.5 sm:px-10"
             >
               See it in action
             </Button>
           </div>
-          <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1.5">
+          <div className="mt-3 flex flex-col gap-x-3 gap-y-1.5 sm:flex-row sm:items-center">
             <span className="font-mono text-xs text-muted-foreground/80">
-              macOS · Apple Silicon · Free and open source
+              macOS · Apple Silicon
             </span>
-            <span className="text-muted-foreground/40 hidden sm:inline">·</span>
+            <span className="hidden text-muted-foreground/40 sm:inline">·</span>
             <a
               href={SOURCE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground w-fit"
+              className="w-fit text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
             >
               Source on GitHub
             </a>
