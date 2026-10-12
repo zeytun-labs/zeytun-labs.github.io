@@ -16,7 +16,9 @@ function getReducedMotionServerSnapshot() {
   return false
 }
 
-export function useDemoActivity<T extends HTMLElement = HTMLDivElement>() {
+export function useDemoActivity<T extends HTMLElement = HTMLDivElement>(
+  enabled = true
+) {
   const ref = useRef<T>(null)
   const reducedMotion = useSyncExternalStore(
     subscribeReducedMotion,
@@ -30,7 +32,7 @@ export function useDemoActivity<T extends HTMLElement = HTMLDivElement>() {
     let isVisible = document.visibilityState === "visible"
 
     const update = () => {
-      const active = isIntersecting && isVisible && !reducedMotion
+      const active = enabled && isIntersecting && isVisible && !reducedMotion
       setCanAnimate(active)
     }
 
@@ -60,7 +62,7 @@ export function useDemoActivity<T extends HTMLElement = HTMLDivElement>() {
       document.removeEventListener("visibilitychange", onVisibilityChange)
       observer?.disconnect()
     }
-  }, [reducedMotion])
+  }, [enabled, reducedMotion])
 
-  return { ref, canAnimate, reducedMotion }
+  return { ref, canAnimate: enabled && canAnimate, reducedMotion }
 }

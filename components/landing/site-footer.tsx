@@ -1,33 +1,26 @@
 import Link from "next/link"
 
 import { Mark } from "@/components/landing/mark"
-import { ISSUES_URL, SOURCE_URL } from "@/lib/site"
+import { ISSUES_URL, SOURCE_URL, STAR_URL, SOCIAL_LINKS } from "@/lib/site"
 
 const columns = [
   {
-    title: "Product",
+    title: "Explore",
     links: [
-      { label: "Traffic Monitor", href: "#traffic" },
-      { label: "Process", href: "#process" },
-      { label: "Checkpoint", href: "#checkpoint" },
-      { label: "Rules", href: "#rules" },
-      { label: "Policies", href: "#policy" },
-      { label: "DNS", href: "#dns" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Roadmap", href: "#roadmap" },
+      { label: "How it works", href: "#model" },
+      { label: "Features", href: "#features" },
+      { label: "Community", href: "#community" },
+      { label: "FAQ", href: "#faq" },
       { label: "Download", href: "#download" },
-      { label: "Support", href: "mailto:hi@zeytun.app" },
     ],
   },
   {
-    title: "Elsewhere",
+    title: "Connect",
     links: [
-      { label: "GitHub", href: SOURCE_URL },
+      { label: "GitHub", href: STAR_URL },
+      { label: "View source", href: SOURCE_URL },
       { label: "Issues", href: ISSUES_URL },
+      ...SOCIAL_LINKS.map((s) => ({ label: s.label, href: s.href })),
       { label: "Contact", href: "mailto:hi@zeytun.app" },
     ],
   },
@@ -35,9 +28,9 @@ const columns = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-42 border-t border-border/40">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
+    <footer className="mt-20 border-t border-border/40">
+      <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
             <Link className="mb-4 flex items-center gap-2" href="/">
               <Mark className="size-6 text-primary" />
@@ -45,7 +38,7 @@ export function SiteFooter() {
                 Zeytun
               </span>
             </Link>
-            <p className="mt-4 font-heading text-xl">
+            <p className="mt-3 font-heading text-xl">
               See it. Route it. Stop it.
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
@@ -59,14 +52,14 @@ export function SiteFooter() {
               <h4 className="mb-4 font-mono text-xs tracking-wider text-muted-foreground uppercase">
                 {column.title}
               </h4>
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-2.5">
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    {link.href.startsWith("http") ? (
+                    {link.href.startsWith("http") || link.href.startsWith("mailto:") ? (
                       <a
                         href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                        rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
                         className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
@@ -86,7 +79,7 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Zeytun. All rights reserved.</span>
           <span className="max-w-lg sm:text-end">
             Zeytun is free and open source under{" "}

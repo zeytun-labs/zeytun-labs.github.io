@@ -2,19 +2,13 @@ import type { Metadata, Viewport } from "next"
 
 import { Nav } from "@/components/landing/nav"
 import { Hero } from "@/components/landing/hero"
-import { Problem } from "@/components/landing/problem"
-import { WhyZeytun } from "@/components/landing/why-zeytun"
-import { TrafficMonitor } from "@/components/landing/traffic-monitor"
-import { Process } from "@/components/landing/process"
-import { Checkpoint } from "@/components/landing/checkpoint"
-import { Rules } from "@/components/landing/rules"
-import { Policy } from "@/components/landing/policy"
-import { Dns } from "@/components/landing/dns"
-import { Architecture } from "@/components/landing/architecture"
-import { EverythingElse } from "@/components/landing/everything-else"
-import { Roadmap } from "@/components/landing/roadmap"
+import { ProductShowcase } from "@/components/landing/product-showcase"
+import { FeatureHighlights } from "@/components/landing/feature-highlights"
+import { CommunityStats } from "@/components/landing/community-stats"
+import { Faq } from "@/components/landing/faq"
 import { Download } from "@/components/landing/download"
 import { SiteFooter } from "@/components/landing/site-footer"
+import { getGithubStats } from "@/lib/github-stats"
 
 const description =
   "Zeytun is a free, open-source network manager for macOS. Inspect the connections it handles, review app and destination details, and control routing with rules, policies and DNS settings."
@@ -35,23 +29,18 @@ export const viewport: Viewport = {
 }
 
 export default function Page() {
+  const stats = getGithubStats()
+
   return (
     <div className="relative min-h-screen overflow-x-clip px-6">
-      <Nav />
-      {/* v3 arc: see → decide → route → trust */}
-      <main id="main-content" className="space-y-42">
+      <Nav starsCount={stats.stars.value} />
+      {/* 6 core sections: Hero → Product Showcase → Features → Community → FAQ → Download */}
+      <main id="main-content" className="space-y-20 md:space-y-24">
         <Hero />
-        <Problem />
-        <WhyZeytun />
-        <TrafficMonitor />
-        <Process />
-        <Checkpoint />
-        <Rules />
-        <Policy />
-        <Dns />
-        <Architecture />
-        <EverythingElse />
-        <Roadmap />
+        <ProductShowcase />
+        <FeatureHighlights />
+        <CommunityStats stats={stats} />
+        <Faq />
         <Download />
       </main>
       <SiteFooter />

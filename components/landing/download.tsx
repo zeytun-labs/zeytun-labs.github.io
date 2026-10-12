@@ -24,8 +24,7 @@ export function Download() {
             Your network. Your rules.
           </h2>
           <p className="mb-8 max-w-lg text-lg text-muted-foreground">
-            Download the Zeytun beta for macOS. Free and open source, with
-            connection visibility, routing rules and DNS controls in one app.
+            Try the Zeytun beta for macOS. Free and open source.
           </p>
 
           <div className="flex flex-col items-center gap-3">

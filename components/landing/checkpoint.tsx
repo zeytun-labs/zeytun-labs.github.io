@@ -82,8 +82,8 @@ function CBody() {
 const POLICIES = ["streaming-pool", "eu-fallback", "Direct"] as const
 const LOOP = 7 // steps of 1.2s: window in @1, dropdown @2, picked @3, remember @5
 
-function AnimatedFig() {
-  const { ref, canAnimate, reducedMotion } = useDemoActivity()
+export function AnimatedFig({ active = true }: { active?: boolean } = {}) {
+  const { ref, canAnimate, reducedMotion } = useDemoActivity(active)
   const [step, setStep] = useState(0)
 
   useEffect(() => {
@@ -96,7 +96,10 @@ function AnimatedFig() {
   const picked = effectiveStep >= 3 ? POLICIES[0] : "Direct"
 
   return (
-    <div ref={ref} className="relative flex h-full min-h-100 items-center justify-center">
+    <div
+      ref={ref}
+      className="relative flex min-h-100 w-full max-w-xl min-w-0 items-center justify-center"
+    >
       {/* the connection that is being held, in the terminal that opened it */}
       <div
         className={cn(
@@ -233,7 +236,7 @@ function AnimatedFig() {
                 <div className="flex gap-2 pt-1">
                   <span
                     className={cn(
-                      "flex-1 text-center select-none rounded-full px-3 py-1.5 text-xs font-medium text-primary-foreground! transition-all",
+                      "flex-1 rounded-full px-3 py-1.5 text-center text-xs font-medium text-primary-foreground! transition-all select-none",
                       effectiveStep >= 6
                         ? "bg-primary ring-2 ring-primary/40"
                         : "bg-primary"
@@ -241,10 +244,10 @@ function AnimatedFig() {
                   >
                     Allow
                   </span>
-                  <span className="flex-1 text-center select-none rounded-full bg-white/5 px-3 py-1.5 font-mono text-xs font-medium text-muted-foreground! transition-colors">
+                  <span className="flex-1 rounded-full bg-white/5 px-3 py-1.5 text-center font-mono text-xs font-medium whitespace-nowrap text-muted-foreground! transition-colors select-none">
                     Use FINAL
                   </span>
-                  <span className="flex-1 text-center select-none rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground! transition-colors">
+                  <span className="flex-1 rounded-full border border-border/60 bg-card px-3 py-1.5 text-center text-xs font-medium text-muted-foreground! transition-colors select-none">
                     Block
                   </span>
                 </div>

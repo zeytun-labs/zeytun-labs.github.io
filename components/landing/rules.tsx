@@ -209,8 +209,8 @@ function ruleReducer(state: RuleState, action: RuleAction): RuleState {
   return state
 }
 
-function RuleTableFig() {
-  const { ref, canAnimate } = useDemoActivity()
+export function RuleTableFig({ active = true }: { active?: boolean } = {}) {
+  const { ref, canAnimate } = useDemoActivity(active)
   const [state, dispatch] = useReducer(ruleReducer, {
     order: RULES.map((_, i) => i),
     dragging: null,
@@ -254,7 +254,7 @@ function RuleTableFig() {
                       : "border-border/40"
                   )}
                 >
-                  <div className="flex items-center gap-2 min-w-0 md:contents">
+                  <div className="flex min-w-0 items-center gap-2 md:contents">
                     <HugeiconsIcon
                       icon={Menu01Icon}
                       className="size-4 shrink-0 text-muted-foreground/50"
@@ -263,7 +263,7 @@ function RuleTableFig() {
                       <Chip className="shrink-0 px-1.5 py-0.5 text-[10px]">
                         {r.type}
                       </Chip>
-                      <span className="truncate text-muted-foreground min-w-0">
+                      <span className="min-w-0 truncate text-muted-foreground">
                         {r.value}
                       </span>
                     </div>
@@ -273,9 +273,7 @@ function RuleTableFig() {
                   </div>
 
                   <div className="flex items-center justify-between ps-6 text-[11px] md:contents">
-                    <span className="text-foreground">
-                      {r.policy}
-                    </span>
+                    <span className="text-foreground">{r.policy}</span>
                     <span className="text-muted-foreground md:w-14 md:text-end">
                       {r.expiry}
                     </span>
@@ -295,20 +293,22 @@ function RuleTableFig() {
               "flex flex-col gap-1.5 md:grid md:grid-cols-[16px_minmax(0,1fr)_auto_auto_28px] md:items-center md:gap-3"
             )}
           >
-            <div className="flex items-center gap-2 min-w-0 md:contents">
+            <div className="flex min-w-0 items-center gap-2 md:contents">
               <span className="hidden md:block" />
-              <div className="flex min-w-0 flex-1 items-center gap-2 flex-wrap sm:flex-nowrap">
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 sm:flex-nowrap">
                 <Chip on className="shrink-0 px-1.5 py-0.5 text-[10px]">
                   FINAL
                 </Chip>
-                <span className="text-muted-foreground text-xs break-words">
+                <span className="text-xs break-words text-muted-foreground">
                   everything that matched nothing
                 </span>
               </div>
             </div>
             <div className="flex items-center justify-between text-[11px] md:contents">
               <span className="text-primary">streaming-pool</span>
-              <span className="text-muted-foreground md:w-14 md:text-end">—</span>
+              <span className="text-muted-foreground md:w-14 md:text-end">
+                —
+              </span>
             </div>
             <span className="hidden md:block" />
           </div>

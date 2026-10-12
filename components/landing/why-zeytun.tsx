@@ -106,7 +106,9 @@ function Glance() {
                   className="h-full rounded-full bg-primary/60"
                 />
               </div>
-              <span className="w-12 text-end font-mono text-xs">{leg.value}</span>
+              <span className="w-12 text-end font-mono text-xs">
+                {leg.value}
+              </span>
             </div>
           ))}
         </div>
@@ -164,12 +166,14 @@ function Card({
       {children}
 
       <div className="relative z-10 px-6">
-        <div className="mb-2 flex items-center gap-2">
+        <div className="mb-3 flex items-start gap-3">
           {/* Fallback svg if Target02Icon fails, but HugeiconsIcon is safe */}
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
-            <HugeiconsIcon icon={icon} />
+          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+            <HugeiconsIcon icon={icon} className="size-4.5" />
           </div>
-          <h3 className="font-heading text-3xl tracking-wide">{title}</h3>
+          <h3 className="min-w-0 pt-1 font-heading text-xl leading-snug tracking-tight lg:text-[22px]">
+            {title}
+          </h3>
         </div>
         <p className="leading-relaxed text-muted-foreground">{description}</p>
       </div>
@@ -195,13 +199,15 @@ function Fig({
   )
 }
 
-function SeeCard() {
+export function SeeCard({
+  title = "SEE",
+  description = "Inspect connections handled by Zeytun, with available app details and live upload and download by process, host and policy.",
+}: {
+  title?: string
+  description?: string
+} = {}) {
   return (
-    <Card
-      icon={Radar03Icon}
-      title="SEE"
-      description="Inspect connections handled by Zeytun, with available app details and live upload and download by process, host and policy."
-    >
+    <Card icon={Radar03Icon} title={title} description={description}>
       <Fig>
         {/* Radar Animation */}
         <div className="absolute top-0 aspect-square w-4/5">
@@ -228,13 +234,15 @@ function SeeCard() {
   )
 }
 
-function DecideCard() {
+export function DecideCard({
+  title = "DECIDE",
+  description = "In Rule-based mode, enable Connection Ask to pause unmatched TCP connections while you choose a route or rejection.",
+}: {
+  title?: string
+  description?: string
+} = {}) {
   return (
-    <Card
-      icon={Flag02Icon}
-      title="DECIDE"
-      description="In Rule-based mode, enable Connection Ask to pause unmatched TCP connections while you choose a route or rejection."
-    >
+    <Card icon={Flag02Icon} title={title} description={description}>
       <Fig className="relative">
         <GridNet />
         <CheckpointWindowMinimal />
@@ -243,13 +251,15 @@ function DecideCard() {
   )
 }
 
-function RouteCard() {
+export function RouteCard({
+  title = "ROUTE",
+  description = "Use rules, policies, proxy chains and DNS settings to control the traffic Zeytun handles.",
+}: {
+  title?: string
+  description?: string
+} = {}) {
   return (
-    <Card
-      icon={Directions02Icon}
-      title="ROUTE"
-      description="Use rules, policies, proxy chains and DNS settings to control the traffic Zeytun handles."
-    >
+    <Card icon={Directions02Icon} title={title} description={description}>
       <Fig>
         <RouteChip />
       </Fig>
