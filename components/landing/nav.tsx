@@ -6,7 +6,8 @@ import Link from "next/link"
 import { buttonVariants } from "../ui/button"
 import { cn } from "@/lib/utils"
 import { DOWNLOAD_URL, STAR_URL } from "@/lib/site"
-import { Star } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowDown03Icon, GithubIcon } from "@hugeicons/core-free-icons"
 
 export function Nav({ starsCount }: { starsCount?: number | null }) {
   const [stuck, setStuck] = useState(false)
@@ -42,17 +43,16 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
               href={STAR_URL}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Star Zeytun on GitHub"
+              aria-label="GitHub repository"
               className={cn(
                 buttonVariants({ variant: "outline", size: "sm" }),
-                "flex h-8 items-center gap-1.5 rounded-full px-2 text-xs text-foreground! hover:bg-muted/80 sm:h-8 sm:px-3 sm:text-sm"
+                "flex h-8 items-center gap-1.5 rounded-full px-2.5 text-xs text-foreground! hover:bg-muted/80 sm:h-8 sm:px-3 sm:text-sm"
               )}
             >
-              <Star className="size-3.5 text-lime-400" />
-              <span className="hidden sm:inline">Star on GitHub</span>
-              {typeof starsCount === "number" && starsCount > 0 && (
-                <span className="py-0.2 hidden rounded-full bg-muted px-1.5 font-mono text-[10px] text-muted-foreground md:inline">
-                  {starsCount}
+              <HugeiconsIcon icon={GithubIcon} className="size-4" />
+              {typeof starsCount === "number" && (
+                <span className="font-mono text-xs">
+                  {starsCount.toLocaleString("en-US")}
                 </span>
               )}
             </a>
@@ -64,11 +64,11 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
               rel="noopener noreferrer"
               className={cn(
                 buttonVariants({ size: "sm" }),
-                "h-8 shrink-0 rounded-full px-3 text-xs font-medium text-primary-foreground! sm:h-8 sm:px-4 sm:text-sm"
+                "flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-primary-foreground! sm:h-8 sm:px-4 sm:text-sm"
               )}
             >
-              <span className="hidden sm:inline">Download beta</span>
-              <span className="sm:hidden">Download</span>
+              <HugeiconsIcon icon={ArrowDown03Icon} className="size-4" />
+              <span>Download</span>
             </a>
           </div>
         </div>
