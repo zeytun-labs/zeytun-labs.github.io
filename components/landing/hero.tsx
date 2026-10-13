@@ -7,7 +7,7 @@ import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
 import { AppleIcon } from "./apple-icon"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { BetaIcon } from "@hugeicons/core-free-icons"
+import { NewReleasesIcon } from "@hugeicons/core-free-icons"
 
 export function Hero() {
   return (
@@ -20,7 +20,7 @@ export function Hero() {
         <div className="my-auto flex w-full min-w-0 flex-col gap-2 md:w-3/5">
           <AnimatedGradientText className="gap-1.5">
             <HugeiconsIcon
-              icon={BetaIcon}
+              icon={NewReleasesIcon}
               className="size-3.5 text-primary"
               strokeWidth={2}
             />
