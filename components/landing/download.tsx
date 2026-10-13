@@ -1,6 +1,3 @@
-import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
-
 import { Section, Title } from "../common/section"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, ISSUES_URL, RELEASES_URL, SOURCE_URL } from "@/lib/site"
@@ -43,8 +40,8 @@ export function Download() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Download
-              <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
+              <AppleIcon className="size-5" />
+              Download for Mac
             </ShinyButton>
             {isFallback && (
               <p className="text-xs text-muted-foreground/80">

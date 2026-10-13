@@ -3,8 +3,6 @@ import ParticleCanvas from "./particle-canvas"
 import { Button } from "../ui/button"
 import { AnimatedGradientText } from "../ui/animated-gradient-text"
 import { cn } from "@/lib/utils"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
 import { AppleIcon } from "./apple-icon"
@@ -43,8 +41,8 @@ export function Hero() {
               rel="noopener noreferrer"
               className="w-full sm:w-auto"
             >
-              Download
-              <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
+              <AppleIcon className="size-5" />
+              Download for Mac
             </ShinyButton>
             <Button
               nativeButton={false}
