@@ -86,7 +86,7 @@ export function DamagedDialog({
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -3, scale: 0.92 }}
                         transition={{ duration: 0.16, ease: "easeOut" }}
-                        className="inline-flex items-center gap-1.5 text-primary"
+                        className="inline-flex items-center gap-1.5 text-white"
                       >
                         <HugeiconsIcon icon={Tick02Icon} className="size-3.5" />
                         <span>Copied</span>
