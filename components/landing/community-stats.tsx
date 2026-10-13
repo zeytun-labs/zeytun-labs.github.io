@@ -58,7 +58,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
                 rel="noopener noreferrer"
                 className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/50 bg-background/40 px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary"
               >
-                <span>Download beta</span>
+                <span>Download</span>
                 <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
             </div>

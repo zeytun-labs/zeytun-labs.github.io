@@ -41,7 +41,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="w-full sm:w-auto"
             >
-              Download beta
+              Download
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
             </ShinyButton>
             <Button

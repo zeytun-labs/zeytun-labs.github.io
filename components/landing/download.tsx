@@ -39,7 +39,7 @@ export function Download() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Download beta
+              Download
               <HugeiconsIcon icon={ArrowRight02Icon} className="size-5.5!" />
             </ShinyButton>
             {isFallback && (

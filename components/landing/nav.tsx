@@ -68,7 +68,11 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
               )}
             >
               <span>Download</span>
-              <HugeiconsIcon icon={Download01Icon} className="size-4" />
+              <HugeiconsIcon
+                icon={Download01Icon}
+                className="size-4"
+                strokeWidth={2}
+              />
             </a>
           </div>
         </div>
