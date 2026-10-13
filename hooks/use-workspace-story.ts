@@ -2,8 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const TOP = 96
-const stickyTop = () => (window.innerWidth < 1024 ? 80 : TOP)
+const getStickyTop = (height: number) => {
+  const minTop = window.innerWidth < 1024 ? 76 : 88
+  const centered = Math.round((window.innerHeight + minTop - height) / 2)
+  return Math.max(minTop, centered)
+}
+
 export function useWorkspaceStory(reducedMotion: boolean, stepCount: number) {
   const root = useRef<HTMLDivElement>(null)
   const card = useRef<HTMLDivElement>(null)
@@ -14,11 +18,12 @@ export function useWorkspaceStory(reducedMotion: boolean, stepCount: number) {
       frame = 0
       if (!root.current || !card.current) return
       const height = card.current.offsetHeight
-      const top = stickyTop()
+      const minTop = window.innerWidth < 1024 ? 76 : 88
+      const top = getStickyTop(height)
       const travel = window.innerHeight * Math.max(1.15, stepCount * 0.32)
       root.current.style.minHeight = `${height + travel}px`
       // A short viewport uses normal flow instead of clipping the scene.
-      const fits = height + top + 4 <= window.innerHeight
+      const fits = height + minTop + 4 <= window.innerHeight
       card.current.style.position = fits ? "sticky" : "relative"
       card.current.style.top = fits ? `${top}px` : "0px"
       const progress = Math.max(
@@ -56,9 +61,10 @@ export function useWorkspaceStory(reducedMotion: boolean, stepCount: number) {
   }, [stepCount])
   const goToStep = useCallback(
     (step: number) => {
-      if (!root.current) return
+      if (!root.current || !card.current) return
+      const top = getStickyTop(card.current.offsetHeight)
       const start =
-        root.current.getBoundingClientRect().top + window.scrollY - stickyTop()
+        root.current.getBoundingClientRect().top + window.scrollY - top
       const fraction = step === 0 ? 0 : (step + 0.15) / stepCount
       window.scrollTo({
         top:

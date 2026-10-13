@@ -136,7 +136,7 @@ export function WorkspaceDemo({
   const [activeId, setActiveId] = useState("personal")
   const [pendingRestart, setPendingRestart] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
-  const [notice, setNotice] = useState("")
+  const [, setNotice] = useState("")
   const [menu, setMenu] = useState<Menu | null>(null)
   const [modal, setModal] = useState<Modal>(null)
   const [dnsTab, setDnsTab] = useState("servers")
@@ -2104,19 +2104,6 @@ export function WorkspaceDemo({
           )}
         </div>
       </div>
-      <div className="mt-3 flex min-h-5 items-center justify-between gap-3 px-1 font-mono text-[10px] text-muted-foreground/65">
-        <span>
-          <span className="hidden sm:inline">Interactive </span>preview ·
-          Example data
-        </span>
-      </div>
-      <p
-        role="status"
-        aria-live="polite"
-        className="mt-1 min-h-4 px-1 text-center font-mono text-[10px] text-muted-foreground/60"
-      >
-        {notice}
-      </p>
     </div>
   )
 }

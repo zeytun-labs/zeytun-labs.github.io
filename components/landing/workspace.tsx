@@ -164,7 +164,8 @@ export function Workspace() {
           data-story-card
           data-story-step={scene.id}
           data-story-paused={paused || undefined}
-          className="sticky top-20 grid items-center gap-2 lg:top-24 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8"
+          className="sticky grid items-center gap-2 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8"
+          style={{ top: "calc(max(88px, (100svh + 88px - 540px) / 2))" }}
         >
           <aside className="min-w-0">
             <div
@@ -234,22 +235,14 @@ export function Workspace() {
               </AnimatePresence>
             </div>
             <div className="flex min-h-9 items-center text-xs text-muted-foreground">
-              {complete || step === STORY.length - 1 ? (
-                <a
-                  href="#community"
-                  className="inline-flex min-h-9 items-center gap-2 hover:text-primary"
-                >
-                  Continue below
-                  <ArrowDown className="size-4" />
-                </a>
-              ) : (
-                <p className="flex items-center gap-2">
-                  <ArrowDown className="size-4 text-primary" />
-                  {paused
-                    ? "Scroll to continue the story"
+              <p className="flex items-center gap-2">
+                <ArrowDown className="size-4 text-primary" />
+                {paused
+                  ? "Scroll to continue the story"
+                  : step === STORY.length - 1 || complete
+                    ? "Scroll to continue"
                     : "Scroll for the next step"}
-                </p>
-              )}
+              </p>
             </div>
           </aside>
           <div
