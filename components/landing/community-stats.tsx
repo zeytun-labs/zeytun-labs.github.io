@@ -8,7 +8,8 @@ import {
   SOURCE_URL,
   SOCIAL_LINKS,
 } from "@/lib/site"
-import { ArrowUpRight, Code2, ExternalLink, Monitor } from "lucide-react"
+import { ArrowUpRight, Code2, ExternalLink } from "lucide-react"
+import { AppleIcon } from "./apple-icon"
 
 export function CommunityStats({ stats }: { stats: GithubStats }) {
   const updateDates = [
@@ -67,10 +68,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
                 {downloadCount}
               </p>
               <p className="mt-3 flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
-                <span
-                  className="size-1.5 rounded-full bg-primary"
-                  aria-hidden="true"
-                />
+                <AppleIcon className="size-3 text-primary" />
                 macOS DMG downloads
               </p>
             </div>
@@ -93,7 +91,8 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
                 <p className="font-mono text-[10px] tracking-wider text-muted-foreground/60 uppercase">
                   Platform
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <AppleIcon className="size-3.5" />
                   macOS · Apple Silicon
                 </p>
               </div>
@@ -108,7 +107,7 @@ export function CommunityStats({ stats }: { stats: GithubStats }) {
         >
           <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground sm:text-sm">
             <span className="flex items-center gap-2">
-              <Monitor className="size-4 shrink-0" aria-hidden="true" />
+              <AppleIcon className="size-4 shrink-0 text-primary" />
               For your Mac
             </span>
             <ArrowUpRight

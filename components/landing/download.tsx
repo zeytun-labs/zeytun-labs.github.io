@@ -5,6 +5,7 @@ import { Section, Title } from "../common/section"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, ISSUES_URL, RELEASES_URL, SOURCE_URL } from "@/lib/site"
 import { AsciiWaves } from "./ascii-waves"
+import { AppleIcon } from "./apple-icon"
 
 export function Download() {
   const isFallback = DOWNLOAD_URL === RELEASES_URL
@@ -25,7 +26,10 @@ export function Download() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center">
-          <Title>Beta · macOS</Title>
+          <Title className="inline-flex items-center gap-1.5">
+            <AppleIcon className="size-3.5" />
+            macOS
+          </Title>
           <h2 className="mb-4 font-heading text-4xl tracking-tight md:text-5xl">
             Your network. Your rules.
           </h2>
@@ -69,8 +73,9 @@ export function Download() {
           </div>
 
           <div className="mt-8 space-y-2">
-            <p className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
-              macOS · Apple Silicon · Beta software
+            <p className="flex items-center justify-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              <AppleIcon className="size-3.5" />
+              macOS · Apple Silicon
             </p>
           </div>
         </div>

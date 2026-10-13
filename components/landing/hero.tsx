@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
+import { AppleIcon } from "./apple-icon"
 
 export function Hero() {
   return (
@@ -17,13 +18,14 @@ export function Hero() {
       <ParticleCanvas />
       <div className="relative z-4 mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 sm:px-8">
         <div className="my-auto flex w-full min-w-0 flex-col gap-2 md:w-3/5">
-          <AnimatedGradientText>
+          <AnimatedGradientText className="gap-1.5">
+            <AppleIcon className="size-3.5 text-primary" />
             <span
               className={cn(
                 `inline animate-gradient bg-linear-to-r from-primary via-primary/40 to-primary bg-size-[var(--bg-size)_100%] bg-clip-text font-mono text-transparent`
               )}
             >
-              Beta · macOS
+              macOS
             </span>
           </AnimatedGradientText>
           <h1 className="mt-2 font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] font-medium tracking-[-0.035em] uppercase">
@@ -54,7 +56,8 @@ export function Hero() {
             </Button>
           </div>
           <div className="mt-3 flex flex-col gap-x-3 gap-y-1.5 sm:flex-row sm:items-center">
-            <span className="font-mono text-xs text-muted-foreground/80">
+            <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground/80">
+              <AppleIcon className="size-3.5" />
               macOS · Apple Silicon
             </span>
             <span className="hidden text-muted-foreground/40 sm:inline">·</span>
