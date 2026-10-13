@@ -9,8 +9,6 @@ import { cn } from "@/lib/utils"
 import { ShinyButton } from "../ui/shiny-button"
 import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
 import { AppleIcon } from "./apple-icon"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { NewReleasesIcon } from "@hugeicons/core-free-icons"
 import { DamagedDialog } from "./damaged-dialog"
 
 export function Hero() {
@@ -25,11 +23,9 @@ export function Hero() {
       <div className="relative z-4 mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 sm:px-8">
         <div className="my-auto flex w-full min-w-0 flex-col gap-2 md:w-3/5">
           <AnimatedGradientText className="gap-1.5">
-            <HugeiconsIcon
-              icon={NewReleasesIcon}
-              className="size-3.5 text-primary"
-              strokeWidth={2}
-            />
+            <span className="text-xs" aria-hidden="true">
+              ✨
+            </span>
             <span
               className={cn(
                 `inline animate-gradient bg-linear-to-r from-primary via-primary/40 to-primary bg-size-[var(--bg-size)_100%] bg-clip-text font-mono text-transparent`
