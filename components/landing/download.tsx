@@ -1,12 +1,10 @@
 import { Section, Title } from "../common/section"
 import { ShinyButton } from "../ui/shiny-button"
-import { DOWNLOAD_URL, ISSUES_URL, RELEASES_URL, SOURCE_URL } from "@/lib/site"
+import { DOWNLOAD_URL, ISSUES_URL, SOURCE_URL } from "@/lib/site"
 import { AsciiWaves } from "./ascii-waves"
 import { AppleIcon } from "./apple-icon"
 
 export function Download() {
-  const isFallback = DOWNLOAD_URL === RELEASES_URL
-
   return (
     <Section className="text-center" id="download">
       <div
@@ -43,11 +41,10 @@ export function Download() {
               <AppleIcon className="size-5" />
               Download for Mac
             </ShinyButton>
-            {isFallback && (
-              <p className="text-xs text-muted-foreground/80">
-                On GitHub Releases, download the Apple Silicon .dmg file.
-              </p>
-            )}
+            <p className="flex items-center justify-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              <AppleIcon className="size-3.5" />
+              macOS · Apple Silicon
+            </p>
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm">
@@ -67,13 +64,6 @@ export function Download() {
             >
               Report a bug
             </a>
-          </div>
-
-          <div className="mt-8 space-y-2">
-            <p className="flex items-center justify-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground uppercase">
-              <AppleIcon className="size-3.5" />
-              macOS · Apple Silicon
-            </p>
           </div>
         </div>
       </div>
