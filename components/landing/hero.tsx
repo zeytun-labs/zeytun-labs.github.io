@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { Section } from "../common/section"
 import ParticleCanvas from "./particle-canvas"
 import { Button } from "../ui/button"
@@ -8,8 +11,11 @@ import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
 import { AppleIcon } from "./apple-icon"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { NewReleasesIcon } from "@hugeicons/core-free-icons"
+import { DamagedDialog } from "./damaged-dialog"
 
 export function Hero() {
+  const [damagedOpen, setDamagedOpen] = useState(false)
+
   return (
     <Section
       className="relative -mx-6 flex min-h-[calc(100svh-60px)] max-w-none! flex-col overflow-hidden px-0 pt-[clamp(56px,8vw,112px)] pb-[clamp(52px,8vw,80px)]"
@@ -59,12 +65,7 @@ export function Hero() {
               See it in action
             </Button>
           </div>
-          <div className="mt-3 flex flex-col gap-x-3 gap-y-1.5 sm:flex-row sm:items-center">
-            <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground/80">
-              <AppleIcon className="size-3.5" />
-              macOS · Apple Silicon
-            </span>
-            <span className="hidden text-muted-foreground/40 sm:inline">·</span>
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
             <a
               href={SOURCE_URL}
               target="_blank"
@@ -73,8 +74,18 @@ export function Hero() {
             >
               Source on GitHub
             </a>
+            <span className="text-muted-foreground/40">·</span>
+            <button
+              type="button"
+              onClick={() => setDamagedOpen(true)}
+              className="w-fit cursor-pointer text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Says &ldquo;damaged&rdquo;?
+            </button>
           </div>
         </div>
+
+        <DamagedDialog open={damagedOpen} onOpenChange={setDamagedOpen} />
 
         <a
           href="#model"
