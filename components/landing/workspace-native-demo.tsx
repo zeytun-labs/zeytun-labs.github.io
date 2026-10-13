@@ -122,12 +122,17 @@ const MODAL_TITLES = {
 export function WorkspaceDemo({
   view,
   onViewChange,
+  guided,
 }: {
   view: WorkspaceView
   onViewChange: (view: WorkspaceView) => void
+  guided?: "overview" | "process" | "rule"
 }) {
-  const [profiles, setProfiles] = useState(initialProfiles)
-  const [resetCount, setResetCount] = useState(0)
+  const [profiles, setProfiles] = useState<DemoProfile[]>(() => {
+    const profiles = initialProfiles()
+    // Every fresh story session starts in the mode that applies its Safari rule.
+    return profiles.map((profile) => ({ ...profile, mode: "rule" as const }))
+  })
   const [activeId, setActiveId] = useState("personal")
   const [pendingRestart, setPendingRestart] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
@@ -136,7 +141,6 @@ export function WorkspaceDemo({
   const [modal, setModal] = useState<Modal>(null)
   const [dnsTab, setDnsTab] = useState("servers")
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
-  const [fullSize, setFullSize] = useState(false)
   const [hoverNav, setHoverNav] = useState<number | null>(null)
   const [name, setName] = useState("")
   const [address, setAddress] = useState("")
@@ -198,24 +202,34 @@ export function WorkspaceDemo({
     return () => clearInterval(interval)
   }, [canAnimate])
 
+  useEffect(() => {
+    // Scroll navigation should not leave a popup from the previous page over
+    // the next scene; profile edits and saved rules remain in the same session.
+    const frame = requestAnimationFrame(() => {
+      setMenu(null)
+      setModal(null)
+      setRuleEditor(null)
+      setRulesetEditor(null)
+      setInspectedConnection(null)
+      setReportOpen(false)
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [view])
+
   useLayoutEffect(() => {
     const element = viewport.current
     if (!element) return
     const resize = () => {
-      if (!fullSize) {
-        element.scrollLeft = 0
-        element.scrollTop = 0
-      }
       element.style.setProperty(
         "--demo-scale",
-        String(fullSize ? 1 : element.clientWidth / APP_WIDTH)
+        String(element.clientWidth / APP_WIDTH)
       )
     }
     resize()
     const observer = new ResizeObserver(resize)
     observer.observe(element)
     return () => observer.disconnect()
-  }, [fullSize])
+  }, [])
   useEffect(
     () => () => {
       if (timer.current) clearTimeout(timer.current)
@@ -243,33 +257,6 @@ export function WorkspaceDemo({
       setBusy(null)
       timer.current = null
     }, 650)
-  }
-  const reset = () => {
-    setResetCount((previous) => previous + 1)
-    if (timer.current) clearTimeout(timer.current)
-    timer.current = null
-    setBusy(null)
-    setProfiles(initialProfiles())
-    setActiveId("personal")
-    setPendingRestart(false)
-    setMenu(null)
-    setModal(null)
-    setTestResult(false)
-    setStunResult(false)
-    setSerialTest(false)
-    setHttp3(false)
-    setDnsTab("servers")
-    setSelectedRow(null)
-    setDnsFinal({})
-    setConnections(initialConnections())
-    setClearedConnections([])
-    setTick(0)
-    setRuleEditor(null)
-    setRulesetEditor(null)
-    setInspectedConnection(null)
-    setReportOpen(false)
-    onViewChange("home")
-    setNotice("Preview reset.")
   }
   const navigate = (next: WorkspaceView) => {
     setMenu(null)
@@ -561,27 +548,19 @@ export function WorkspaceDemo({
         ref={viewport}
         style={{
           ...APP_THEME,
-          height: fullSize ? APP_HEIGHT + 16 : undefined,
-          aspectRatio: fullSize ? undefined : `${APP_WIDTH} / ${APP_HEIGHT}`,
+          aspectRatio: `${APP_WIDTH} / ${APP_HEIGHT}`,
           borderRadius: "calc(28px * var(--demo-scale, 0.8))",
         }}
-        className={cn(
-          "relative isolate border border-border/60 bg-background font-sans text-foreground shadow-[0_24px_80px_-24px_rgba(0,0,0,0.7)]",
-          fullSize ? "overflow-x-auto overflow-y-hidden" : "overflow-hidden"
-        )}
+        className="relative isolate overflow-hidden border border-border/60 bg-background font-sans text-foreground shadow-[0_24px_80px_-24px_rgba(0,0,0,0.7)]"
       >
         <div
           style={{
             width: APP_WIDTH,
             height: APP_HEIGHT,
             minWidth: APP_WIDTH,
-            ...(fullSize
-              ? {}
-              : {
-                  position: "absolute",
-                  transform: "scale(var(--demo-scale, 0.8))",
-                  transformOrigin: "top left",
-                }),
+            position: "absolute",
+            transform: "scale(var(--demo-scale, 0.8))",
+            transformOrigin: "top left",
           }}
           ref={canvas}
           data-app-canvas
@@ -778,7 +757,7 @@ export function WorkspaceDemo({
           </header>
 
           <main
-            key={`${resetCount}:${view}`}
+            key={view}
             data-preview-page={view}
             className="absolute top-20 right-6 bottom-6 left-[104px] overflow-y-auto motion-safe:animate-in motion-safe:duration-150 motion-safe:fade-in"
             onClick={() => setMenu(null)}
@@ -800,6 +779,7 @@ export function WorkspaceDemo({
             )}
             {page === "Process" && (
               <WorkspaceProcess
+                guided={guided === "process"}
                 connections={connections}
                 tick={tick}
                 onCloseConnections={(name) => {
@@ -815,6 +795,7 @@ export function WorkspaceDemo({
             )}
             {page === "Rule" && (
               <WorkspaceRules
+                guided={guided === "rule"}
                 key={current.id}
                 profile={current}
                 onUpdate={updateRouting}
@@ -2128,40 +2109,13 @@ export function WorkspaceDemo({
           <span className="hidden sm:inline">Interactive </span>preview ·
           Example data
         </span>
-        <div className="flex shrink-0 gap-3">
-          <button
-            type="button"
-            onClick={() => setFullSize(!fullSize)}
-            aria-pressed={fullSize}
-            className={cn(
-              "min-h-7 cursor-pointer px-1.5 hover:text-primary",
-              APP_CONTROL
-            )}
-          >
-            {fullSize ? "Fit to page" : "Full-size"}
-          </button>
-          <button
-            type="button"
-            aria-label="Reset workspace preview"
-            onClick={reset}
-            className={cn(
-              "min-h-7 cursor-pointer px-1.5 hover:text-primary",
-              APP_CONTROL
-            )}
-          >
-            Reset
-          </button>
-        </div>
       </div>
       <p
         role="status"
         aria-live="polite"
         className="mt-1 min-h-4 px-1 text-center font-mono text-[10px] text-muted-foreground/60"
       >
-        {notice ||
-          (fullSize
-            ? "Scroll horizontally to explore the desktop layout."
-            : "Explore the sidebar. All changes stay in this preview.")}
+        {notice}
       </p>
     </div>
   )

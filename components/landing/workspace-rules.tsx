@@ -32,15 +32,19 @@ export function WorkspaceRules({
   onUpdate,
   onEdit,
   onEditSet,
+  guided = false,
 }: {
   profile: DemoProfile
   onUpdate: (changes: Partial<DemoProfile>) => void
   onEdit: (draft: RuleDraft) => void
   onEditSet: (draft: Partial<DemoRuleset>) => void
+  guided?: boolean
 }) {
   const [tab, setTab] = useState("rules")
   const [search, setSearch] = useState("")
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(
+    guided ? "route-safari" : null
+  )
   const [addMenu, setAddMenu] = useState(false)
   const [dragged, setDragged] = useState<string | null>(null)
   const [downloadVia, setDownloadVia] = useState("direct")

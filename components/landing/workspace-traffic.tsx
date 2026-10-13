@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { ListXIcon, Menu01Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import {
   AppTabs,
   AppButton,
   AppModal,
+  AppContextMenu,
   AppIcon,
   APP_INPUT,
   APP_CONTROL,
@@ -52,7 +53,43 @@ export function WorkspaceTraffic({
   const [search, setSearch] = useState("")
   const [columns, setColumns] = useState(COLUMNS)
   const [columnMenu, setColumnMenu] = useState(false)
-  const [context, setContext] = useState<DemoConnection | null>(null)
+  const [context, setContext] = useState<{
+    connection: DemoConnection
+    owner: HTMLElement
+    x: number
+    y: number
+  } | null>(null)
+  const closeContext = useCallback(() => setContext(null), [])
+  const openContext = (
+    connection: DemoConnection,
+    target: HTMLElement,
+    clientX: number,
+    clientY: number
+  ) => {
+    const owner = target.closest<HTMLElement>("[data-app-canvas]")
+    if (!owner) return
+    const bounds = owner.getBoundingClientRect(),
+      scale = bounds.width / owner.offsetWidth
+    const top = Math.max(8, (Math.max(0, bounds.top) - bounds.top) / scale + 8)
+    const bottom = Math.min(
+      owner.offsetHeight - 84,
+      (Math.min(innerHeight, bounds.bottom) - bounds.top) / scale - 84
+    )
+    const left = Math.max(
+      8,
+      (Math.max(0, bounds.left) - bounds.left) / scale + 8
+    )
+    const right = Math.min(
+      owner.offsetWidth - 264,
+      (Math.min(innerWidth, bounds.right) - bounds.left) / scale - 264
+    )
+    setContext({
+      connection,
+      owner,
+      x: Math.max(left, Math.min((clientX - bounds.left) / scale, right)),
+      y: Math.max(top, Math.min((clientY - bounds.top) / scale, bottom)),
+    })
+  }
   const rows = connections.filter(
     (item) => tab === "recent" || item.status === "active"
   )
@@ -282,9 +319,23 @@ export function WorkspaceTraffic({
                   onClick={() => onInspect(item)}
                   onContextMenu={(e) => {
                     e.preventDefault()
-                    setContext(item)
+                    openContext(item, e.currentTarget, e.clientX, e.clientY)
                   }}
                   onKeyDown={(e) => {
+                    if (
+                      e.key === "ContextMenu" ||
+                      (e.shiftKey && e.key === "F10")
+                    ) {
+                      e.preventDefault()
+                      const bounds = e.currentTarget.getBoundingClientRect()
+                      openContext(
+                        item,
+                        e.currentTarget,
+                        bounds.left + 16,
+                        bounds.bottom
+                      )
+                      return
+                    }
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault()
                       onInspect(item)
@@ -318,11 +369,7 @@ export function WorkspaceTraffic({
           </table>
         </div>
         {context && (
-          <div
-            role="menu"
-            aria-label="Connection actions"
-            className="absolute top-20 right-4 z-20 w-64 rounded-xl border border-border bg-popover p-1 shadow-xl"
-          >
+          <AppContextMenu anchor={context} onClose={closeContext}>
             <button
               role="menuitem"
               className={cn(
@@ -330,11 +377,11 @@ export function WorkspaceTraffic({
                 APP_CONTROL
               )}
               onClick={() => {
-                onAddRule(connectionHostRule(context))
+                onAddRule(connectionHostRule(context.connection))
                 setContext(null)
               }}
             >
-              Add rule for {context.host}
+              Add rule for {context.connection.host}
             </button>
             <button
               role="menuitem"
@@ -344,30 +391,20 @@ export function WorkspaceTraffic({
               )}
               onClick={() => {
                 const process = DEMO_PROCESSES.find(
-                  (p) => p.name === context.process
+                  (p) => p.name === context.connection.process
                 )
                 onAddRule({
                   kind: "PROCESS-PATH",
-                  value: process?.path ?? context.process,
+                  value: process?.path ?? context.connection.process,
                   outbound: "direct",
-                  comment: `Rule for ${context.process}`,
+                  comment: `Rule for ${context.connection.process}`,
                 })
                 setContext(null)
               }}
             >
-              Add rule for {context.process}
+              Add rule for {context.connection.process}
             </button>
-            <button
-              role="menuitem"
-              className={cn(
-                "w-full rounded-lg p-2 text-left text-xs text-muted-foreground hover:bg-accent",
-                APP_CONTROL
-              )}
-              onClick={() => setContext(null)}
-            >
-              Close menu
-            </button>
-          </div>
+          </AppContextMenu>
         )}
       </section>
     </div>

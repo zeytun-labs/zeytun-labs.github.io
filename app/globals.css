@@ -132,12 +132,13 @@
     }
   html {
     @apply font-sans;
-    overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100vw;
   }
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
+    /* Clip decoration without creating a scroll ancestor for sticky scenes. */
+    overflow-x: clip;
     max-width: 100vw;
   }
 

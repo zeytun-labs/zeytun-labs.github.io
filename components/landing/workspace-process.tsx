@@ -47,15 +47,19 @@ export function WorkspaceProcess({
   tick,
   onCloseConnections,
   onAddRule,
+  guided = false,
 }: {
   connections: DemoConnection[]
   tick: number
   onCloseConnections: (name: string) => void
   onAddRule: (process: DemoProcess) => void
+  guided?: boolean
 }) {
   const [search, setSearch] = useState("")
   const [sort, setSort] = useState("traffic")
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(
+    guided ? "Safari" : null
+  )
   const [menu, setMenu] = useState<string | null>(null)
   const active = (name: string) =>
     connections.filter(

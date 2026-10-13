@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useId, useRef, useState } from "react"
+import { createPortal } from "react-dom"
 import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -92,6 +93,72 @@ export function AppMenuItem({
   )
 }
 
+export function AppContextMenu({
+  anchor,
+  onClose,
+  children,
+}: {
+  anchor: { owner: HTMLElement; x: number; y: number }
+  onClose: () => void
+  children: ReactNode
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    const outside = (event: PointerEvent) => {
+      if (!ref.current?.contains(event.target as Node)) onClose()
+    }
+    const scroll = () => onClose()
+    document.addEventListener("pointerdown", outside)
+    document.addEventListener("scroll", scroll, true)
+    ref.current
+      ?.querySelector<HTMLElement>('[role="menuitem"]')
+      ?.focus({ preventScroll: true })
+    return () => {
+      document.removeEventListener("pointerdown", outside)
+      document.removeEventListener("scroll", scroll, true)
+      if (previous?.isConnected) previous.focus({ preventScroll: true })
+    }
+  }, [onClose])
+  return createPortal(
+    <div
+      ref={ref}
+      role="menu"
+      aria-label="Connection actions"
+      style={{
+        left: Math.max(8, Math.min(anchor.x, anchor.owner.offsetWidth - 264)),
+        top: Math.max(8, Math.min(anchor.y, anchor.owner.offsetHeight - 84)),
+      }}
+      className="absolute z-[80] w-64 rounded-xl border border-border bg-popover p-1 shadow-xl"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" || event.key === "Tab") {
+          event.preventDefault()
+          event.stopPropagation()
+          onClose()
+        }
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault()
+          const items = [
+            ...ref.current!.querySelectorAll<HTMLButtonElement>(
+              '[role="menuitem"]'
+            ),
+          ]
+          const current = items.indexOf(
+            document.activeElement as HTMLButtonElement
+          )
+          items[
+            (current + (event.key === "ArrowDown" ? 1 : items.length - 1)) %
+              items.length
+          ]?.focus({ preventScroll: true })
+        }
+      }}
+    >
+      {children}
+    </div>,
+    anchor.owner
+  )
+}
+
 export function AppSelect({
   label,
   options,
@@ -109,36 +176,69 @@ export function AppSelect({
 }) {
   const [internal, setInternal] = useState(initial ?? options[0]?.value ?? "")
   const [open, setOpen] = useState(false)
-  const [above, setAbove] = useState(false)
+  const [placement, setPlacement] = useState<{
+    owner: HTMLElement
+    left: number
+    top: number
+    width: number
+    maxHeight: number
+  } | null>(null)
   const ref = useRef<HTMLDivElement>(null)
+  const list = useRef<HTMLDivElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
   const id = useId()
   const selected = value ?? internal
   useEffect(() => {
     if (!open) return
     const close = (event: PointerEvent) => {
-      if (!ref.current?.contains(event.target as Node)) setOpen(false)
+      if (
+        !ref.current?.contains(event.target as Node) &&
+        !list.current?.contains(event.target as Node)
+      )
+        setOpen(false)
     }
     document.addEventListener("pointerdown", close)
-    ref.current
+    const scroll = (event: Event) => {
+      if (!list.current?.contains(event.target as Node)) setOpen(false)
+    }
+    document.addEventListener("scroll", scroll, true)
+    list.current
       ?.querySelector<HTMLButtonElement>(
         '[role="option"][aria-selected="true"]'
       )
-      ?.focus()
-    return () => document.removeEventListener("pointerdown", close)
+      ?.focus({ preventScroll: true })
+    return () => {
+      document.removeEventListener("pointerdown", close)
+      document.removeEventListener("scroll", scroll, true)
+    }
   }, [open])
   const toggle = () => {
     const owner = trigger.current?.closest<HTMLElement>("[data-app-canvas]")
-    const bounds = owner?.getBoundingClientRect()
-    const button = trigger.current?.getBoundingClientRect()
-    setAbove(
-      !!(
-        bounds &&
-        button &&
-        bounds.bottom - button.bottom <
-          (190 * bounds.height) / owner!.offsetHeight
-      )
-    )
+    if (!owner || !trigger.current) return
+    const bounds = owner.getBoundingClientRect()
+    const button = trigger.current.getBoundingClientRect()
+    const scale = bounds.width / owner.offsetWidth
+    const below = (bounds.bottom - button.bottom) / scale - 12
+    const above = (button.top - bounds.top) / scale - 12
+    const desired = Math.min(options.length * 32 + 10, 288)
+    const upwards = below < desired && above > below
+    const maxHeight = Math.min(desired, Math.max(64, upwards ? above : below))
+    const width = button.width / scale
+    setPlacement({
+      owner,
+      left: Math.max(
+        8,
+        Math.min(
+          (button.left - bounds.left) / scale,
+          owner.offsetWidth - width - 8
+        )
+      ),
+      top: upwards
+        ? (button.top - bounds.top) / scale - maxHeight - 4
+        : (button.bottom - bounds.top) / scale + 4,
+      width,
+      maxHeight,
+    })
     setOpen(!open)
   }
   return (
@@ -146,15 +246,19 @@ export function AppSelect({
       ref={ref}
       className={cn("relative", className)}
       onKeyDown={(event) => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" && open) {
           event.stopPropagation()
           setOpen(false)
           trigger.current?.focus()
         }
+        if (event.key === "Tab" && open) {
+          setOpen(false)
+          trigger.current?.focus({ preventScroll: true })
+        }
         if (open && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
           event.preventDefault()
           const buttons = Array.from(
-            ref.current!.querySelectorAll<HTMLButtonElement>('[role="option"]')
+            list.current!.querySelectorAll<HTMLButtonElement>('[role="option"]')
           )
           const index = buttons.indexOf(
             document.activeElement as HTMLButtonElement
@@ -162,7 +266,7 @@ export function AppSelect({
           buttons[
             (index + (event.key === "ArrowDown" ? 1 : buttons.length - 1)) %
               buttons.length
-          ]?.focus()
+          ]?.focus({ preventScroll: true })
         }
       }}
     >
@@ -193,41 +297,48 @@ export function AppSelect({
           className="size-4 text-muted-foreground"
         />
       </button>
-      {open && (
-        <div
-          id={id}
-          role="listbox"
-          aria-label={label}
-          className={cn(
-            "absolute inset-x-0 z-[80] max-h-44 overflow-auto rounded-xl border border-border bg-popover p-1 shadow-xl",
-            above ? "bottom-full mb-1" : "top-full mt-1"
-          )}
-        >
-          {options.map((item) => (
-            <button
-              key={item.value}
-              type="button"
-              role="option"
-              aria-selected={selected === item.value}
-              onClick={() => {
-                setInternal(item.value)
-                onChange?.(item.value)
-                setOpen(false)
-                trigger.current?.focus()
-              }}
-              className={cn(
-                "flex min-h-8 w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-2 text-left text-sm hover:bg-accent",
-                APP_CONTROL
-              )}
-            >
-              {item.label}
-              {selected === item.value && (
-                <AppIcon icon={CheckIcon} className="size-4" />
-              )}
-            </button>
-          ))}
-        </div>
-      )}
+      {open &&
+        placement &&
+        createPortal(
+          <div
+            ref={list}
+            id={id}
+            role="listbox"
+            aria-label={label}
+            style={{
+              left: placement.left,
+              top: placement.top,
+              width: placement.width,
+              maxHeight: placement.maxHeight,
+            }}
+            className="absolute z-[80] overflow-x-hidden overflow-y-auto overscroll-contain rounded-xl border border-border bg-popover p-1 shadow-xl"
+          >
+            {options.map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                role="option"
+                aria-selected={selected === item.value}
+                onClick={() => {
+                  setInternal(item.value)
+                  onChange?.(item.value)
+                  setOpen(false)
+                  trigger.current?.focus({ preventScroll: true })
+                }}
+                className={cn(
+                  "flex min-h-8 w-full cursor-pointer items-center justify-between gap-2 rounded-lg px-2 text-left text-sm hover:bg-accent",
+                  APP_CONTROL
+                )}
+              >
+                {item.label}
+                {selected === item.value && (
+                  <AppIcon icon={CheckIcon} className="size-4" />
+                )}
+              </button>
+            ))}
+          </div>,
+          placement.owner
+        )}
     </div>
   )
 }

@@ -37,7 +37,7 @@ export function WorkspaceRuleEditor({
       onClose={onClose}
     >
       <form
-        className="mt-5 flex min-h-0 flex-col gap-4 overflow-y-auto"
+        className="mt-5 flex flex-col gap-4"
         onSubmit={(e) => {
           e.preventDefault()
           if (form.kind !== "FINAL" && !form.value.trim()) {

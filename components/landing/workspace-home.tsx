@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useRef, useState } from "react"
+import { useId, useMemo, useRef, useState } from "react"
 import { motion, useAnimationFrame, useMotionValue } from "motion/react"
 import {
   Wifi02Icon,
@@ -19,6 +19,11 @@ import {
 } from "./workspace-activity-data"
 import type { DemoProfile } from "./workspace-demo-data"
 import { cn } from "@/lib/utils"
+import {
+  speedHistoryPaths,
+  SPEED_SAMPLE_MS,
+  SPEED_SAMPLE_STEP,
+} from "./workspace-speed-history"
 
 const CARD =
   "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-4xl border border-border/40 bg-card/70 shadow-sm"
@@ -28,19 +33,6 @@ const ORANGE = "oklch(0.77 0.16 70)"
 const GREEN = "oklch(0.77 0.2 131)"
 const trafficStripe = (color: string) =>
   `repeating-linear-gradient(-45deg, ${color} 0 6px, color-mix(in oklab, ${color} 65%, transparent) 6px 12px)`
-
-// A periodic history strip moves horizontally. Samples never change their Y
-// positions; both ends of the strip agree when the translation wraps.
-const SPEED_STEP = 10
-const SPEED_CYCLE = 96
-const SPEED_SAMPLES = Array.from(
-  { length: SPEED_CYCLE * 2 + 1 },
-  (_, i) =>
-    26 +
-    Math.sin((i * Math.PI) / 8) * 10 +
-    Math.cos((i * Math.PI) / 12) * 6 +
-    Math.sin((i * Math.PI) / 4) * 3
-)
 
 function SpeedChart({
   title,
@@ -56,16 +48,28 @@ function SpeedChart({
   const id = useId().replaceAll(":", "")
   const offset = useMotionValue(0)
   const elapsed = useRef(0)
+  const lastStep = useRef(0)
+  const line = useRef<SVGPathElement>(null)
+  const fill = useRef<SVGPathElement>(null)
+  const seed = title === "Upload" ? 17 : 83
+  const initialPath = useMemo(() => speedHistoryPaths(0, seed), [seed])
   useAnimationFrame((_, delta) => {
     if (!running) return
     elapsed.current += Math.min(delta, 64)
+    const step = Math.floor(elapsed.current / SPEED_SAMPLE_MS)
+    if (step !== lastStep.current) {
+      // Swap the retained window and its translation in the same animation
+      // frame, so existing samples keep their positions without a reset flash.
+      const paths = speedHistoryPaths(step, seed)
+      line.current?.setAttribute("d", paths.line)
+      fill.current?.setAttribute("d", paths.fill)
+      lastStep.current = step
+    }
     offset.set(
-      -(((elapsed.current / 1500) * SPEED_STEP) % (SPEED_CYCLE * SPEED_STEP))
+      (-(elapsed.current % SPEED_SAMPLE_MS) / SPEED_SAMPLE_MS) *
+        SPEED_SAMPLE_STEP
     )
   })
-  const points = SPEED_SAMPLES.map(
-    (v, i) => `${i * SPEED_STEP},${95 - v}`
-  ).join(" ")
   return (
     <div className={cn(CARD, "pt-4")}>
       <div className="px-5">
@@ -93,12 +97,11 @@ function SpeedChart({
           </linearGradient>
         </defs>
         <motion.g data-speed-history style={{ x: offset }}>
-          <polygon
-            points={`0,100 ${points} ${SPEED_CYCLE * 2 * SPEED_STEP},100`}
-            fill={`url(#${id})`}
-          />
-          <polyline
-            points={points}
+          <path ref={fill} d={initialPath.fill} fill={`url(#${id})`} />
+          <path
+            ref={line}
+            data-speed-line
+            d={initialPath.line}
             fill="none"
             stroke={color}
             strokeWidth="1.5"
