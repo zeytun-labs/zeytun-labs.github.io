@@ -7,7 +7,7 @@ import { buttonVariants } from "../ui/button"
 import { cn } from "@/lib/utils"
 import { DOWNLOAD_URL, STAR_URL } from "@/lib/site"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ArrowDown03Icon, GithubIcon } from "@hugeicons/core-free-icons"
+import { Download01Icon, GithubIcon } from "@hugeicons/core-free-icons"
 
 export function Nav({ starsCount }: { starsCount?: number | null }) {
   const [stuck, setStuck] = useState(false)
@@ -67,8 +67,8 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
                 "flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-primary-foreground! sm:h-8 sm:px-4 sm:text-sm"
               )}
             >
-              <HugeiconsIcon icon={ArrowDown03Icon} className="size-4" />
               <span>Download</span>
+              <HugeiconsIcon icon={Download01Icon} className="size-4" />
             </a>
           </div>
         </div>
