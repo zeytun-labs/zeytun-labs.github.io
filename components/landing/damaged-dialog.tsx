@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Dialog } from "@base-ui/react/dialog"
+import { motion, AnimatePresence } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Cancel01Icon,
@@ -75,13 +76,35 @@ export function DamagedDialog({
                   type="button"
                   onClick={copy}
                   aria-label="Copy command to clipboard"
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border/60 bg-muted/50 px-2.5 py-1 text-xs font-sans text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
+                  className="relative inline-flex min-h-7 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border/60 bg-muted/50 px-2.5 py-1 text-xs font-sans transition-colors hover:bg-muted hover:text-foreground active:scale-95"
                 >
-                  <HugeiconsIcon
-                    icon={copied ? Tick02Icon : Copy01Icon}
-                    className="size-3.5"
-                  />
-                  <span>{copied ? "Copied" : "Copy"}</span>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {copied ? (
+                      <motion.span
+                        key="copied"
+                        initial={{ opacity: 0, y: 3, scale: 0.92 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -3, scale: 0.92 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="inline-flex items-center gap-1.5 text-primary"
+                      >
+                        <HugeiconsIcon icon={Tick02Icon} className="size-3.5" />
+                        <span>Copied</span>
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="copy"
+                        initial={{ opacity: 0, y: -3, scale: 0.92 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 3, scale: 0.92 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="inline-flex items-center gap-1.5 text-muted-foreground"
+                      >
+                        <HugeiconsIcon icon={Copy01Icon} className="size-3.5" />
+                        <span>Copy</span>
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </button>
               </div>
               <p className="mt-2 text-xs text-muted-foreground/70">
