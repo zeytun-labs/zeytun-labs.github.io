@@ -3,15 +3,12 @@ import type { Metadata } from "next"
 import { ResourcePage } from "@/components/landing/resource-page"
 import { ISSUES_URL, STATS_REPO } from "@/lib/site"
 
-const privateContactUrl = `${ISSUES_URL}/new?${new URLSearchParams({
-  title: "Request for a private security contact",
-  body: "I would like to contact a maintainer privately about a security concern. Please provide a private reporting channel. No vulnerability details are included in this issue.",
-}).toString()}`
+const privateReportUrl = `https://github.com/${STATS_REPO}/security/advisories/new`
 
 export const metadata: Metadata = {
   title: "Security | Zeytun",
   description:
-    "How to contact Zeytun maintainers about a vulnerability and prepare a useful report without exposing sensitive data.",
+    "Report a Zeytun vulnerability privately through GitHub and prepare a useful report without exposing sensitive data.",
 }
 
 export default function SecurityPage() {
@@ -21,23 +18,22 @@ export default function SecurityPage() {
       intro="Report vulnerabilities affecting Zeytun without exposing credentials, private traffic, or exploit details in public."
     >
       <section>
-        <h2>Arrange a private report</h2>
+        <h2>Report a vulnerability privately</h2>
         <p>
-          GitHub private vulnerability reporting is currently disabled for the
-          app repository. To reach a maintainer, open a contact request using
-          the link below. This creates a public issue draft: include only the
-          request for a private channel, with no vulnerability details or
-          attachments.
+          Use the app repository&apos;s private vulnerability reporting form on
+          GitHub. Reports are shared privately with the repository maintainers
+          rather than posted to the public issue tracker. A GitHub account is
+          required to submit a report.
         </p>
         <p className="mt-4">
-          <a href={privateContactUrl} target="_blank" rel="noopener noreferrer">
-            Request a private reporting channel
+          <a href={privateReportUrl} target="_blank" rel="noopener noreferrer">
+            Report a vulnerability
           </a>
         </p>
         <p className="mt-4">
-          Once a maintainer provides a private channel, send the report there.
-          Coordinate public disclosure with the maintainer so the issue can be
-          investigated and affected users can receive guidance.
+          Keep follow-up details in the private report. Coordinate public
+          disclosure with the maintainer so the issue can be investigated and
+          affected users can receive guidance.
         </p>
       </section>
 

@@ -116,8 +116,9 @@ export default function PrivacyPage() {
             project&apos;s issue tracker
           </a>
           . If your concern involves private information or a vulnerability,
-          follow the <Link href="/security">private contact instructions</Link>{" "}
-          before sharing details.
+          follow the{" "}
+          <Link href="/security">private reporting instructions</Link> before
+          sharing details.
         </p>
       </section>
     </ResourcePage>
