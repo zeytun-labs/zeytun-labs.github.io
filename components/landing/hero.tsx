@@ -6,9 +6,8 @@ import ParticleCanvas from "./particle-canvas"
 import { Button } from "../ui/button"
 import { AnimatedGradientText } from "../ui/animated-gradient-text"
 import { cn } from "@/lib/utils"
-import { ShinyButton } from "../ui/shiny-button"
-import { DOWNLOAD_URL, SOURCE_URL } from "@/lib/site"
-import { AppleIcon } from "./apple-icon"
+import { SOURCE_URL } from "@/lib/site"
+import { DownloadButton } from "./download-button"
 import { DamagedDialog } from "./damaged-dialog"
 
 export function Hero() {
@@ -22,36 +21,39 @@ export function Hero() {
       <ParticleCanvas />
       <div className="relative z-4 mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 sm:px-8">
         <div className="my-auto flex w-full min-w-0 flex-col gap-2 md:w-3/5">
-          <AnimatedGradientText className="gap-1.5">
-            <span className="text-xs" aria-hidden="true">
-              ✨
-            </span>
-            <span
-              className={cn(
-                `inline animate-gradient bg-linear-to-r from-primary via-primary/40 to-primary bg-size-[var(--bg-size)_100%] bg-clip-text font-mono text-transparent`
-              )}
-            >
-              Public Beta
-            </span>
-          </AnimatedGradientText>
-          <h1 className="mt-2 font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] font-medium tracking-[-0.035em] uppercase">
+          <div data-reveal>
+            <AnimatedGradientText className="gap-1.5">
+              <span className="text-xs" aria-hidden="true">
+                ✨
+              </span>
+              <span
+                className={cn(
+                  `inline animate-gradient bg-linear-to-r from-primary via-primary/40 to-primary bg-size-[var(--bg-size)_100%] bg-clip-text font-mono text-transparent`
+                )}
+              >
+                Public Beta
+              </span>
+            </AnimatedGradientText>
+          </div>
+          <h1
+            data-reveal
+            className="mt-2 font-heading text-[clamp(46px,7.4vw,96px)] leading-[0.94] font-medium tracking-[-0.035em] uppercase [--reveal-delay:60ms]"
+          >
             See it. <em className="block text-primary not-italic">Route it.</em>{" "}
             Stop it.
           </h1>
-          <p className="max-w-xl text-lg break-words text-muted-foreground">
+          <p
+            data-reveal
+            className="max-w-xl text-lg break-words text-muted-foreground [--reveal-delay:120ms]"
+          >
             A free, open-source network manager for macOS. Inspect app
             connections, choose their routes, and decide what gets through.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <ShinyButton
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto"
-            >
-              <AppleIcon className="size-5" />
-              Download for Mac
-            </ShinyButton>
+          <div
+            data-reveal
+            className="mt-3 flex flex-wrap gap-2 [--reveal-delay:180ms]"
+          >
+            <DownloadButton className="w-full sm:w-auto" />
             <Button
               nativeButton={false}
               render={<a href="#model" />}
@@ -61,7 +63,10 @@ export function Hero() {
               See it in action
             </Button>
           </div>
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <div
+            data-reveal
+            className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 [--reveal-delay:220ms]"
+          >
             <a
               href={SOURCE_URL}
               target="_blank"
@@ -82,14 +87,6 @@ export function Hero() {
         </div>
 
         <DamagedDialog open={damagedOpen} onOpenChange={setDamagedOpen} />
-
-        <a
-          href="#model"
-          className="hidden flex-col items-center gap-2 self-center font-mono text-xs tracking-widest text-muted-foreground uppercase transition-colors hover:text-foreground md:flex"
-        >
-          <span className="block h-8 w-px animate-pulse bg-linear-to-b from-transparent to-primary" />
-          Scroll
-        </a>
       </div>
     </Section>
   )

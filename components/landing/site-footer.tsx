@@ -1,43 +1,91 @@
 import Link from "next/link"
+import {
+  DiscordIcon,
+  GithubIcon,
+  InstagramIcon,
+  NewTwitterIcon,
+  TelegramIcon,
+} from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Mark } from "@/components/landing/mark"
-import {
-  ISSUES_URL,
-  SOURCE_URL,
-  STAR_URL,
-  SOCIAL_LINKS,
-  LICENSE_URL,
-} from "@/lib/site"
+import { LICENSE_URL, RELEASES_URL, STAR_URL } from "@/lib/site"
 
-const columns = [
+const productLinks = [
+  { label: "Release Notes", href: RELEASES_URL },
   {
-    title: "Explore",
-    links: [
-      { label: "How it works", href: "#model" },
-      { label: "Features", href: "#features" },
-      { label: "Community", href: "#community" },
-      { label: "FAQ", href: "#faq" },
-      { label: "Download", href: "#download" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { label: "GitHub", href: STAR_URL },
-      { label: "View source", href: SOURCE_URL },
-      { label: "Issues", href: ISSUES_URL },
-      ...SOCIAL_LINKS.map((s) => ({ label: s.label, href: s.href })),
-      { label: "Contact", href: "mailto:hi@zeytun.app" },
-    ],
+    label: "Changelog",
+    href: `${STAR_URL}/commits/main/`,
   },
 ]
+
+const connectLinks = [
+  { label: "GitHub", href: STAR_URL, icon: GithubIcon },
+  // Add the official URLs here when the social accounts are confirmed.
+  { label: "X", href: null, icon: NewTwitterIcon },
+  { label: "Telegram", href: null, icon: TelegramIcon },
+  { label: "Discord", href: null, icon: DiscordIcon },
+  { label: "Instagram", href: null, icon: InstagramIcon },
+]
+
+const resourceLinks = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Security", href: "/security" },
+]
+
+const linkClassName =
+  "text-sm text-muted-foreground transition-colors hover:text-foreground"
+
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string
+  children: React.ReactNode
+}) {
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={linkClassName}
+      >
+        {children}
+      </a>
+    )
+  }
+
+  return (
+    <Link href={href} className={linkClassName}>
+      {children}
+    </Link>
+  )
+}
+
+function FooterColumn({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div data-reveal>
+      <h4 className="mb-4 font-mono text-xs tracking-wider text-muted-foreground uppercase">
+        {title}
+      </h4>
+      <ul className="flex flex-col gap-3">{children}</ul>
+    </div>
+  )
+}
 
 export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border/40">
       <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 lg:grid-cols-5">
+          <div data-reveal className="col-span-2">
             <Link className="mb-4 flex items-center gap-2" href="/">
               <Mark className="size-6 text-primary" />
               <span className="translate-y-px font-kaine text-xl leading-none font-extrabold text-lime-100">
@@ -52,46 +100,51 @@ export function SiteFooter() {
             </p>
           </div>
 
-          {columns.map((column) => (
-            <div key={column.title}>
-              <h4 className="mb-4 font-mono text-xs tracking-wider text-muted-foreground uppercase">
-                {column.title}
-              </h4>
-              <ul className="flex flex-col gap-2.5">
-                {column.links.map((link) => (
-                  <li key={link.label}>
-                    {link.href.startsWith("http") ||
-                    link.href.startsWith("mailto:") ? (
-                      <a
-                        href={link.href}
-                        target={
-                          link.href.startsWith("mailto:") ? undefined : "_blank"
-                        }
-                        rel={
-                          link.href.startsWith("mailto:")
-                            ? undefined
-                            : "noopener noreferrer"
-                        }
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <FooterColumn title="Product">
+            {productLinks.map((link) => (
+              <li key={link.label}>
+                <FooterLink href={link.href}>{link.label}</FooterLink>
+              </li>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="Connect">
+            {connectLinks.map((link) => (
+              <li key={link.label}>
+                {link.href ? (
+                  <FooterLink href={link.href}>
+                    <span className="inline-flex items-center gap-2">
+                      <HugeiconsIcon icon={link.icon} className="size-4" />
+                      {link.label}
+                    </span>
+                  </FooterLink>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    title="Official link coming soon"
+                    className="inline-flex cursor-default items-center gap-2 text-sm text-muted-foreground/55"
+                  >
+                    <HugeiconsIcon icon={link.icon} className="size-4" />
+                    {link.label}
+                  </span>
+                )}
+              </li>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="Resources">
+            {resourceLinks.map((link) => (
+              <li key={link.label}>
+                <FooterLink href={link.href}>{link.label}</FooterLink>
+              </li>
+            ))}
+          </FooterColumn>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div
+          data-reveal
+          className="mt-12 flex flex-col gap-4 border-t border-border/40 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+        >
           <span>© 2026 Zeytun.</span>
           <span className="max-w-lg sm:text-end">
             Licensed under{" "}

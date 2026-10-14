@@ -1,5 +1,5 @@
-import { Section, Title } from "../common/section"
-import { ShinyButton } from "../ui/shiny-button"
+import { Section } from "../common/section"
+import { DownloadButton } from "./download-button"
 import { DOWNLOAD_URL, ISSUES_URL, SOURCE_URL } from "@/lib/site"
 import { AsciiWaves } from "./ascii-waves"
 import { AppleIcon } from "./apple-icon"
@@ -21,33 +21,36 @@ export function Download() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center">
-          <Title className="inline-flex items-center gap-1.5">
-            <AppleIcon className="size-3.5" />
-            macOS
-          </Title>
-          <h2 className="mb-4 font-heading text-4xl tracking-tight md:text-5xl">
+          <h2
+            data-reveal
+            className="mb-4 font-heading text-4xl tracking-tight md:text-5xl"
+          >
             Your network. Your rules.
           </h2>
-          <p className="mb-8 max-w-lg text-lg text-muted-foreground">
+          <p
+            data-reveal
+            className="mb-8 max-w-lg text-lg text-muted-foreground [--reveal-delay:120ms]"
+          >
             Try it with your apps and share your feedback.
           </p>
 
-          <div className="flex flex-col items-center gap-3">
-            <ShinyButton
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <AppleIcon className="size-5" />
-              Download for Mac
-            </ShinyButton>
+          <div
+            data-reveal
+            className="flex flex-col items-center gap-3 [--reveal-delay:160ms]"
+          >
+            <DownloadButton />
             <p className="flex items-center justify-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground uppercase">
               <AppleIcon className="size-3.5" />
-              macOS · Apple Silicon
+              {DOWNLOAD_URL
+                ? "Apple Silicon"
+                : "Apple Silicon · Coming soon"}
             </p>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm">
+          <div
+            data-reveal
+            className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm [--reveal-delay:200ms]"
+          >
             <a
               href={SOURCE_URL}
               target="_blank"

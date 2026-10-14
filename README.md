@@ -49,6 +49,7 @@ The statistics shown in the **Community** section are pre-fetched at build time 
 - **Downloads**: Computed strictly by summing `download_count` of all uploaded `.dmg` installer assets across all non-draft releases in `zeytun-labs/zeytun-app`.
 - **Stars & History**: Fetched from official GitHub stargazers count and weekly stargazers history endpoints.
 - **Resilience**: If the GitHub API fails or hits rate limits, the previous valid snapshot values are retained to ensure builds always succeed.
+- **Download links**: The newest published release with an uploaded Apple Silicon DMG (including prereleases) supplies the direct installer URL. Drafts are excluded. With no public installer, download buttons stay disabled. Run `pnpm stats:sync` and rebuild after publishing a release.
 
 ## Environment Variables
 
@@ -56,7 +57,8 @@ Copy `.env.example` to `.env.local` to customize settings:
 
 ```bash
 # Optional direct download URL override (HTTPS required).
-# Defaults to https://github.com/zeytun-labs/zeytun-app/releases
+# Defaults to the direct DMG URL recorded during stats:sync.
+# Without a public installer, download buttons are disabled.
 NEXT_PUBLIC_ZEYTUN_DOWNLOAD_URL=
 
 # Canonical production site URL.

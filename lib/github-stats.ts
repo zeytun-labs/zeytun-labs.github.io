@@ -3,6 +3,12 @@ import rawStats from "@/data/github-stats.json"
 export type GithubStats = {
   schemaVersion: 1
   repo: "zeytun-labs/zeytun-app"
+  latestRelease?: {
+    url: string
+    version: string
+    assetName: string
+    publishedAt: string
+  } | null
   stars: {
     value: number | null
     updatedAt: string | null
@@ -23,7 +29,11 @@ export type GithubStats = {
 export function getGithubStats(): GithubStats {
   try {
     const stats = rawStats as unknown as GithubStats
-    if (stats && stats.schemaVersion === 1 && stats.repo === "zeytun-labs/zeytun-app") {
+    if (
+      stats &&
+      stats.schemaVersion === 1 &&
+      stats.repo === "zeytun-labs/zeytun-app"
+    ) {
       return stats
     }
   } catch {
@@ -33,8 +43,14 @@ export function getGithubStats(): GithubStats {
   return {
     schemaVersion: 1,
     repo: "zeytun-labs/zeytun-app",
+    latestRelease: null,
     stars: { value: null, updatedAt: null },
-    downloads: { value: null, assetCount: null, updatedAt: null, kind: "macos-dmg-assets" },
+    downloads: {
+      value: null,
+      assetCount: null,
+      updatedAt: null,
+      kind: "macos-dmg-assets",
+    },
     history: { kind: "weekly-new-stars", points: [], updatedAt: null },
   }
 }

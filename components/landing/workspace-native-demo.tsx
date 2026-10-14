@@ -543,7 +543,25 @@ export function WorkspaceDemo({
   )
 
   return (
-    <div ref={activityRef} className="min-w-0">
+    <div ref={activityRef} className="relative isolate min-w-0">
+      {/* A rectangular shadow fades toward each edge's midpoint. Intersecting
+          the two linear masks keeps the corners deeper without round blobs. */}
+      <div
+        aria-hidden="true"
+        data-workspace-shadow
+        className="pointer-events-none absolute -inset-16 -z-10"
+        style={{
+          color: "#dce9cd",
+          maskImage:
+            "linear-gradient(to right, black, rgb(0 0 0 / 18%) 50%, black), linear-gradient(to bottom, black, rgb(0 0 0 / 18%) 50%, black)",
+          maskComposite: "intersect",
+        }}
+      >
+        <div
+          className="absolute inset-16 shadow-[0_0_40px_0_color-mix(in_oklch,currentColor_10%,transparent),0_0_72px_4px_color-mix(in_oklch,currentColor_4%,transparent)]"
+          style={{ borderRadius: "2.6923% / 4%" }}
+        />
+      </div>
       <div
         ref={viewport}
         style={{

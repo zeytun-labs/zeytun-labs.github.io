@@ -54,6 +54,7 @@ export function Faq() {
           const isOpen = !!openItems[item.q]
           return (
             <div
+              data-reveal
               key={item.q}
               className={cn(
                 "rounded-2xl border border-border/40 p-4 transition-colors hover:border-border/60",

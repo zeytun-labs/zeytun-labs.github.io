@@ -5,7 +5,8 @@ import { Mark } from "@/components/landing/mark"
 import Link from "next/link"
 import { buttonVariants } from "../ui/button"
 import { cn } from "@/lib/utils"
-import { DOWNLOAD_URL, STAR_URL } from "@/lib/site"
+import { STAR_URL } from "@/lib/site"
+import { DownloadLink } from "./download-link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Download01Icon, GithubIcon } from "@hugeicons/core-free-icons"
 
@@ -58,10 +59,7 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
             </a>
 
             {/* Download Button */}
-            <a
-              href={DOWNLOAD_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <DownloadLink
               className={cn(
                 buttonVariants({ size: "sm" }),
                 "flex h-8 shrink-0 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-primary-foreground! sm:h-8 sm:px-4 sm:text-sm"
@@ -73,7 +71,7 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
                 className="size-4"
                 strokeWidth={2}
               />
-            </a>
+            </DownloadLink>
           </div>
         </div>
       </header>

@@ -153,6 +153,28 @@
     }
   }
 }
+
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-state="pending"] {
+    opacity: 0;
+  }
+
+  [data-reveal-state="visible"] {
+    animation: section-reveal 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+}
 /* ✨ Shiny Button Component ✨ */
 @property --gradient-angle {
   syntax: "<angle>";

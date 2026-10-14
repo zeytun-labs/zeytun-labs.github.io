@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { execSync } from "node:child_process"
+import { selectMacInstaller } from "./release-assets.mjs"
 
 const REPO = "zeytun-labs/zeytun-app"
 const STATS_FILE = path.resolve(process.cwd(), "data/github-stats.json")
@@ -9,7 +10,10 @@ function getToken() {
   if (process.env.GITHUB_STATS_TOKEN) return process.env.GITHUB_STATS_TOKEN
   if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN
   try {
-    const token = execSync("gh auth token", { stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" }).trim()
+    const token = execSync("gh auth token", {
+      stdio: ["ignore", "pipe", "ignore"],
+      encoding: "utf8",
+    }).trim()
     if (token) return token
   } catch {
     // ignore
@@ -19,9 +23,9 @@ function getToken() {
 
 const token = getToken()
 const baseHeaders = {
-  "Accept": "application/vnd.github.v3+json",
+  Accept: "application/vnd.github.v3+json",
   "User-Agent": "zeytun-stats-sync",
-  ...(token ? { "Authorization": `Bearer ${token}` } : {}),
+  ...(token ? { Authorization: `Bearer ${token}` } : {}),
 }
 
 async function fetchJson(url) {
@@ -62,8 +66,14 @@ async function sync() {
   let previous = {
     schemaVersion: 1,
     repo: REPO,
+    latestRelease: null,
     stars: { value: null, updatedAt: null },
-    downloads: { value: null, assetCount: null, updatedAt: null, kind: "macos-dmg-assets" },
+    downloads: {
+      value: null,
+      assetCount: null,
+      updatedAt: null,
+      kind: "macos-dmg-assets",
+    },
     history: { kind: "weekly-new-stars", points: [], updatedAt: null },
   }
 
@@ -78,18 +88,21 @@ async function sync() {
     }
   }
 
-  const nextStats = { ...previous }
+  const nextStats = { latestRelease: null, ...previous }
   const nowIso = new Date().toISOString()
 
   // 1. Fetch Stars Count
   try {
     let count = null
     try {
-      const { data } = await fetchJson(`https://api.github.com/repos/${REPO}/stargazers/count`)
+      const { data } = await fetchJson(
+        `https://api.github.com/repos/${REPO}/stargazers/count`
+      )
       if (typeof data.count === "number") count = data.count
     } catch {
       const { data } = await fetchJson(`https://api.github.com/repos/${REPO}`)
-      if (typeof data.stargazers_count === "number") count = data.stargazers_count
+      if (typeof data.stargazers_count === "number")
+        count = data.stargazers_count
     }
 
     if (typeof count === "number") {
@@ -105,7 +118,9 @@ async function sync() {
 
   // 2. Fetch Stargazers History
   try {
-    const { data } = await fetchJson(`https://api.github.com/repos/${REPO}/stargazers/history?per_page=30&page=1`)
+    const { data } = await fetchJson(
+      `https://api.github.com/repos/${REPO}/stargazers/history?per_page=30&page=1`
+    )
     if (Array.isArray(data)) {
       // data is newest-first, take up to 26 weeks and reverse to oldest-first
       const slice = data.slice(0, 26).reverse()
@@ -126,7 +141,9 @@ async function sync() {
 
   // 3. Fetch Releases & DMG Downloads
   try {
-    const releases = await fetchAllPages(`https://api.github.com/repos/${REPO}/releases?per_page=100&page=1`)
+    const releases = await fetchAllPages(
+      `https://api.github.com/repos/${REPO}/releases?per_page=100&page=1`
+    )
     // Filter: skip drafts, include published prereleases
     const publishedReleases = releases.filter((r) => !r.draft)
 
@@ -144,6 +161,7 @@ async function sync() {
           // fallback to embedded assets
         }
       }
+      rel.assets = assets
 
       for (const asset of assets) {
         if (!asset || seenAssetIds.has(asset.id)) continue
@@ -163,7 +181,13 @@ async function sync() {
       updatedAt: nowIso,
       kind: "macos-dmg-assets",
     }
-    console.log(`[sync] DMG downloads: ${totalDownloads} (across ${dmgAssetCount} DMG assets in ${publishedReleases.length} published releases)`)
+    nextStats.latestRelease = selectMacInstaller(publishedReleases)
+    console.log(
+      `[sync] Installer: ${nextStats.latestRelease?.assetName || "no published macOS installer"}`
+    )
+    console.log(
+      `[sync] DMG downloads: ${totalDownloads} (across ${dmgAssetCount} DMG assets in ${publishedReleases.length} published releases)`
+    )
   } catch (err) {
     console.warn(`[sync] Failed to fetch releases/downloads: ${err.message}`)
   }

@@ -7,6 +7,7 @@ import { WorkspaceDemo, type WorkspaceView } from "./workspace-demo"
 import { Section, Title, Heading } from "../common/section"
 import { cn } from "@/lib/utils"
 import { useWorkspaceStory } from "@/hooks/use-workspace-story"
+import { WorkspaceBackdrop } from "./workspace-backdrop"
 
 const STORY = [
   {
@@ -145,9 +146,20 @@ export function Workspace() {
   return (
     <Section id="features" aria-labelledby="workspace-heading">
       <div className="mx-auto mb-10 max-w-2xl text-center">
-        <Title>Scroll to explore</Title>
-        <Heading id="workspace-heading">Your setup. One workspace.</Heading>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+        <div data-reveal>
+          <Title>Inside Zeytun</Title>
+        </div>
+        <Heading
+          data-reveal
+          className="[--reveal-delay:70ms]"
+          id="workspace-heading"
+        >
+          Your setup. One workspace.
+        </Heading>
+        <p
+          data-reveal
+          className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted-foreground [--reveal-delay:140ms] sm:text-lg"
+        >
           See your network, choose its routes, and follow individual
           connections.
         </p>
@@ -164,10 +176,11 @@ export function Workspace() {
           data-story-card
           data-story-step={scene.id}
           data-story-paused={paused || undefined}
-          className="sticky grid items-center gap-2 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8"
+          className="sticky isolate grid items-center gap-2 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-8"
           style={{ top: "calc(max(88px, (100svh + 88px - 540px) / 2))" }}
         >
-          <aside className="min-w-0">
+          <WorkspaceBackdrop />
+          <aside data-reveal className="min-w-0">
             <div
               ref={navigation}
               className="[scrollbar-width:none] overflow-x-auto lg:overflow-visible [&::-webkit-scrollbar]:hidden"
@@ -246,7 +259,8 @@ export function Workspace() {
             </div>
           </aside>
           <div
-            className="mx-auto w-full min-w-0"
+            data-reveal
+            className="mx-auto w-full min-w-0 [--reveal-delay:100ms]"
             style={{
               maxWidth:
                 "min(760px, max(320px, calc((100svh - 272px) * 1.4857)))",

@@ -9,6 +9,7 @@ import {
 } from "motion/react"
 import { Section } from "../common/section"
 import { Title } from "../common/section"
+import { Rise } from "./chrome"
 import { ProcessFig } from "./process"
 import { AnimatedFig } from "./checkpoint"
 import { RuleTableFig } from "./rules"
@@ -102,13 +103,16 @@ export function ProductShowcase() {
     <Section id="model">
       <div className="grid gap-8 lg:grid-cols-[minmax(250px,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-12">
         <div className="flex min-w-0 flex-col items-start">
-          <Title className="mb-6">How it works</Title>
+          <Rise>
+            <Title className="mb-6">How it works</Title>
+          </Rise>
 
           <LayoutGroup id={layoutId}>
             <div
+              data-reveal
               role="tablist"
               aria-label="Product showcase stages"
-              className="mb-7 flex rounded-full border border-border/40 bg-card/60 p-1.5 shadow-sm backdrop-blur-sm"
+              className="mb-7 flex rounded-full border border-border/40 bg-card/60 p-1.5 shadow-sm backdrop-blur-sm [--reveal-delay:60ms]"
             >
               {TABS.map((tab, idx) => {
                 const isSelected = activeTab === tab.key
@@ -154,7 +158,10 @@ export function ProductShowcase() {
 
           {/* Reserve the tallest complete copy; each description still
               follows its own title without an empty line in between. */}
-          <div className="grid w-full max-w-md">
+          <div
+            data-reveal
+            className="grid w-full max-w-md [--reveal-delay:120ms]"
+          >
             {TABS.map((tab) => {
               const selected = activeTab === tab.key
               return (
@@ -204,7 +211,10 @@ export function ProductShowcase() {
           </div>
         </div>
 
-        <div className="relative isolate flex h-[540px] items-center justify-center overflow-hidden rounded-3xl border border-border/40 bg-card/20 px-4 py-4 sm:px-8 md:h-[460px] md:py-8">
+        <div
+          data-reveal
+          className="relative isolate flex h-[540px] items-center justify-center overflow-hidden rounded-3xl border border-border/40 bg-card/20 px-4 py-4 [--reveal-delay:100ms] sm:px-8 md:h-[460px] md:py-8"
+        >
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(to_right,color-mix(in_oklch,var(--border)_35%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--border)_35%,transparent)_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_at_center,black_8%,transparent_82%)] bg-size-[48px_48px]"

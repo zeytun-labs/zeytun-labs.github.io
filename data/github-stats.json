@@ -1,14 +1,15 @@
 {
+  "latestRelease": null,
   "schemaVersion": 1,
   "repo": "zeytun-labs/zeytun-app",
   "stars": {
     "value": 0,
-    "updatedAt": "2026-10-12T00:12:28.162Z"
+    "updatedAt": "2026-10-13T10:47:00.115Z"
   },
   "downloads": {
     "value": 0,
     "assetCount": 0,
-    "updatedAt": "2026-10-12T00:12:28.162Z",
+    "updatedAt": "2026-10-13T10:47:00.115Z",
     "kind": "macos-dmg-assets"
   },
   "history": {
@@ -27,6 +28,6 @@
         "stars": 0
       }
     ],
-    "updatedAt": "2026-10-12T00:12:28.162Z"
+    "updatedAt": "2026-10-13T10:47:00.115Z"
   }
 }

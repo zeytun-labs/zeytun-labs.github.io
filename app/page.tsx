@@ -8,6 +8,7 @@ import { CommunityStats } from "@/components/landing/community-stats"
 import { Faq } from "@/components/landing/faq"
 import { Download } from "@/components/landing/download"
 import { SiteFooter } from "@/components/landing/site-footer"
+import { SectionReveals } from "@/components/landing/section-reveals"
 import { getGithubStats } from "@/lib/github-stats"
 
 const description =
@@ -33,6 +34,7 @@ export default function Page() {
 
   return (
     <div className="relative min-h-screen overflow-x-clip px-6">
+      <SectionReveals />
       <Nav starsCount={stats.stars.value} />
       {/* Hero → Product Showcase → Workspace → Community → FAQ → Download */}
       <main id="main-content" className="space-y-20 md:space-y-24">

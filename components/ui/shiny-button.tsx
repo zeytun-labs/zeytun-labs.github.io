@@ -30,7 +30,7 @@ export function ShinyButton({
     "flex items-center justify-center",
     "rounded-full px-10 py-5 text-lg leading-tight font-medium",
     "border border-transparent text-foreground",
-    "transition-all duration-1000 ease-out active:translate-y-px",
+    "transition-all duration-1000 ease-out active:translate-y-px disabled:cursor-not-allowed disabled:opacity-45",
     className
   )
   const inner = (
@@ -48,7 +48,8 @@ export function ShinyButton({
     )
   }
 
-  const { type = "button", ...buttonProps } = props as React.ButtonHTMLAttributes<HTMLButtonElement>
+  const { type = "button", ...buttonProps } =
+    props as React.ButtonHTMLAttributes<HTMLButtonElement>
   return (
     <button type={type} {...buttonProps} className={classes}>
       {inner}

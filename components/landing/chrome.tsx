@@ -40,19 +40,9 @@ export function SectionHead({
       ]
         .filter(Boolean)
         .map((el, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{
-              duration: 0.7,
-              delay: i * 0.1,
-              ease: [0.16, 1, 0.3, 1],
-            }}
-          >
+          <Rise key={i} delay={i * 0.07}>
             {el}
-          </motion.div>
+          </Rise>
         ))}
     </div>
   )
@@ -73,15 +63,13 @@ export function Rise({
   className?: string
 }) {
   return (
-    <motion.div
+    <div
+      data-reveal
       className={className}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ "--reveal-delay": `${delay * 1000}ms` } as React.CSSProperties}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }
 
