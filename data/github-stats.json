@@ -1,15 +1,20 @@
 {
-  "latestRelease": null,
+  "latestRelease": {
+    "url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/Zeytun_0.1.0-beta_aarch64.dmg",
+    "version": "v0.1.0-beta",
+    "assetName": "Zeytun_0.1.0-beta_aarch64.dmg",
+    "publishedAt": "2026-11-04T22:32:50Z"
+  },
   "schemaVersion": 1,
   "repo": "zeytun-labs/zeytun-app",
   "stars": {
-    "value": 0,
-    "updatedAt": "2026-10-13T10:47:00.115Z"
+    "value": 3,
+    "updatedAt": "2026-11-04T22:59:32.243Z"
   },
   "downloads": {
-    "value": 0,
-    "assetCount": 0,
-    "updatedAt": "2026-10-13T10:47:00.115Z",
+    "value": 3,
+    "assetCount": 1,
+    "updatedAt": "2026-11-04T22:59:32.243Z",
     "kind": "macos-dmg-assets"
   },
   "history": {
@@ -26,8 +31,20 @@
       {
         "week": 1791676800,
         "stars": 0
+      },
+      {
+        "week": 1792281600,
+        "stars": 0
+      },
+      {
+        "week": 1792886400,
+        "stars": 0
+      },
+      {
+        "week": 1793491200,
+        "stars": 3
       }
     ],
-    "updatedAt": "2026-10-13T10:47:00.115Z"
+    "updatedAt": "2026-11-04T22:59:32.243Z"
   }
 }
