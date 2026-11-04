@@ -1,8 +1,6 @@
 import Link from "next/link"
 import {
-  DiscordIcon,
   GithubIcon,
-  InstagramIcon,
   NewTwitterIcon,
   TelegramIcon,
 } from "@hugeicons/core-free-icons"
@@ -20,12 +18,21 @@ const productLinks = [
 ]
 
 const connectLinks = [
-  { label: "GitHub", href: STAR_URL, icon: GithubIcon },
-  // Add the official URLs here when the social accounts are confirmed.
-  { label: "X", href: null, icon: NewTwitterIcon },
-  { label: "Telegram", href: null, icon: TelegramIcon },
-  { label: "Discord", href: null, icon: DiscordIcon },
-  { label: "Instagram", href: null, icon: InstagramIcon },
+  {
+    label: "GitHub",
+    href: "https://github.com/zeytun-labs",
+    icon: GithubIcon,
+  },
+  {
+    label: "X",
+    href: "https://x.com/ZeytunHQ",
+    icon: NewTwitterIcon,
+  },
+  {
+    label: "Telegram",
+    href: "https://t.me/ZeytunHQ",
+    icon: TelegramIcon,
+  },
 ]
 
 const resourceLinks = [
@@ -111,23 +118,12 @@ export function SiteFooter() {
           <FooterColumn title="Connect">
             {connectLinks.map((link) => (
               <li key={link.label}>
-                {link.href ? (
-                  <FooterLink href={link.href}>
-                    <span className="inline-flex items-center gap-2">
-                      <HugeiconsIcon icon={link.icon} className="size-4" />
-                      {link.label}
-                    </span>
-                  </FooterLink>
-                ) : (
-                  <span
-                    aria-disabled="true"
-                    title="Official link coming soon"
-                    className="inline-flex cursor-default items-center gap-2 text-sm text-muted-foreground/55"
-                  >
+                <FooterLink href={link.href}>
+                  <span className="inline-flex items-center gap-2">
                     <HugeiconsIcon icon={link.icon} className="size-4" />
                     {link.label}
                   </span>
-                )}
+                </FooterLink>
               </li>
             ))}
           </FooterColumn>
