@@ -57,6 +57,21 @@ export function Hero() {
             <Button
               nativeButton={false}
               render={<a href="#model" />}
+              onClick={(e) => {
+                const target = document.getElementById("model")
+                if (target) {
+                  e.preventDefault()
+                  if (window.__lenis) {
+                    window.__lenis.scrollTo(target, {
+                      duration: 1.2,
+                      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    })
+                  } else {
+                    target.scrollIntoView({ behavior: "smooth" })
+                  }
+                  history.pushState(null, "", "#model")
+                }
+              }}
               variant="outline"
               className="h-auto! w-full min-w-0 rounded-full px-8 py-5 text-lg! leading-tight font-medium text-muted-foreground! hover:text-foreground! sm:w-auto sm:min-w-60.5 sm:px-10"
             >
