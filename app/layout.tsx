@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SmoothScroll } from "@/components/smooth-scroll"
+import { SplashLoader } from "@/components/splash-loader"
 import { cn } from "@/lib/utils"
 
 const neueKaine = localFont({
@@ -41,6 +42,7 @@ export default function RootLayout({
       )}
     >
       <body>
+        <SplashLoader />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none"
