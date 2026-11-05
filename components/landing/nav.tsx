@@ -52,8 +52,8 @@ export function Nav({ starsCount }: { starsCount?: number | null }) {
             >
               <HugeiconsIcon icon={GithubIcon} className="size-4" />
               {typeof starsCount === "number" && (
-                <span className="font-mono text-xs">
-                  {starsCount.toLocaleString("en-US")}
+                <span className="text-xs">
+                  {starsCount.toLocaleString("en-US")} Stars
                 </span>
               )}
             </a>
