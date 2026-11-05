@@ -19,7 +19,7 @@ export function SplashLoader() {
   justify-content: center;
   gap: 20px;
   background-color: #070807;
-  color: #bef264;
+  color: var(--primary, oklch(0.768 0.233 130.85));
   transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
   user-select: none;
 }
@@ -85,8 +85,8 @@ export function SplashLoader() {
   width: 50%;
   height: 100%;
   border-radius: 9999px;
-  background: #bef264;
-  box-shadow: 0 0 8px rgba(190, 242, 100, 0.6);
+  background: var(--primary, oklch(0.768 0.233 130.85));
+  box-shadow: 0 0 10px oklch(0.768 0.233 130.85 / 0.7);
   animation: splashProgress 1.4s ease-in-out infinite;
 }
 @keyframes splashProgress {
@@ -109,7 +109,7 @@ export function SplashLoader() {
             height="56"
             viewBox="0 0 40 40"
             fill="currentColor"
-            style={{ filter: "drop-shadow(0 0 12px rgba(190,242,100,0.25))" }}
+            style={{ filter: "drop-shadow(0 0 12px oklch(0.768 0.233 130.85 / 0.35))" }}
           >
             <path d={fullPath} />
           </svg>
