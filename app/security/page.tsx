@@ -40,7 +40,7 @@ export default function SecurityPage() {
       <section>
         <h2>What to include in the private report</h2>
         <ul className="list-disc space-y-2 pl-5">
-          <li>Your Zeytun version, macOS version, and affected feature.</li>
+          <li>Your Zeytun version, OS version, and affected feature.</li>
           <li>
             The conditions required to trigger the issue and clear steps to
             reproduce it.

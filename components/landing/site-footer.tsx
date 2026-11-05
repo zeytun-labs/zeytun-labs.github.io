@@ -103,7 +103,7 @@ export function SiteFooter() {
               See it. Route it. Stop it.
             </p>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Network visibility and routing for macOS.
+              Network visibility and routing.
             </p>
           </div>
 

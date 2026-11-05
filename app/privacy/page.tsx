@@ -7,17 +7,17 @@ import { ISSUES_URL } from "@/lib/site"
 export const metadata: Metadata = {
   title: "Privacy | Zeytun",
   description:
-    "What Zeytun processes on your Mac, which features contact external services, and what to know before sharing diagnostic data.",
+    "What Zeytun processes on your device, which features contact external services, and what to know before sharing diagnostic data.",
 }
 
 export default function PrivacyPage() {
   return (
     <ResourcePage
       title="Privacy"
-      intro="Understand what Zeytun can see, what it stores on your Mac, and when it connects to services outside your device."
+      intro="Understand what Zeytun can see, what it stores on your device, and when it connects to services outside your device."
     >
       <section>
-        <h2>Network information on your Mac</h2>
+        <h2>Network information on your device</h2>
         <p>
           Zeytun processes the connections handled by its network core to apply
           your routing rules and show network activity. This can include app and
@@ -82,7 +82,7 @@ export default function PrivacyPage() {
       <section>
         <h2>Diagnostics and files you share</h2>
         <p>
-          Crash reports are written to local files and can include app and macOS
+          Crash reports are written to local files and can include app and OS
           versions, error details, and recent log messages. Sharing a report or
           posting an issue can disclose information about your setup. Review the
           contents before sending them and remove credentials, subscription

@@ -12,13 +12,13 @@ import { SectionReveals } from "@/components/landing/section-reveals"
 import { getGithubStats } from "@/lib/github-stats"
 
 const description =
-  "A free, open-source network manager for macOS. Inspect app connections, choose their routes, and control traffic with rules."
+  "A free, open-source network manager. Inspect app connections, choose their routes, and control traffic with rules."
 
 export const metadata: Metadata = {
-  title: "Zeytun — Open-source network manager for macOS",
+  title: "Zeytun — Open-source network manager",
   description,
   openGraph: {
-    title: "Zeytun — Open-source network manager for macOS",
+    title: "Zeytun — Open-source network manager",
     description,
     type: "website",
   },

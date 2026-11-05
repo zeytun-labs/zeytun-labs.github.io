@@ -46,8 +46,8 @@ export function Hero() {
             data-reveal
             className="max-w-xl text-lg break-words text-muted-foreground [--reveal-delay:120ms]"
           >
-            A free, open-source network manager for macOS. Inspect app
-            connections, choose their routes, and decide what gets through.
+            A free, open-source network manager. Inspect app connections, choose
+            their routes, and decide what gets through.
           </p>
           <div
             data-reveal

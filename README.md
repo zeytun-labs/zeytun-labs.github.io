@@ -1,6 +1,6 @@
 # Zeytun Web
 
-The official website and landing page for [Zeytun](https://github.com/zeytun-labs/zeytun), an open-source network manager for macOS.
+The official website and landing page for [Zeytun](https://github.com/zeytun-labs/zeytun), an open-source network manager.
 
 ## Structure
 
