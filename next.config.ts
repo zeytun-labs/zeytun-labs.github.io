@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   // ponytail: if a CMS-backed blog or dynamic OG images land later, drop this
   // line and deploy on a runtime (Workers / Node) instead. MDX blog is fine.
   output: "export",
+  trailingSlash: true,
 }
 
 export default nextConfig

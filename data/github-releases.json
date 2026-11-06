@@ -1,0 +1,135 @@
+[
+  {
+    "id": 434489509,
+    "tag_name": "v0.1.0-beta",
+    "name": "Zeytun v0.1.0-beta",
+    "published_at": "2026-11-04T22:32:50Z",
+    "html_url": "https://github.com/zeytun-labs/zeytun-app/releases/tag/v0.1.0-beta",
+    "body": "## Introducing Zeytun Beta\n\nThe first public pre-release of Zeytun is now available for early testing.",
+    "prerelease": true,
+    "commits": [
+      {
+        "sha": "6b37483",
+        "message": "Merge pull request #4 from zeytun-labs/ci/use-macos-14-runner\n\nci: switch macOS runners to macos-14 for runner availability",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/6b374839b5a529c5be726581ad554dc809bee544"
+      },
+      {
+        "sha": "35d2af5",
+        "message": "ci: switch macOS runners to macos-14 for capacity",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/35d2af58ef3b784ea2c6b8169ae5a4edb6285f56"
+      },
+      {
+        "sha": "caf339a",
+        "message": "Merge pull request #3 from zeytun-labs/release/v0.1.0-beta\n\nrelease: prepare v0.1.0-beta",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/caf339a2f59a4b2993bb3abf165ec1118003c849"
+      },
+      {
+        "sha": "5defe14",
+        "message": "test(core): match platform core binary name in install test",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/5defe145561fa0a390142709edff0804047f22df"
+      },
+      {
+        "sha": "6df1fa8",
+        "message": "fix(tray): convert non-macos initial tray icon to owned static image",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/6df1fa82b82f3e457a2e171e2713bf3f6efcfd69"
+      },
+      {
+        "sha": "f9c045f",
+        "message": "release: prepare v0.1.0-beta",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/f9c045f8a3664193818f9dd5f1fb81faae8787be"
+      },
+      {
+        "sha": "f83ab4b",
+        "message": "fix: require profile names and refine tray layout",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/f83ab4bfc6f3ffb8b534de3a1eb44f6888823b56"
+      },
+      {
+        "sha": "849814c",
+        "message": "feat: modernize native tray controls and traffic display",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/849814c37313a80a9068f59875f518fd1b22cab7"
+      },
+      {
+        "sha": "2bd566b",
+        "message": "feat: group policy proxies into animated subscription sections",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/2bd566b64cdab28114ab97358c059a882b7174c8"
+      },
+      {
+        "sha": "167602b",
+        "message": "fix: report subscription connection updates",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/167602b114dbb93cbac0e29fe4bc9fcd456635ad"
+      },
+      {
+        "sha": "cfb7ee5",
+        "message": "fix: preserve outbound mode on startup",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/cfb7ee55bf31cf4aa665de75c50db9ecb6834f4a"
+      },
+      {
+        "sha": "4cd77db",
+        "message": "Merge pull request #1 from zeytun-labs/windows\n\nfeat(windows): initial Windows platform support and system integration",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/4cd77dbf5ac55f4aaf7471d651e8818d7e8683a7"
+      },
+      {
+        "sha": "17a28c9",
+        "message": "test: isolate process resolution from host app discovery",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/17a28c9fbb0387e7e2eeaafc779b1e66cf26c0b7"
+      },
+      {
+        "sha": "2be62aa",
+        "message": "docs: align contributor guidance with the optimized CI pipeline",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/2be62aac199108d139fab54fed361ea27f8ab52a"
+      },
+      {
+        "sha": "b7c2b64",
+        "message": "ci: keep pull request validation fast and stabilize Rust caches",
+        "author": "sadeqi-ah",
+        "html_url": "https://github.com/zeytun-labs/zeytun-app/commit/b7c2b64ef2c6a86ce1a8599902e71b913d60f227"
+      }
+    ],
+    "assets": [
+      {
+        "name": "latest.json",
+        "browser_download_url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/latest.json",
+        "size": 1253,
+        "download_count": 2
+      },
+      {
+        "name": "zeytun-core-source.tar.gz",
+        "browser_download_url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/zeytun-core-source.tar.gz",
+        "size": 2124941,
+        "download_count": 1
+      },
+      {
+        "name": "Zeytun_0.1.0-beta_aarch64.dmg",
+        "browser_download_url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/Zeytun_0.1.0-beta_aarch64.dmg",
+        "size": 52060195,
+        "download_count": 3
+      },
+      {
+        "name": "Zeytun_aarch64.app.tar.gz",
+        "browser_download_url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/Zeytun_aarch64.app.tar.gz",
+        "size": 53293084,
+        "download_count": 1
+      },
+      {
+        "name": "Zeytun_aarch64.app.tar.gz.sig",
+        "browser_download_url": "https://github.com/zeytun-labs/zeytun-app/releases/download/v0.1.0-beta/Zeytun_aarch64.app.tar.gz.sig",
+        "size": 404,
+        "download_count": 1
+      }
+    ]
+  }
+]

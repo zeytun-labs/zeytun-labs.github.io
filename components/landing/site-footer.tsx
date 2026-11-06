@@ -7,14 +7,11 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react"
 
 import { Mark } from "@/components/landing/mark"
-import { LICENSE_URL, RELEASES_URL, STAR_URL } from "@/lib/site"
+import { LICENSE_URL } from "@/lib/site"
 
 const productLinks = [
-  { label: "Release Notes", href: RELEASES_URL },
-  {
-    label: "Changelog",
-    href: `${STAR_URL}/commits/main/`,
-  },
+  { label: "Changelog", href: "/changelog" },
+  { label: "Release Notes", href: "/changelog/0-1-0-beta" },
 ]
 
 const connectLinks = [

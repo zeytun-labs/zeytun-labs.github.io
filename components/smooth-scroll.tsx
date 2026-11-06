@@ -58,7 +58,16 @@ export function SmoothScroll() {
 
       const href = anchor.getAttribute("href")
       if (href?.startsWith("#") && href.length > 1 && href !== "#main-content") {
-        const targetElement = document.querySelector(href)
+        const id = href.slice(1)
+        const targetElement =
+          document.getElementById(id) ||
+          (() => {
+            try {
+              return document.querySelector(href)
+            } catch {
+              return null
+            }
+          })()
         if (targetElement) {
           e.preventDefault()
           if (lenis) {

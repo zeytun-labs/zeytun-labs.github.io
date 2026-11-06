@@ -5,6 +5,7 @@ import { selectMacInstaller } from "./release-assets.mjs"
 
 const REPO = "zeytun-labs/zeytun-app"
 const STATS_FILE = path.resolve(process.cwd(), "data/github-stats.json")
+const RELEASES_FILE = path.resolve(process.cwd(), "data/github-releases.json")
 
 function getToken() {
   if (process.env.GITHUB_STATS_TOKEN) return process.env.GITHUB_STATS_TOKEN
@@ -188,6 +189,72 @@ async function sync() {
     console.log(
       `[sync] DMG downloads: ${totalDownloads} (across ${dmgAssetCount} DMG assets in ${publishedReleases.length} published releases)`
     )
+
+    const releasesPayload = []
+    for (const rel of publishedReleases) {
+      let body = rel.body || ""
+      if (!body.trim()) {
+        try {
+          const notesRes = await fetch(
+            `https://api.github.com/repos/${REPO}/releases/generate-notes`,
+            {
+              method: "POST",
+              headers: baseHeaders,
+              body: JSON.stringify({ tag_name: rel.tag_name }),
+            }
+          )
+          if (notesRes.ok) {
+            const notesData = await notesRes.json()
+            if (notesData.body) {
+              body = notesData.body
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      let commits = []
+      try {
+        const commitsRes = await fetch(
+          `https://api.github.com/repos/${REPO}/commits?sha=${rel.tag_name}&per_page=15`,
+          { headers: baseHeaders }
+        )
+        if (commitsRes.ok) {
+          const rawCommits = await commitsRes.json()
+          commits = rawCommits.map((c) => ({
+            sha: c.sha.slice(0, 7),
+            message: c.commit.message,
+            author: c.author?.login || c.commit.author?.name || "",
+            html_url: c.html_url,
+          }))
+        }
+      } catch {
+        // ignore
+      }
+
+      releasesPayload.push({
+        id: rel.id,
+        tag_name: rel.tag_name,
+        name: rel.name || rel.tag_name,
+        published_at: rel.published_at,
+        html_url: rel.html_url,
+        body,
+        prerelease: Boolean(rel.prerelease),
+        commits,
+        assets: (rel.assets || []).map((a) => ({
+          name: a.name,
+          browser_download_url: a.browser_download_url,
+          size: a.size,
+          download_count: a.download_count || 0,
+        })),
+      })
+    }
+
+    const relTmp = `${RELEASES_FILE}.tmp`
+    fs.writeFileSync(relTmp, JSON.stringify(releasesPayload, null, 2) + "\n", "utf8")
+    fs.renameSync(relTmp, RELEASES_FILE)
+    console.log(`[sync] Successfully updated ${RELEASES_FILE} (${releasesPayload.length} releases)`)
   } catch (err) {
     console.warn(`[sync] Failed to fetch releases/downloads: ${err.message}`)
   }
