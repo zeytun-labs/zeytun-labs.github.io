@@ -3,6 +3,7 @@ import { DownloadButton } from "./download-button"
 import { DOWNLOAD_URL, ISSUES_URL, SOURCE_URL } from "@/lib/site"
 import { AsciiWaves } from "./ascii-waves"
 import { AppleIcon } from "./apple-icon"
+import { BrewInstall } from "./brew-install"
 
 export function Download() {
   return (
@@ -41,10 +42,13 @@ export function Download() {
             <DownloadButton />
             <p className="flex items-center justify-center gap-1.5 font-mono text-xs tracking-wider text-muted-foreground uppercase">
               <AppleIcon className="size-3.5" />
-              {DOWNLOAD_URL
-                ? "Apple Silicon"
-                : "Apple Silicon · Coming soon"}
+              {DOWNLOAD_URL ? "Apple Silicon" : "Apple Silicon · Coming soon"}
             </p>
+            {DOWNLOAD_URL ? (
+              <div className="mt-3 w-full">
+                <BrewInstall />
+              </div>
+            ) : null}
           </div>
 
           <div
